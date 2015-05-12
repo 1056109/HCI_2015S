@@ -1,11 +1,16 @@
 package at.at.tuwien.hci.hciss2015;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -80,9 +85,35 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onCancel() {       //if animation gets cancelled do something
-
+                onFinish();
             }
         });
+    }
+
+    public void openMap(View view){
+        System.out.println("so das menu startet mal");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("wtf are you doing")
+                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // FIRE ZE MISSILES!
+                    }
+                })
+                .setNegativeButton("wtf", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        // Create the AlertDialog object and return it
+        builder.create();
+    }
+
+    public void openMerkmale(View view){
+
+    }
+
+    public void openMenu(View view){
+
     }
 }
 

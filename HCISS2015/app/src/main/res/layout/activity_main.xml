@@ -2,8 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MapActivity" >
+    android:layout_height="match_parent">
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/map"
@@ -14,29 +13,40 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Merkmale"
         android:id="@+id/merkmalbutton"
         android:src="@drawable/diamond"
-        android:layout_gravity="right|bottom" />
+        android:background="?android:selectableItemBackground"
+        android:onClick="openMerkmale"
+        android:layout_gravity="right|bottom"
+        android:layout_margin="10dp" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/mapbutton"
+        android:background="?android:selectableItemBackground"
         android:src="@drawable/map"
-        android:layout_gravity="center_horizontal|bottom" />
+        android:onClick="openMap"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_margin="10dp" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/weaponbutton"
         android:src="@drawable/hammer"
-        android:layout_gravity="left|bottom" />
+        android:background="?android:selectableItemBackground"
+        android:layout_gravity="left|bottom"
+        android:layout_margin="10dp" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/menu"
         android:id="@+id/menubutton"
-        android:layout_gravity="left|top" />
+        android:background="?android:selectableItemBackground"
+        android:onClick="openMenu"
+        android:layout_gravity="left|top"
+        android:layout_margin="10dp" />
+
 </FrameLayout>
