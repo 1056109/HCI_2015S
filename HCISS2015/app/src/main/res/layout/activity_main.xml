@@ -11,24 +11,32 @@
     android:layout_height="match_parent"
     android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Merkmale"
         android:id="@+id/merkmalbutton"
+        android:src="@drawable/diamond"
         android:layout_gravity="right|bottom" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Map"
         android:id="@+id/mapbutton"
+        android:src="@drawable/map"
         android:layout_gravity="center_horizontal|bottom" />
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Menu"
+        android:id="@+id/weaponbutton"
+        android:src="@drawable/hammer"
+        android:layout_gravity="left|bottom" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/menu"
         android:id="@+id/menubutton"
         android:layout_gravity="left|top" />
 </FrameLayout>
