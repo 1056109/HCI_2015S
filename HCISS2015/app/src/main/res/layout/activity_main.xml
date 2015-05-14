@@ -24,8 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/mapbutton"
-        android:background="?android:selectableItemBackground"
         android:src="@drawable/map"
+        android:background="?android:selectableItemBackground"
         android:onClick="openMap"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_margin="10dp" />
