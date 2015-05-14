@@ -68,12 +68,15 @@ public class MainActivity extends FragmentActivity {
 
     public void openMap(View view){
         MapDialog dialog = new MapDialog();
+
         dialog.show(getSupportFragmentManager(), "abc");
 
     }
 
     public void openMerkmale(View view){
+        MerkmalDialog dialog = new MerkmalDialog();
 
+        dialog.show(getSupportFragmentManager(), "abc");
     }
 
     public void openMenu(View view){
