@@ -2,7 +2,12 @@ package at.at.tuwien.hci.hciss2015;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,10 +35,22 @@ public class MainActivity extends FragmentActivity {
 
     private static final String TILE_SERVER_URL = "http://tile.openstreetmap.org/";
 
+    private String[] myDrawerOptions;
+    private DrawerLayout myDrawerLayout;
+    private ListView myDrawerList;
+
+    private FrameLayout myFrameLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        myDrawerOptions = getResources().getStringArray(R.array.drawer_options);
+        myDrawerList = (ListView) findViewById(R.id.left_drawer);
+        myDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, myDrawerOptions));
+        myDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         mMap = ((SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map)).getMap();
@@ -79,8 +96,23 @@ public class MainActivity extends FragmentActivity {
         dialog.show(getSupportFragmentManager(), "abc");
     }
 
-    public void openMenu(View view){
+    public void openDrawer(View view) {
+        myDrawerLayout.openDrawer(myDrawerList);
+    }
 
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+
+        private void selectItem(int position) {
+            //TODO start new activity or replace current fragment
+            myDrawerList.setItemChecked(position, true);
+            myDrawerLayout.closeDrawer(myDrawerList);
+
+        }
     }
 }
 
