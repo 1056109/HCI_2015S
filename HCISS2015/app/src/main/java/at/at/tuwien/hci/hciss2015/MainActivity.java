@@ -1,5 +1,6 @@
 package at.at.tuwien.hci.hciss2015;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
@@ -8,6 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,7 +18,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 
 /**
  * sources @
@@ -40,6 +45,8 @@ public class MainActivity extends FragmentActivity {
     private ListView myDrawerList;
 
     private FrameLayout myFrameLayout;
+
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +73,23 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onFinish() {        //When animation is finished, do some stuff like drawing icons and showing position
+
                 mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(48.208587, 16.372301))
-                                .title("Testmarker 1")
+                                        //.title("Testmarker 1")
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital))
                 );
 
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);      //show MyLocation-Button
-                mMap.setMyLocationEnabled(true);        //Show my location
+                mMap.setMyLocationEnabled(true);                            //Show my location
+                mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        Toast.makeText(context, "do something", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                });
             }
 
             @Override
@@ -82,6 +98,8 @@ public class MainActivity extends FragmentActivity {
             }
         });
     }
+
+
 
     public void openMap(View view){
         MapDialog dialog = new MapDialog();
@@ -98,6 +116,27 @@ public class MainActivity extends FragmentActivity {
 
     public void openDrawer(View view) {
         myDrawerLayout.openDrawer(myDrawerList);
+    }
+
+    private class MyInfoWindowAdapter implements InfoWindowAdapter {
+
+        private final View myCustomInfoWindow;
+
+        MyInfoWindowAdapter() {
+            myCustomInfoWindow = getLayoutInflater().inflate(R.layout.custom_info_window, null);
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            TextView title = (TextView) myCustomInfoWindow.findViewById(R.id.txtTitle);
+            title.setText("test hospital");
+            return myCustomInfoWindow;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            return null;
+        }
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
