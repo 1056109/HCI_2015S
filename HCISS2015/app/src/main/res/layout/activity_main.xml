@@ -24,7 +24,7 @@
             android:layout_margin="10dp"
             android:background="?android:selectableItemBackground"
             android:onClick="openMerkmale"
-            android:src="@drawable/diamond" />
+            android:src="@drawable/merkmal1" />
 
         <ImageButton
             android:id="@+id/btnMap"
@@ -34,7 +34,7 @@
             android:layout_margin="10dp"
             android:background="?android:selectableItemBackground"
             android:onClick="openMap"
-            android:src="@drawable/map" />
+            android:src="@drawable/map1" />
 
         <ImageButton
             android:id="@+id/btnWeapon"
@@ -53,7 +53,7 @@
             android:layout_margin="10dp"
             android:background="?android:selectableItemBackground"
             android:onClick="openDrawer"
-            android:src="@drawable/menu" />
+            android:src="@drawable/menu1" />
     </FrameLayout>
 
     <!-- navigation drawer -->
