@@ -8,6 +8,7 @@
     android:background="@drawable/custom_info_window_shape">
 
     <LinearLayout
+        android:layout_gravity="center_horizontal"
         android:id="@+id/icons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

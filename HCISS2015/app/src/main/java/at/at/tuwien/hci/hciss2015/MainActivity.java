@@ -1,9 +1,15 @@
 package at.at.tuwien.hci.hciss2015;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.util.LruCache;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,12 +21,22 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import at.at.tuwien.hci.hciss2015.domain.PointOfInterest;
+import at.at.tuwien.hci.hciss2015.persistence.MyDatabaseHelper;
+import at.at.tuwien.hci.hciss2015.persistence.PointOfInterestDaoImpl;
+import at.at.tuwien.hci.hciss2015.persistence.Types;
+import at.at.tuwien.hci.hciss2015.util.MyMarkerDrawer;
 
 /**
  * sources @
@@ -47,17 +63,29 @@ public class MainActivity extends FragmentActivity {
     private FrameLayout myFrameLayout;
 
     private Context context = this;
+    private LruCache<String, BitmapDescriptor> mMemoryCache;
+
+    private PointOfInterestDaoImpl daoInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(context));
+        daoInstance = PointOfInterestDaoImpl.getInstance();
+
         myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         myDrawerOptions = getResources().getStringArray(R.array.drawer_options);
         myDrawerList = (ListView) findViewById(R.id.left_drawer);
         myDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, myDrawerOptions));
         myDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+        final int cacheSize = maxMemory / 8;
+
+        mMemoryCache = new LruCache<String, BitmapDescriptor>(cacheSize);
 
         mMap = ((SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map)).getMap();
@@ -73,12 +101,40 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onFinish() {        //When animation is finished, do some stuff like drawing icons and showing position
+                //MyMarkerDrawer markerDrawer = new MyMarkerDrawer(context, mMap);
+                //markerDrawer.execute();
 
-                mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(48.208587, 16.372301))
-                                        //.title("Testmarker 1")
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.hospital))
-                );
+                List<PointOfInterest> pois = null;
+                int resId = 0;
+                String imageKey = "";
+                BitmapDescriptor bd = null;
+
+                for (int type : Types.types) {
+                    pois = new ArrayList<PointOfInterest>(daoInstance.getPOIsByType(type));
+                    resId = getDrawableByType(type);
+                    for (PointOfInterest poi : pois) {
+
+                        imageKey = String.valueOf(resId);
+                        bd = getBitmapDescriptorFromMemCache(imageKey);
+                        if (bd != null) {
+                            mMap.addMarker(new MarkerOptions()
+                                            .position(poi.getLatLng())
+                                            .title(poi.getDescription())
+                                            .icon(bd)
+                            );
+                        } else {
+                            bd = BitmapDescriptorFactory.fromResource(resId);
+                            mMap.addMarker(new MarkerOptions()
+                                            .position(poi.getLatLng())
+                                            .title(poi.getDescription())
+                                            .icon(bd)
+                            );
+                            //BitmapWorkerTask task = new BitmapWorkerTask(context);
+                            //task.execute(resId);
+                            addBitmapToMemoryCache(imageKey, bd);
+                        }
+                    }
+                }
 
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);      //show MyLocation-Button
                 mMap.setMyLocationEnabled(true);                            //Show my location
@@ -99,16 +155,24 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
+    public void addBitmapToMemoryCache(String key, BitmapDescriptor desc) {
+        if (getBitmapDescriptorFromMemCache(key) == null) {
+            mMemoryCache.put(key, desc);
+        }
+    }
 
+    public BitmapDescriptor getBitmapDescriptorFromMemCache(String key) {
+        return mMemoryCache.get(key);
+    }
 
-    public void openMap(View view){
+    public void openMap(View view) {
         MapDialog dialog = new MapDialog();
 
         dialog.show(getSupportFragmentManager(), "abc");
 
     }
 
-    public void openMerkmale(View view){
+    public void openMerkmale(View view) {
         MerkmalDialog dialog = new MerkmalDialog();
 
         dialog.show(getSupportFragmentManager(), "abc");
@@ -117,6 +181,8 @@ public class MainActivity extends FragmentActivity {
     public void openDrawer(View view) {
         myDrawerLayout.openDrawer(myDrawerList);
     }
+
+
 
     private class MyInfoWindowAdapter implements InfoWindowAdapter {
 
@@ -129,7 +195,7 @@ public class MainActivity extends FragmentActivity {
         @Override
         public View getInfoWindow(Marker marker) {
             TextView title = (TextView) myCustomInfoWindow.findViewById(R.id.txtTitle);
-            title.setText("test hospital");
+            title.setText(marker.getTitle());
             return myCustomInfoWindow;
         }
 
@@ -153,14 +219,30 @@ public class MainActivity extends FragmentActivity {
 
         }
     }
+
+    private int getDrawableByType(int type) {
+        switch (type) {
+            case 0:
+                return R.drawable.police;
+            case 1:
+                return R.drawable.hospital;
+            case 2:
+                return  R.drawable.subway;
+            case 3:
+                return R.drawable.park;
+            default:
+                return -1;
+        }
+    }
+
 }
 
-        //ArrayList<LatLng> hospitals = new ArrayList<>();
+//ArrayList<LatLng> hospitals = new ArrayList<>();
 
 
-        /**
-         * Location Listener, maybee needed or not, so the code is provided here to be sure
-         */
+/**
+ * Location Listener, maybee needed or not, so the code is provided here to be sure
+ */
         /*
 
         // Acquire a reference to the system Location Manager
@@ -176,7 +258,6 @@ public class MainActivity extends FragmentActivity {
                 mMap.addMarker(new MarkerOptions()
                                 .position(pos)
                                 .title("Hospital 1")
-                        // .icon(BitmapDescriptorFactory.fromFile("res/hospital.bmp"))
                 );-
             }
 
@@ -192,9 +273,9 @@ public class MainActivity extends FragmentActivity {
         */
 
 
-        /**
-         * Tile Overlay von Amer
-         */
+/**
+ * Tile Overlay von Amer
+ */
         /*
         TileOverlayOptions opts = new TileOverlayOptions();
 

@@ -14,6 +14,9 @@ public class PointOfInterest {
     private double lng;
     private int flag;
 
+    //non db fields
+    private int drawable;
+
     public PointOfInterest() {
 
     }
@@ -76,6 +79,14 @@ public class PointOfInterest {
 
     public LatLng getLatLng() {
         return new LatLng(getLat(), getLng());
+    }
+
+    public int getDrawable() {
+        return drawable;
+    }
+
+    public void setDrawable(int drawable) {
+        this.drawable = drawable;
     }
 
     @Override

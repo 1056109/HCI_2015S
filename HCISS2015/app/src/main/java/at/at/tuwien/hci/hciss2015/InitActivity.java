@@ -22,7 +22,7 @@ public class InitActivity extends Activity {
 
     private ProgressBar spinner;
 
-    private PointOfInterestDaoImpl instance;
+    //private PointOfInterestDaoImpl instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +31,10 @@ public class InitActivity extends Activity {
 
         spinner = (ProgressBar) findViewById(R.id.pbSpinner);
 
-        PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(this));
-        instance = PointOfInterestDaoImpl.getInstance();
+        //PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(this));
+        //instance = PointOfInterestDaoImpl.getInstance();
 
+        //Log.d(TAG, "current DB entries count: " + instance.countPOIs());
         //Log.d(TAG, instance.getSinglePOI(1).toString());
         //Log.d(TAG, instance.getPOIsByType(Types.SUBWAY).toString());
         //instance.resetAllFlags();
