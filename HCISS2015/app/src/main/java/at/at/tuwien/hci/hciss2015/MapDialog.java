@@ -20,8 +20,7 @@ public class MapDialog extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setMessage("This is the first fragment dialog to test")
-                .setView(inflater.inflate(R.layout.map_layout, null));
+        builder.setView(inflater.inflate(R.layout.map_layout, null));
 
         // Create the AlertDialog object and return it
         return builder.create();
