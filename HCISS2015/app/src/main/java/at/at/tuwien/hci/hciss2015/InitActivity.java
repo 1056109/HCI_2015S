@@ -2,11 +2,15 @@ package at.at.tuwien.hci.hciss2015;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.ActionMode;
 import android.widget.ProgressBar;
+
+import at.at.tuwien.hci.hciss2015.persistence.MyDatabaseHelper;
+import at.at.tuwien.hci.hciss2015.persistence.PointOfInterestDaoImpl;
+import at.at.tuwien.hci.hciss2015.persistence.Types;
 
 
 /**
@@ -14,7 +18,11 @@ import android.widget.ProgressBar;
  */
 public class InitActivity extends Activity {
 
+    private static final String TAG = InitActivity.class.getSimpleName();
+
     private ProgressBar spinner;
+
+    private PointOfInterestDaoImpl instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +30,17 @@ public class InitActivity extends Activity {
         setContentView(R.layout.activity_init);
 
         spinner = (ProgressBar) findViewById(R.id.pbSpinner);
+
+        PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(this));
+        instance = PointOfInterestDaoImpl.getInstance();
+
+        //Log.d(TAG, instance.getSinglePOI(1).toString());
+        //Log.d(TAG, instance.getPOIsByType(Types.SUBWAY).toString());
+        //instance.resetAllFlags();
+        //Log.d(TAG, instance.getAllPOIs().toString());
+        //instance.updatePOIFlag(3, 1);
+        //instance.updatePOIFlag(7, 0);
+        //Log.d(TAG, instance.getAllUnvisitedPOIs().toString());
 
         Handler myHandler = new Handler();
 
@@ -31,7 +50,7 @@ public class InitActivity extends Activity {
                 Intent intent = new Intent(InitActivity.this,
                         MainActivity.class);
                 startActivity(intent);
-                Log.i("InitActivity", "Starting MainActivity");
+                Log.i(TAG, "Starting MainActivity");
                 finish();
             }
         }, 2000);
