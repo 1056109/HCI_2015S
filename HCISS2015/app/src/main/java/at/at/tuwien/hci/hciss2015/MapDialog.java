@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -20,11 +21,10 @@ public class MapDialog extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.map_layout, null))
-
-        .setTitle("Fortschritt Aufenthaltsort");
+        builder.setView(inflater.inflate(R.layout.map_layout, null));
 
         // Create the AlertDialog object and return it
         return builder.create();
     }
+
 }

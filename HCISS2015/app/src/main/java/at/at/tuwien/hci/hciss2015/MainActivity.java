@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.LruCache;
@@ -166,19 +167,26 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void openMap(View view) {
-        MapDialog dialog = new MapDialog();
+        Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
+        vb.vibrate(100);
 
+        MapDialog dialog = new MapDialog();
         dialog.show(getSupportFragmentManager(), "abc");
 
     }
 
     public void openMerkmale(View view) {
-        MerkmalDialog dialog = new MerkmalDialog();
+        Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
+        vb.vibrate(100);
 
+        MerkmalDialog dialog = new MerkmalDialog();
         dialog.show(getSupportFragmentManager(), "abc");
     }
 
     public void openDrawer(View view) {
+        Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
+        vb.vibrate(100);
+
         myDrawerLayout.openDrawer(myDrawerList);
     }
 
