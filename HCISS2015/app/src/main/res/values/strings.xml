@@ -8,4 +8,7 @@
         <item>option 2</item>
         <item>option 3</item>
     </array>
+    <string name="mapProgress">0/4</string>
+    <string name="merkmalProgress">0/7</string>
+    <string name="weaponProgress">0/1</string>
 </resources>

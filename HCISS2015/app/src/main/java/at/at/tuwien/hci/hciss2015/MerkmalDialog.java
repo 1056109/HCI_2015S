@@ -20,7 +20,7 @@ public class MerkmalDialog extends DialogFragment {
                         // FIRE ZE MISSILES!
                     }
                 })
-                .setNegativeButton("´absolutely not ok", new DialogInterface.OnClickListener() {
+                .setNegativeButton("absolutely not ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
                     }
