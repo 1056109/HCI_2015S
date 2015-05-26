@@ -66,6 +66,11 @@ public class MainActivity extends FragmentActivity {
     private Context context = this;
     private LruCache<String, BitmapDescriptor> mMemoryCache;
 
+    private BitmapDescriptor hospital;
+    private BitmapDescriptor police;
+    private BitmapDescriptor park;
+    private BitmapDescriptor subway;
+
     private PointOfInterestDaoImpl daoInstance;
 
     @Override
@@ -82,11 +87,18 @@ public class MainActivity extends FragmentActivity {
         myDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, myDrawerOptions));
         myDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
+        police = BitmapDescriptorFactory.fromResource(R.drawable.police);
+        hospital = BitmapDescriptorFactory.fromResource(R.drawable.hospital);
+        park = BitmapDescriptorFactory.fromResource(R.drawable.park);
+        subway = BitmapDescriptorFactory.fromResource(R.drawable.subway);
+
+        /*
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 
         final int cacheSize = maxMemory / 8;
 
         mMemoryCache = new LruCache<String, BitmapDescriptor>(cacheSize);
+        */
 
         mMap = ((SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map)).getMap();
@@ -102,42 +114,13 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public void onFinish() {        //When animation is finished, do some stuff like drawing icons and showing position
-                //MyMarkerDrawer markerDrawer = new MyMarkerDrawer(context, mMap);
-                //markerDrawer.execute();
 
-                List<PointOfInterest> pois = null;
-                int resId = 0;
-                String imageKey = "";
-                BitmapDescriptor bd = null;
-
-                for (int type : Types.types) {
-                    pois = new ArrayList<PointOfInterest>(daoInstance.getPOIsByType(type));
-                    resId = getDrawableByType(type);
-                    for (PointOfInterest poi : pois) {
-
-                        imageKey = String.valueOf(resId);
-                        bd = getBitmapDescriptorFromMemCache(imageKey);
-                        if (bd != null) {
-                            mMap.addMarker(new MarkerOptions()
-                                            .position(poi.getLatLng())
-                                            .title(poi.getDescription())
-                                            .icon(bd)
-                            );
-                        } else {
-                            bd = BitmapDescriptorFactory.fromResource(resId);
-                            mMap.addMarker(new MarkerOptions()
-                                            .position(poi.getLatLng())
-                                            .title(poi.getDescription())
-                                            .icon(bd)
-                            );
-                            //BitmapWorkerTask task = new BitmapWorkerTask(context);
-                            //task.execute(resId);
-                            addBitmapToMemoryCache(imageKey, bd);
-                        }
-                    }
-                }
+                BitmapDescriptor[] bmpDescriptors = { police, hospital, subway, park };
+                MyMarkerDrawer markerDrawer = new MyMarkerDrawer(context, mMap, bmpDescriptors);
+                markerDrawer.execute();
 
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);      //show MyLocation-Button
+                mMap.getUiSettings().setMapToolbarEnabled(false);
                 mMap.setMyLocationEnabled(true);                            //Show my location
                 mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -23,12 +24,14 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
 
     private final Context context;
     private final GoogleMap map;
+    private final BitmapDescriptor[] bmpDescriptors;
 
     private PointOfInterestDaoImpl daoInstance;
 
-    public MyMarkerDrawer(Context context, GoogleMap map) {
+    public MyMarkerDrawer(Context context, GoogleMap map, BitmapDescriptor[] bmpDescriptors) {
         this.context = context;
         this.map = map;
+        this.bmpDescriptors = bmpDescriptors;
 
         PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(context));
         daoInstance = PointOfInterestDaoImpl.getInstance();
@@ -38,7 +41,7 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
         map.addMarker(new MarkerOptions()
                         .title(poi.getDescription())
                         .position(poi.getLatLng())
-                        .icon(BitmapDescriptorFactory.fromResource(poi.getDrawable()))
+                        .icon(bmpDescriptors[poi.getType()])
                         .snippet(String.valueOf(poi.getType()))
         );
     }
@@ -46,15 +49,13 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
     @Override
     protected Boolean doInBackground(Void... params) {
         List<PointOfInterest> pois = null;
-        int drawable = -1;
-        for (int type : Types.types) {
-            drawable = getDrawableByType(type);
-            pois = new ArrayList<PointOfInterest>(daoInstance.getPOIsByType(type));
+
+        //for (int type : Types.types) {
+            pois = new ArrayList<PointOfInterest>(daoInstance.getAllPOIs());
             for (PointOfInterest poi : pois) {
-                poi.setDrawable(drawable);
                 publishProgress(poi);
             }
-        }
+        //}
         return true;
     }
 

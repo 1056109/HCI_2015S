@@ -5,7 +5,7 @@
     android:padding="8dp"
     android:alpha="0.4"
     android:orientation="vertical"
-    android:background="@drawable/custom_info_window_shape">
+    android:background="@drawable/curve_shape">
 
     <LinearLayout
         android:layout_gravity="center_horizontal"
