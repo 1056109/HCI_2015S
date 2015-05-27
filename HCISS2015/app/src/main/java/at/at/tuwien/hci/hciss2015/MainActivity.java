@@ -11,7 +11,10 @@ import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.LruCache;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -46,6 +49,9 @@ import at.at.tuwien.hci.hciss2015.util.MyMarkerDrawer;
  * http://guides.cocoahero.com/google-maps-android-custom-tile-providers.html
  * https://developers.google.com/maps/documentation/android/tileoverlay
  */
+enum CollegueState{
+    waiting, selecting, working
+}
 
 public class MainActivity extends FragmentActivity {
 
@@ -75,12 +81,16 @@ public class MainActivity extends FragmentActivity {
 
     private PointOfInterestDaoImpl daoInstance;
 
-    private boolean collegueFlag = false;       //boolean for collegue-status
+    private CollegueState collegueState;
+    TextView collegueText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        collegueState = CollegueState.waiting;
 
         PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(context));
         daoInstance = PointOfInterestDaoImpl.getInstance();
@@ -130,7 +140,15 @@ public class MainActivity extends FragmentActivity {
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
-                        Toast.makeText(context, "do something", Toast.LENGTH_SHORT).show();
+
+                        if (collegueState.equals(CollegueState.selecting)){
+                            //TODO: make popup-window for asking if collegue should really go there
+                            Toast.makeText(context, "Ihr Kollege wird an dieser Stelle seine Untersuchung beginnen", Toast.LENGTH_SHORT).show();
+                            startCollegueTimer(getCurrentFocus());
+                            collegueState = CollegueState.working;
+                        }
+                        else
+                            Toast.makeText(context, "do something", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 });
@@ -154,30 +172,41 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void openMap(View view) {
-        Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
-        vb.vibrate(100);
+        vibrate();
     }
 
     public void openMerkmale(View view) {
-        Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
-        vb.vibrate(100);
+        vibrate();
     }
 
     public void openDrawer(View view) {
-        Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
-        vb.vibrate(100);
+        vibrate();
 
         myDrawerLayout.openDrawer(myDrawerList);
     }
 
     public void sendCollegue(View view){
-        Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
-        vb.vibrate(100);
+        vibrate();
 
         ImageButton collegue = (ImageButton)view.findViewById(R.id.btnCollegue);
         collegue.setImageResource(R.drawable.info_collegue);
-        collegueFlag = true;
+        collegueState = CollegueState.selecting;
 
+        Toast toast = new Toast (getApplicationContext());
+
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.toast_layout));
+
+        TextView text = (TextView) layout.findViewById(R.id.toast_text);
+        text.setText("Waehle einen Ort aus, an dem dein Kollege eine Untersuchung fuer dich " +
+                "uebernehmen soll! Dein Kollege steht dir nach 30 Minuten wieder zur Verfuegung.");
+
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setView(layout);
+        toast.show();
+        toast.show();
     }
 
 
@@ -231,6 +260,36 @@ public class MainActivity extends FragmentActivity {
             default:
                 return -1;
         }
+    }
+
+    private void vibrate(){
+        Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
+        vb.vibrate(100);
+    }
+
+    public void startCollegueTimer(View view) {         //Timer-Thread for collegue
+
+        final TextView collegueText = (TextView) findViewById(R.id.collegueStatus);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 30; i >= 0; i--) {
+                    final int time = (i/60)+1;
+                    try {
+                        Thread.sleep(60000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    collegueText.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            collegueText.setText(time+"Min");
+                        }
+                    });
+                }
+            }
+        };
+        new Thread(runnable).start();
     }
 
 }
@@ -353,6 +412,7 @@ public class MainActivity extends FragmentActivity {
     public void onProviderDisabled(String s) {
 
     }*/
+
 
 
 

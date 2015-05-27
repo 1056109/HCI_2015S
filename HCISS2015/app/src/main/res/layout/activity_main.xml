@@ -85,7 +85,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/collegue"
+                android:id="@+id/collegueStatus"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
