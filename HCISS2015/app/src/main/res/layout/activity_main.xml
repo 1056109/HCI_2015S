@@ -34,7 +34,7 @@
                 android:gravity="center"
                 android:layout_marginBottom="-8dp"
                 android:background="@drawable/curve_shape"
-                android:textColor="#000000"
+                android:textColor="#FFFFFF"
                 android:text="@string/merkmalProgress"/>
 
             <ImageButton
@@ -63,7 +63,7 @@
                 android:layout_marginBottom="-8dp"
                 android:gravity="center"
                 android:background="@drawable/curve_shape"
-                android:textColor="#000000"
+                android:textColor="#FFFFFF"
                 android:text="@string/mapProgress" />
 
             <ImageButton
@@ -92,7 +92,7 @@
                 android:layout_marginBottom="-8dp"
                 android:gravity="center"
                 android:background="@drawable/curve_shape"
-                android:textColor="#000000"
+                android:textColor="#FFFFFF"
                 android:text="@string/collegue" />
 
             <ImageButton
@@ -123,9 +123,9 @@
                 android:layout_marginBottom="-8dp"
                 android:gravity="center"
                 android:background="@drawable/curve_shape"
-                android:textColor="#000000"
+                android:textColor="#FFFFFF"
                 android:text="@string/weaponProgress" />
-
+außerdem
             <ImageButton
                 android:id="@+id/btnWeapon"
                 android:layout_width="wrap_content"

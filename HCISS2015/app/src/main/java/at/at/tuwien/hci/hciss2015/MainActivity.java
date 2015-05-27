@@ -1,10 +1,12 @@
 package at.at.tuwien.hci.hciss2015;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -78,6 +80,9 @@ public class MainActivity extends FragmentActivity {
     private BitmapDescriptor police;
     private BitmapDescriptor park;
     private BitmapDescriptor subway;
+    private ImageButton closeMap;
+    private ImageButton closeFeatures;
+    private Dialog featureDialog;
 
     private PointOfInterestDaoImpl daoInstance;
 
@@ -173,10 +178,48 @@ public class MainActivity extends FragmentActivity {
 
     public void openMap(View view) {
         vibrate();
+
+        final Dialog mapDialog = new Dialog(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.map_layout,         //does not work
+                (ViewGroup) findViewById(R.id.mapView));
+        mapDialog.setContentView(layout);
+
+        //mapDialog.setContentView(R.layout.map_layout);
+
+        ImageButton dialogButton = (ImageButton) mapDialog.findViewById(R.id.closeMap);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mapDialog.dismiss();
+            }
+        });
+
+        mapDialog.show();
     }
 
     public void openMerkmale(View view) {
         vibrate();
+
+        final Dialog featureDialog = new Dialog(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.feature_layout,         //does not work
+                (ViewGroup) findViewById(R.id.featureView));
+        featureDialog.setContentView(layout);
+
+        //mapDialog.setContentView(R.layout.feature_layout);            //does also not work o.O
+
+        ImageButton dialogButton = (ImageButton) featureDialog.findViewById(R.id.closeMap);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                featureDialog.dismiss();
+            }
+        });
+
+        featureDialog.show();
     }
 
     public void openDrawer(View view) {
@@ -270,11 +313,13 @@ public class MainActivity extends FragmentActivity {
     public void startCollegueTimer(View view) {         //Timer-Thread for collegue
 
         final TextView collegueText = (TextView) findViewById(R.id.collegueStatus);
+        collegueText.setText(30+"Min");
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 for (int i = 30; i >= 0; i--) {
-                    final int time = (i/60)+1;
+                    final int time = i;
                     try {
                         Thread.sleep(60000);
                     } catch (InterruptedException e) {
@@ -284,12 +329,14 @@ public class MainActivity extends FragmentActivity {
                         @Override
                         public void run() {
                             collegueText.setText(time+"Min");
-                        }
+                    }
                     });
                 }
             }
         };
-        new Thread(runnable).start();
+        Thread timer = new Thread(runnable);
+        timer.start();
+        // TODO: logic what happens when time is over - resetting state, button form, feature
     }
 
 }
