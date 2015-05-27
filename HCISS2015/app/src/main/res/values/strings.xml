@@ -11,4 +11,5 @@
     <string name="mapProgress">0/4</string>
     <string name="merkmalProgress">0/7</string>
     <string name="weaponProgress">0/1</string>
+    <string name="collegue">READY</string>
 </resources>

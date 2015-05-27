@@ -19,20 +19,20 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:layout_weight="1"
-            android:src="@drawable/diamond" />
+            android:src="@drawable/ic_feature" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:layout_weight="1"
-            android:src="@drawable/diamond" />
+            android:src="@drawable/ic_map" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/diamond" />
+            android:src="@drawable/ic_weapon" />
     </LinearLayout>
 
     <TextView

@@ -22,7 +22,7 @@ public class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
 
     @Override
     protected Bitmap doInBackground(Integer... params) {
-        final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.hospital);
+        final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_hospital);
 
         return bitmap;
     }

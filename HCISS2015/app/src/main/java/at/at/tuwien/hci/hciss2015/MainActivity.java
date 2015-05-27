@@ -14,7 +14,9 @@ import android.util.LruCache;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,6 +75,8 @@ public class MainActivity extends FragmentActivity {
 
     private PointOfInterestDaoImpl daoInstance;
 
+    private boolean collegueFlag = false;       //boolean for collegue-status
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,10 +91,10 @@ public class MainActivity extends FragmentActivity {
         myDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, myDrawerOptions));
         myDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        police = BitmapDescriptorFactory.fromResource(R.drawable.police);
-        hospital = BitmapDescriptorFactory.fromResource(R.drawable.hospital);
-        park = BitmapDescriptorFactory.fromResource(R.drawable.park);
-        subway = BitmapDescriptorFactory.fromResource(R.drawable.subway);
+        police = BitmapDescriptorFactory.fromResource(R.drawable.ic_police);
+        hospital = BitmapDescriptorFactory.fromResource(R.drawable.ic_hospital);
+        park = BitmapDescriptorFactory.fromResource(R.drawable.ic_park);
+        subway = BitmapDescriptorFactory.fromResource(R.drawable.ic_subway);
 
         /*
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
@@ -152,18 +156,11 @@ public class MainActivity extends FragmentActivity {
     public void openMap(View view) {
         Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
         vb.vibrate(100);
-
-        MapDialog dialog = new MapDialog();
-        dialog.show(getSupportFragmentManager(), "abc");
-
     }
 
     public void openMerkmale(View view) {
         Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
         vb.vibrate(100);
-
-        MerkmalDialog dialog = new MerkmalDialog();
-        dialog.show(getSupportFragmentManager(), "abc");
     }
 
     public void openDrawer(View view) {
@@ -171,6 +168,16 @@ public class MainActivity extends FragmentActivity {
         vb.vibrate(100);
 
         myDrawerLayout.openDrawer(myDrawerList);
+    }
+
+    public void sendCollegue(View view){
+        Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
+        vb.vibrate(100);
+
+        ImageButton collegue = (ImageButton)view.findViewById(R.id.btnCollegue);
+        collegue.setImageResource(R.drawable.info_collegue);
+        collegueFlag = true;
+
     }
 
 
@@ -214,13 +221,13 @@ public class MainActivity extends FragmentActivity {
     private int getDrawableByType(int type) {
         switch (type) {
             case 0:
-                return R.drawable.police;
+                return R.drawable.ic_police;
             case 1:
-                return R.drawable.hospital;
+                return R.drawable.ic_hospital;
             case 2:
-                return  R.drawable.subway;
+                return  R.drawable.ic_subway;
             case 3:
-                return R.drawable.park;
+                return R.drawable.ic_park;
             default:
                 return -1;
         }

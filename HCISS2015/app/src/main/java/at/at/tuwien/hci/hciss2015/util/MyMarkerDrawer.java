@@ -67,13 +67,13 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
     private int getDrawableByType(int type) {
         switch (type) {
             case 0:
-                return R.drawable.police;
+                return R.drawable.ic_police;
             case 1:
-                return R.drawable.hospital;
+                return R.drawable.ic_hospital;
             case 2:
-                return  R.drawable.subway;
+                return  R.drawable.ic_subway;
             case 3:
-                return R.drawable.park;
+                return R.drawable.ic_park;
             default:
                 return -1;
         }
