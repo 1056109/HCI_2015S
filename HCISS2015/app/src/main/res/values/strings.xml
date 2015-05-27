@@ -3,11 +3,25 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <array name="drawer_options">
-        <item>option 1</item>
-        <item>option 2</item>
-        <item>option 3</item>
+
+    <array name="nav_drawer_items">
+        <item>Karte</item>
+        <item>Benutzerdata</item>
+        <item>Fall verwerfen</item>
+        <item>Statistik</item>
+        <item>Help</item>
+        <item>Info</item>
     </array>
+
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_map_drawer</item>
+        <item>@drawable/ic_map_drawer</item>
+        <item>@drawable/ic_map_drawer</item>
+        <item>@drawable/ic_map_drawer</item>
+        <item>@drawable/ic_map_drawer</item>
+        <item>@drawable/ic_map_drawer</item>
+    </array>
+
     <string name="mapProgress">0/4</string>
     <string name="merkmalProgress">0/7</string>
     <string name="weaponProgress">0/1</string>

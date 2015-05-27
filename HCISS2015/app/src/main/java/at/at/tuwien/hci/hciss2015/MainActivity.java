@@ -2,12 +2,7 @@ package at.at.tuwien.hci.hciss2015;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
-import android.os.AsyncTask;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
@@ -18,8 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -34,16 +27,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import at.at.tuwien.hci.hciss2015.domain.PointOfInterest;
+import at.at.tuwien.hci.hciss2015.domain.NavDrawerItem;
 import at.at.tuwien.hci.hciss2015.persistence.MyDatabaseHelper;
 import at.at.tuwien.hci.hciss2015.persistence.PointOfInterestDaoImpl;
-import at.at.tuwien.hci.hciss2015.persistence.Types;
+import at.at.tuwien.hci.hciss2015.util.MyDrawerAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyMarkerDrawer;
 
 /**
@@ -70,6 +62,13 @@ public class MainActivity extends FragmentActivity {
     private String[] myDrawerOptions;
     private DrawerLayout myDrawerLayout;
     private ListView myDrawerList;
+
+    private ArrayList<NavDrawerItem> navDrawerItems;
+    private MyDrawerAdapter adapter;
+
+    // slide menu items
+    private String[] navMenuTitles;
+    private TypedArray navMenuIcons;
 
     private FrameLayout myFrameLayout;
 
@@ -100,10 +99,37 @@ public class MainActivity extends FragmentActivity {
         PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(context));
         daoInstance = PointOfInterestDaoImpl.getInstance();
 
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
+        navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
+
         myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        myDrawerOptions = getResources().getStringArray(R.array.drawer_options);
         myDrawerList = (ListView) findViewById(R.id.left_drawer);
-        myDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, myDrawerOptions));
+
+        navDrawerItems = new ArrayList<NavDrawerItem>();
+
+        // adding nav drawer items to array
+        // Karte
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
+        // Benutzerdaten
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
+        // Fall verwerfen
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
+        // Statistik
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
+        // Help
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
+        // Info
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
+
+        // Recycle the typed array
+        navMenuIcons.recycle();
+
+        // setting the nav drawer list adapter
+        adapter = new MyDrawerAdapter(getApplicationContext(),
+                navDrawerItems);
+        myDrawerList.setAdapter(adapter);
+        myDrawerList.setItemChecked(0, true);
+        //myDrawerList.setAdapter(new MyDrawerAdapter(context, itemsList));
         myDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         police = BitmapDescriptorFactory.fromResource(R.drawable.ic_police);

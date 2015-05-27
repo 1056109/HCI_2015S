@@ -1,5 +1,4 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -31,11 +30,11 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
                 android:layout_marginBottom="-8dp"
                 android:background="@drawable/curve_shape_black"
-                android:textColor="#FFFFFF"
-                android:text="@string/merkmalProgress"/>
+                android:gravity="center"
+                android:text="@string/merkmalProgress"
+                android:textColor="#FFFFFF" />
 
             <ImageButton
                 android:id="@+id/btnFeature"
@@ -45,7 +44,7 @@
                 android:layout_margin="10dp"
                 android:background="?android:selectableItemBackground"
                 android:onClick="openMerkmale"
-                android:src="@drawable/btn_feature"/>
+                android:src="@drawable/btn_feature" />
         </LinearLayout>
 
         <LinearLayout
@@ -61,10 +60,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="-8dp"
-                android:gravity="center"
                 android:background="@drawable/curve_shape_black"
-                android:textColor="#FFFFFF"
-                android:text="@string/mapProgress" />
+                android:gravity="center"
+                android:text="@string/mapProgress"
+                android:textColor="#FFFFFF" />
 
             <ImageButton
                 android:id="@+id/btnMap"
@@ -90,10 +89,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="-8dp"
-                android:gravity="center"
                 android:background="@drawable/curve_shape_black"
-                android:textColor="#FFFFFF"
-                android:text="@string/collegue" />
+                android:gravity="center"
+                android:text="@string/collegue"
+                android:textColor="#FFFFFF" />
 
             <ImageButton
                 android:id="@+id/btnCollegue"
@@ -121,11 +120,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="-8dp"
-                android:gravity="center"
                 android:background="@drawable/curve_shape_black"
-                android:textColor="#FFFFFF"
-                android:text="@string/weaponProgress" />
-außerdem
+                android:gravity="center"
+                android:text="@string/weaponProgress"
+                android:textColor="#FFFFFF" />
+            außerdem
+
             <ImageButton
                 android:id="@+id/btnWeapon"
                 android:layout_width="wrap_content"
@@ -155,8 +155,9 @@ außerdem
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#111"
+        android:background="#ff000000"
         android:choiceMode="singleChoice"
+        android:listSelector="@drawable/list_selector"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />
 </android.support.v4.widget.DrawerLayout>
