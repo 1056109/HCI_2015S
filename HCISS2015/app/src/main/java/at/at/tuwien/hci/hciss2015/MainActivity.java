@@ -204,8 +204,7 @@ public class MainActivity extends FragmentActivity {
 
         final Dialog featureDialog = new Dialog(this);
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.feature_layout,         //does not work
-                (ViewGroup) findViewById(R.id.featureView));
+        View layout = inflater.inflate(R.layout.feature_layout, null);
         featureDialog.setContentView(layout);
 
         //mapDialog.setContentView(R.layout.feature_layout);            //does also not work o.O
