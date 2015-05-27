@@ -1,13 +1,16 @@
 package at.at.tuwien.hci.hciss2015;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.opengl.Visibility;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
-import android.util.LruCache;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,15 +25,12 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import at.at.tuwien.hci.hciss2015.domain.NavDrawerItem;
 import at.at.tuwien.hci.hciss2015.persistence.MyDatabaseHelper;
@@ -38,16 +38,13 @@ import at.at.tuwien.hci.hciss2015.persistence.PointOfInterestDaoImpl;
 import at.at.tuwien.hci.hciss2015.util.MyDrawerAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyMarkerDrawer;
 
-/**
- * sources @
- * http://guides.cocoahero.com/google-maps-android-custom-tile-providers.html
- * https://developers.google.com/maps/documentation/android/tileoverlay
- */
-enum ColleagueState{
-    waiting, selecting, working
+enum ColleagueState {
+    WAITING, READY, WORKING
 }
 
 public class MainActivity extends FragmentActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private GoogleMap mMap;
 
@@ -59,38 +56,43 @@ public class MainActivity extends FragmentActivity {
 
     private static final String TILE_SERVER_URL = "http://tile.openstreetmap.org/";
 
-    private String[] myDrawerOptions;
     private DrawerLayout myDrawerLayout;
     private ListView myDrawerList;
 
     private ArrayList<NavDrawerItem> navDrawerItems;
     private MyDrawerAdapter adapter;
 
-    // slide menu items
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
 
     private FrameLayout myFrameLayout;
 
     private Context context = this;
-    private LruCache<String, BitmapDescriptor> mMemoryCache;
 
     private ImageButton closeMap;
     private ImageButton closeFeatures;
+
     private Dialog featureDialog;
 
     private PointOfInterestDaoImpl daoInstance;
 
-    private ColleagueState collegueState;
-    private TextView colleagueText;
+    private ImageButton colleague;
+    private ColleagueState colleagueState;
+    private TextView txtColleagueState;
+    private String send_colleague_desc;
+    private String send_colleague_working_msg;
 
+    private long startTime;
+
+    private Handler timerHandler;
+    private Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        collegueState = ColleagueState.waiting;
+        colleagueState = ColleagueState.WAITING;
 
         PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(context));
         daoInstance = PointOfInterestDaoImpl.getInstance();
@@ -130,7 +132,10 @@ public class MainActivity extends FragmentActivity {
         mMap = ((SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map)).getMap();
 
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(VIENNA, 12));
+        colleague = (ImageButton) findViewById(R.id.btnColleague);
+        txtColleagueState = (TextView) findViewById(R.id.colleagueState);
+        send_colleague_desc = getResources().getString(R.string.send_colleague_desc);
+        send_colleague_working_msg = getResources().getString(R.string.send_colleague_working_msg);
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(VIENNA)         // Sets the center of the map to Mountain View
@@ -152,15 +157,12 @@ public class MainActivity extends FragmentActivity {
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
-
-                        if (collegueState.equals(ColleagueState.selecting)){
+                        if (colleagueState.equals(ColleagueState.READY)){
                             //TODO: make popup-window for asking if collegue should really go there
-                            Toast.makeText(context, "Ihr Kollege wird an dieser Stelle seine Untersuchung beginnen", Toast.LENGTH_SHORT).show();
-                            startCollegueTimer(getCurrentFocus());
-                            collegueState = ColleagueState.working;
+                            handleCustomToast(send_colleague_working_msg);
+                            executeTimerTask();
+                            colleagueState = ColleagueState.WORKING;
                         }
-                        else
-                            Toast.makeText(context, "do something", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 });
@@ -226,29 +228,31 @@ public class MainActivity extends FragmentActivity {
 
     public void sendColleague(View view){
         vibrate();
-
-        ImageButton colleague = (ImageButton)view.findViewById(R.id.btnColleague);
-        colleague.setImageResource(R.drawable.info_collegue);
-        collegueState = ColleagueState.selecting;
-
-        Toast toast = new Toast (getApplicationContext());
-
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_toast,
-                (ViewGroup) findViewById(R.id.toast_layout));
-
-        TextView text = (TextView) layout.findViewById(R.id.toast_text);
-        text.setText("Waehle einen Ort aus, an dem dein Kollege eine Untersuchung fuer dich " +
-                "uebernehmen soll! Dein Kollege steht dir nach 30 Minuten wieder zur Verfuegung.");
-
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.setView(layout);
-        toast.show();
-        toast.show();
+        if(colleagueState == ColleagueState.WAITING) {
+            colleague.setImageResource(R.drawable.info_collegue);
+            txtColleagueState.setVisibility(TextView.VISIBLE);
+            colleagueState = ColleagueState.READY;
+            handleCustomToast(send_colleague_desc);
+        } else if(colleagueState == ColleagueState.READY) {
+            colleague.setImageResource(R.drawable.btn_colleague);
+            txtColleagueState.setVisibility(TextView.INVISIBLE);
+            colleagueState = ColleagueState.WAITING;
+        } else {
+            return;
+        }
     }
 
+    private void handleCustomToast(String message) {
+        Toast toast = new Toast(context);
+        View customToastLayout = getLayoutInflater().inflate(R.layout.custom_toast, (ViewGroup) findViewById(R.id.toast_layout));
+        TextView txtToastMsg = (TextView) customToastLayout.findViewById(R.id.txtToastMsg);
 
+        txtToastMsg.setText(message);
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setView(customToastLayout);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.show();
+    }
 
     private class MyInfoWindowAdapter implements InfoWindowAdapter {
 
@@ -291,33 +295,46 @@ public class MainActivity extends FragmentActivity {
         vb.vibrate(100);
     }
 
-    public void startCollegueTimer(View view) {         //Timer-Thread for collegue
+    @Override
+    public void onBackPressed() {
+        if(timerHandler != null) {
+            timerHandler.removeCallbacks(runnable);
+        }
+        finish();
+    }
 
-        final TextView collegueText = (TextView) findViewById(R.id.colleagueStatus);
-        collegueText.setText(30+"Min");
+    private void executeTimerTask() {
+        //startTime = 900000; //15 Min
+        startTime = 10000;
+        timerHandler = new Handler();
+        runnable = new Runnable() {
 
-        Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                for (int i = 30; i >= 0; i--) {
-                    final int time = i;
-                    try {
-                        Thread.sleep(60000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        int seconds = (int) (startTime / 1000);
+                        int minutes = seconds / 60;
+                        seconds     = seconds % 60;
+                        //Log.d(TAG, String.format("%d:%02d", minutes, seconds));
+                        txtColleagueState.setText(String.format("%d:%02d", minutes, seconds));
                     }
-                    collegueText.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            collegueText.setText(time+"Min");
-                    }
-                    });
+                });
+
+                if(startTime > 0) {
+                    startTime -= 1000;
+                    timerHandler.postDelayed(this, 1000);
+                } else {
+                    txtColleagueState.setVisibility(TextView.INVISIBLE);
+                    timerHandler.removeCallbacks(runnable);
+                    //fire info dialog
                 }
             }
         };
-        Thread timer = new Thread(runnable);
-        timer.start();
-        // TODO: logic what happens when time is over - resetting state, button form, feature
+
+        timerHandler.post(runnable);
     }
 
 }

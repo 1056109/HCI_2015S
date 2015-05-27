@@ -7,7 +7,7 @@
     android:background="@drawable/curve_shape_black"
     >
 
-    <TextView android:id="@+id/toast_text"
+    <TextView android:id="@+id/txtToastMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"

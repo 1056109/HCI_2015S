@@ -84,15 +84,16 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/colleagueStatus"
+                android:id="@+id/colleagueState"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="-8dp"
                 android:background="@drawable/curve_shape_black"
                 android:gravity="center"
-                android:text="@string/collegue"
-                android:textColor="#FFFFFF" />
+                android:text="@string/send_collegue_state"
+                android:textColor="#FFFFFF"
+                android:visibility="invisible" />
 
             <ImageButton
                 android:id="@+id/btnColleague"
@@ -157,7 +158,7 @@
         android:layout_gravity="start"
         android:background="#ff000000"
         android:choiceMode="singleChoice"
-        android:listSelector="@drawable/list_selector"
         android:divider="@android:color/transparent"
-        android:dividerHeight="0dp" />
+        android:dividerHeight="0dp"
+        android:listSelector="@drawable/list_selector" />
 </android.support.v4.widget.DrawerLayout>

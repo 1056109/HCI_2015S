@@ -32,5 +32,9 @@
     <string name="mapProgress">0/4</string>
     <string name="merkmalProgress">0/7</string>
     <string name="weaponProgress">0/1</string>
-    <string name="collegue">READY</string>
+
+    <string name="send_collegue_state">READY</string>
+    <string name="send_colleague_desc">Waehle einen Ort aus, an dem dein Kollege eine Untersuchung fuer dich uebernehmen soll! Dein Kollege steht dir nach 30 Minuten wieder zur Verfuegung.</string>
+    <string name="send_colleague_working_msg">Ihr Kollege wird an dieser Stelle seine Untersuchung beginnen</string>
+    <string name="title_activity_timer">TimerActivity</string>
 </resources>
