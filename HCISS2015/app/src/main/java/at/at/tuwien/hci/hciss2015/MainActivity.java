@@ -43,7 +43,7 @@ import at.at.tuwien.hci.hciss2015.util.MyMarkerDrawer;
  * http://guides.cocoahero.com/google-maps-android-custom-tile-providers.html
  * https://developers.google.com/maps/documentation/android/tileoverlay
  */
-enum CollegueState{
+enum ColleagueState{
     waiting, selecting, working
 }
 
@@ -75,18 +75,14 @@ public class MainActivity extends FragmentActivity {
     private Context context = this;
     private LruCache<String, BitmapDescriptor> mMemoryCache;
 
-    private BitmapDescriptor hospital;
-    private BitmapDescriptor police;
-    private BitmapDescriptor park;
-    private BitmapDescriptor subway;
     private ImageButton closeMap;
     private ImageButton closeFeatures;
     private Dialog featureDialog;
 
     private PointOfInterestDaoImpl daoInstance;
 
-    private CollegueState collegueState;
-    TextView collegueText;
+    private ColleagueState collegueState;
+    private TextView colleagueText;
 
 
     @Override
@@ -94,7 +90,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        collegueState = CollegueState.waiting;
+        collegueState = ColleagueState.waiting;
 
         PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(context));
         daoInstance = PointOfInterestDaoImpl.getInstance();
@@ -129,21 +125,7 @@ public class MainActivity extends FragmentActivity {
                 navDrawerItems);
         myDrawerList.setAdapter(adapter);
         myDrawerList.setItemChecked(0, true);
-        //myDrawerList.setAdapter(new MyDrawerAdapter(context, itemsList));
         myDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-        police = BitmapDescriptorFactory.fromResource(R.drawable.ic_police);
-        hospital = BitmapDescriptorFactory.fromResource(R.drawable.ic_hospital);
-        park = BitmapDescriptorFactory.fromResource(R.drawable.ic_park);
-        subway = BitmapDescriptorFactory.fromResource(R.drawable.ic_subway);
-
-        /*
-        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-
-        final int cacheSize = maxMemory / 8;
-
-        mMemoryCache = new LruCache<String, BitmapDescriptor>(cacheSize);
-        */
 
         mMap = ((SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map)).getMap();
@@ -160,8 +142,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onFinish() {        //When animation is finished, do some stuff like drawing icons and showing position
 
-                BitmapDescriptor[] bmpDescriptors = { police, hospital, subway, park };
-                MyMarkerDrawer markerDrawer = new MyMarkerDrawer(context, mMap, bmpDescriptors);
+                MyMarkerDrawer markerDrawer = new MyMarkerDrawer(context, mMap);
                 markerDrawer.execute();
 
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);      //show MyLocation-Button
@@ -172,11 +153,11 @@ public class MainActivity extends FragmentActivity {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
 
-                        if (collegueState.equals(CollegueState.selecting)){
+                        if (collegueState.equals(ColleagueState.selecting)){
                             //TODO: make popup-window for asking if collegue should really go there
                             Toast.makeText(context, "Ihr Kollege wird an dieser Stelle seine Untersuchung beginnen", Toast.LENGTH_SHORT).show();
                             startCollegueTimer(getCurrentFocus());
-                            collegueState = CollegueState.working;
+                            collegueState = ColleagueState.working;
                         }
                         else
                             Toast.makeText(context, "do something", Toast.LENGTH_SHORT).show();
@@ -190,16 +171,6 @@ public class MainActivity extends FragmentActivity {
                 onFinish();
             }
         });
-    }
-
-    public void addBitmapToMemoryCache(String key, BitmapDescriptor desc) {
-        if (getBitmapDescriptorFromMemCache(key) == null) {
-            mMemoryCache.put(key, desc);
-        }
-    }
-
-    public BitmapDescriptor getBitmapDescriptorFromMemCache(String key) {
-        return mMemoryCache.get(key);
     }
 
     public void openMap(View view) {
@@ -253,12 +224,12 @@ public class MainActivity extends FragmentActivity {
         myDrawerLayout.openDrawer(myDrawerList);
     }
 
-    public void sendCollegue(View view){
+    public void sendColleague(View view){
         vibrate();
 
-        ImageButton collegue = (ImageButton)view.findViewById(R.id.btnCollegue);
-        collegue.setImageResource(R.drawable.info_collegue);
-        collegueState = CollegueState.selecting;
+        ImageButton colleague = (ImageButton)view.findViewById(R.id.btnColleague);
+        colleague.setImageResource(R.drawable.info_collegue);
+        collegueState = ColleagueState.selecting;
 
         Toast toast = new Toast (getApplicationContext());
 
@@ -315,21 +286,6 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    private int getDrawableByType(int type) {
-        switch (type) {
-            case 0:
-                return R.drawable.ic_police;
-            case 1:
-                return R.drawable.ic_hospital;
-            case 2:
-                return  R.drawable.ic_subway;
-            case 3:
-                return R.drawable.ic_park;
-            default:
-                return -1;
-        }
-    }
-
     private void vibrate(){
         Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
         vb.vibrate(100);
@@ -337,7 +293,7 @@ public class MainActivity extends FragmentActivity {
 
     public void startCollegueTimer(View view) {         //Timer-Thread for collegue
 
-        final TextView collegueText = (TextView) findViewById(R.id.collegueStatus);
+        final TextView collegueText = (TextView) findViewById(R.id.colleagueStatus);
         collegueText.setText(30+"Min");
 
         Runnable runnable = new Runnable() {

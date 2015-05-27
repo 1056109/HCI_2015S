@@ -84,7 +84,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/collegueStatus"
+                android:id="@+id/colleagueStatus"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -95,14 +95,14 @@
                 android:textColor="#FFFFFF" />
 
             <ImageButton
-                android:id="@+id/btnCollegue"
+                android:id="@+id/btnColleague"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
                 android:layout_margin="10dp"
                 android:background="?android:selectableItemBackground"
-                android:onClick="sendCollegue"
-                android:src="@drawable/btn_collegue" />
+                android:onClick="sendColleague"
+                android:src="@drawable/btn_colleague" />
         </LinearLayout>
 
 
