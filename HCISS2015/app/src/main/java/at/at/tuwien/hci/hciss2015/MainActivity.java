@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -178,46 +179,42 @@ public class MainActivity extends FragmentActivity {
     public void openMap(View view) {
         vibrate();
 
-        final Dialog mapDialog = new Dialog(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.map_layout,         //does not work
-                (ViewGroup) findViewById(R.id.mapView));
-        mapDialog.setContentView(layout);
 
-        //mapDialog.setContentView(R.layout.map_layout);
-
-        ImageButton dialogButton = (ImageButton) mapDialog.findViewById(R.id.closeMap);
-        // if button is clicked, close the custom dialog
+        final Dialog dialog = new Dialog(this);
+        LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = li.inflate(R.layout.map_layout, null, false);
+        dialog.setContentView(layout);
+        Window window = dialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.closeMap);
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mapDialog.dismiss();
+                dialog.dismiss();
             }
         });
 
-        mapDialog.show();
+        dialog.show();
     }
 
     public void openMerkmale(View view) {
         vibrate();
 
-        final Dialog featureDialog = new Dialog(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.feature_layout, null);
-        featureDialog.setContentView(layout);
-
-        //mapDialog.setContentView(R.layout.feature_layout);            //does also not work o.O
-
-        ImageButton dialogButton = (ImageButton) featureDialog.findViewById(R.id.closeMap);
-        // if button is clicked, close the custom dialog
+        final Dialog dialog = new Dialog(this);
+        LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = li.inflate(R.layout.feature_layout, null, false);
+        dialog.setContentView(layout);
+        Window window = dialog.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.closeFeature);
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                featureDialog.dismiss();
+                dialog.dismiss();
             }
         });
 
-        featureDialog.show();
+        dialog.show();
     }
 
     public void openDrawer(View view) {
