@@ -70,11 +70,6 @@ public class MainActivity extends FragmentActivity {
 
     private Context context = this;
 
-    private ImageButton closeMap;
-    private ImageButton closeFeatures;
-
-    private Dialog featureDialog;
-
     private PointOfInterestDaoImpl daoInstance;
 
     private ImageButton colleague;
@@ -160,6 +155,9 @@ public class MainActivity extends FragmentActivity {
                     public boolean onMarkerClick(Marker marker) {
                         if (colleagueState.equals(ColleagueState.READY)){
                             //TODO: make popup-window for asking if collegue should really go there
+
+                            colleague.setImageResource(R.drawable.info_collegue);
+                            colleague.setClickable(false);
                             handleCustomToast(send_colleague_working_msg);
                             executeTimerTask();
                             colleagueState = ColleagueState.WORKING;
@@ -190,6 +188,7 @@ public class MainActivity extends FragmentActivity {
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                vibrate();
                 dialog.dismiss();
             }
         });
@@ -210,6 +209,7 @@ public class MainActivity extends FragmentActivity {
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                vibrate();
                 dialog.dismiss();
             }
         });
@@ -226,7 +226,6 @@ public class MainActivity extends FragmentActivity {
     public void sendColleague(View view){
         vibrate();
         if(colleagueState == ColleagueState.WAITING) {
-            colleague.setImageResource(R.drawable.info_collegue);
             txtColleagueState.setVisibility(TextView.VISIBLE);
             colleagueState = ColleagueState.READY;
             handleCustomToast(send_colleague_desc);

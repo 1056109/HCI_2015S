@@ -15,11 +15,11 @@
 
     <array name="nav_drawer_icons">
         <item>@drawable/ic_map_drawer</item>
-        <item>@drawable/ic_map_drawer</item>
-        <item>@drawable/ic_map_drawer</item>
-        <item>@drawable/ic_map_drawer</item>
-        <item>@drawable/ic_map_drawer</item>
-        <item>@drawable/ic_map_drawer</item>
+        <item>@drawable/ic_user_drawer</item>
+        <item>@drawable/ic_trash_drawer</item>
+        <item>@drawable/ic_stats_drawer</item>
+        <item>@drawable/ic_help_drawer</item>
+        <item>@drawable/ic_info_drawer</item>
     </array>
 
     <array name="my_marker_icons">
@@ -34,7 +34,7 @@
     <string name="weaponProgress">0/1</string>
 
     <string name="send_collegue_state">READY</string>
-    <string name="send_colleague_desc">Waehle einen Ort aus, an dem dein Kollege eine Untersuchung fuer dich uebernehmen soll! Dein Kollege steht dir nach 30 Minuten wieder zur Verfuegung.</string>
-    <string name="send_colleague_working_msg">Ihr Kollege wird an dieser Stelle seine Untersuchung beginnen</string>
+    <string name="send_colleague_desc">Waehle einen Ort aus, an dem dein Kollege eine Untersuchung fuer dich uebernehmen soll! Dein Partner kehrt nach 30 Minuten mit einem Hinweis zurueck.</string>
+    <string name="send_colleague_working_msg">Dein Kollege wird an dieser Stelle seine Untersuchung beginnen</string>
     <string name="title_activity_timer">TimerActivity</string>
 </resources>

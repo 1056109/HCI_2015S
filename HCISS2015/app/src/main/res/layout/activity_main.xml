@@ -84,6 +84,37 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/weaponProgress"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="-8dp"
+                android:background="@drawable/curve_shape_black"
+                android:gravity="center"
+                android:text="@string/weaponProgress"
+                android:textColor="#FFFFFF" />
+
+
+            <ImageButton
+                android:id="@+id/btnWeapon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:layout_margin="10dp"
+                android:background="?android:selectableItemBackground"
+                android:src="@drawable/info_weapon" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="73dp"
+            android:layout_height="121dp"
+            android:layout_gravity="left|bottom"
+            android:layout_marginBottom="80dp"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <TextView
                 android:id="@+id/colleagueState"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
@@ -104,37 +135,6 @@
                 android:background="?android:selectableItemBackground"
                 android:onClick="sendColleague"
                 android:src="@drawable/btn_colleague" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="73dp"
-            android:layout_height="121dp"
-            android:layout_gravity="left|bottom"
-            android:layout_marginBottom="80dp"
-            android:gravity="bottom"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/weaponProgress"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="-8dp"
-                android:background="@drawable/curve_shape_black"
-                android:gravity="center"
-                android:text="@string/weaponProgress"
-                android:textColor="#FFFFFF" />
-            außerdem
-
-            <ImageButton
-                android:id="@+id/btnWeapon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|bottom"
-                android:layout_margin="10dp"
-                android:background="?android:selectableItemBackground"
-                android:src="@drawable/info_weapon" />
 
         </LinearLayout>
 
