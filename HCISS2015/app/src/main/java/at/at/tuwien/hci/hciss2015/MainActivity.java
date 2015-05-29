@@ -169,7 +169,7 @@ public class MainActivity extends FragmentActivity {
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
-                        if (colleagueState.equals(ColleagueState.READY)){
+                        if (colleagueState.equals(ColleagueState.READY)) {
                             //TODO: make popup-window for asking if collegue should really go there
 
                             colleague.setImageResource(R.drawable.info_collegue);
@@ -190,33 +190,35 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
-    private void newMap(){
+    private void drawMap() {
+
+        if (mapProgress!=MapProgress.Zero)
+            circle.remove();
+
         circle = mMap.addCircle(new CircleOptions()
                 .center(VIENNA)
                 .fillColor(0x5064B5F6)
                 .strokeWidth(4));
 
-        if (mapProgress == MapProgress.Zero){
-            mapProgress= MapProgress.One;
-            showCircle = true;
+        showCircle = true;
+    }
+
+    private void newMap() {
+        if (mapProgress == MapProgress.Zero) {
+            drawMap();
+            mapProgress = MapProgress.One;
             circle.setRadius(circleRad1);
-        }
-
-        else if (mapProgress == MapProgress.One){
-            mapProgress= MapProgress.Two;
-            showCircle = true;
+        } else if (mapProgress == MapProgress.One) {
+            drawMap();
+            mapProgress = MapProgress.Two;
             circle.setRadius(circleRad2);
-        }
-
-        else if (mapProgress == MapProgress.Two){
-            mapProgress= MapProgress.Three;
-            showCircle = true;
+        } else if (mapProgress == MapProgress.Two) {
+            drawMap();
+            mapProgress = MapProgress.Three;
             circle.setRadius(circleRad3);
-        }
-
-        else if (mapProgress == MapProgress.Three){
-            mapProgress= MapProgress.Four;
-            showCircle = true;
+        } else if (mapProgress == MapProgress.Three) {
+            drawMap();
+            mapProgress = MapProgress.Four;
             circle.setRadius(circleRad4);
         }
     }
@@ -224,14 +226,13 @@ public class MainActivity extends FragmentActivity {
     public void openMap(View view) {
         vibrate();
 
-        if (mapProgress==MapProgress.Zero){
+        if (mapProgress == MapProgress.Zero) {
             //TODO customToast erstellen
-        }
-        else {
+        } else {
             if (!showCircle)
                 showCircle = true;
             else
-                showCircle=false;
+                showCircle = false;
 
             circle.setVisible(showCircle);
         }
@@ -284,13 +285,13 @@ public class MainActivity extends FragmentActivity {
         myDrawerLayout.openDrawer(myDrawerList);
     }
 
-    public void sendColleague(View view){
+    public void sendColleague(View view) {
         vibrate();
-        if(colleagueState == ColleagueState.WAITING) {
+        if (colleagueState == ColleagueState.WAITING) {
             txtColleagueState.setVisibility(TextView.VISIBLE);
             colleagueState = ColleagueState.READY;
             handleCustomToast(send_colleague_desc);
-        } else if(colleagueState == ColleagueState.READY) {
+        } else if (colleagueState == ColleagueState.READY) {
             colleague.setImageResource(R.drawable.btn_colleague);
             txtColleagueState.setVisibility(TextView.INVISIBLE);
             colleagueState = ColleagueState.WAITING;
@@ -347,14 +348,14 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    private void vibrate(){
-        Vibrator vb = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
+    private void vibrate() {
+        Vibrator vb = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         vb.vibrate(100);
     }
 
     @Override
     public void onBackPressed() {
-        if(timerHandler != null) {
+        if (timerHandler != null) {
             timerHandler.removeCallbacks(runnable);
         }
         finish();
@@ -374,13 +375,13 @@ public class MainActivity extends FragmentActivity {
                     public void run() {
                         int seconds = (int) (startTime / 1000);
                         int minutes = seconds / 60;
-                        seconds     = seconds % 60;
+                        seconds = seconds % 60;
                         //Log.d(TAG, String.format("%d:%02d", minutes, seconds));
                         txtColleagueState.setText(String.format("%d:%02d", minutes, seconds));
                     }
                 });
 
-                if(startTime > 0) {
+                if (startTime > 0) {
                     startTime -= 1000;
                     timerHandler.postDelayed(this, 1000);
                 } else {
@@ -401,6 +402,8 @@ public class MainActivity extends FragmentActivity {
 
 /**
  * Location Listener, maybee needed or not, so the code is provided here to be sure
+ * <p/>
+ * Tile Overlay von Amer
  */
         /*
 
