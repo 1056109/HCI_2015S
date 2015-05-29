@@ -27,6 +27,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -41,6 +43,10 @@ import at.at.tuwien.hci.hciss2015.util.MyMarkerDrawer;
 
 enum ColleagueState {
     WAITING, READY, WORKING
+}
+
+enum MapProgress {
+    Zero, One, Two, Three, Four
 }
 
 public class MainActivity extends FragmentActivity {
@@ -82,6 +88,16 @@ public class MainActivity extends FragmentActivity {
 
     private Handler timerHandler;
     private Runnable runnable;
+
+    private Circle circle;
+    private int circleRad1 = 4500;
+    private int circleRad2 = 1500;
+    private int circleRad3 = 400;
+    private int circleRad4 = 100;
+    private boolean showCircle = false;
+
+    private MapProgress mapProgress = MapProgress.Zero;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,11 +190,55 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
+    private void newMap(){
+        circle = mMap.addCircle(new CircleOptions()
+                .center(VIENNA)
+                .fillColor(0x5064B5F6)
+                .strokeWidth(4));
+
+        if (mapProgress == MapProgress.Zero){
+            mapProgress= MapProgress.One;
+            showCircle = true;
+            circle.setRadius(circleRad1);
+        }
+
+        else if (mapProgress == MapProgress.One){
+            mapProgress= MapProgress.Two;
+            showCircle = true;
+            circle.setRadius(circleRad2);
+        }
+
+        else if (mapProgress == MapProgress.Two){
+            mapProgress= MapProgress.Three;
+            showCircle = true;
+            circle.setRadius(circleRad3);
+        }
+
+        else if (mapProgress == MapProgress.Three){
+            mapProgress= MapProgress.Four;
+            showCircle = true;
+            circle.setRadius(circleRad4);
+        }
+    }
+
     public void openMap(View view) {
         vibrate();
 
+        if (mapProgress==MapProgress.Zero){
+            //TODO customToast erstellen
+        }
+        else {
+            if (!showCircle)
+                showCircle = true;
+            else
+                showCircle=false;
 
-        final Dialog dialog = new Dialog(this);
+            circle.setVisible(showCircle);
+        }
+
+
+
+       /* final Dialog dialog = new Dialog(this);
         LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = li.inflate(R.layout.map_layout, null, false);
         dialog.setContentView(layout);
@@ -193,12 +253,13 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        dialog.show();
+        dialog.show();*/
     }
 
     public void openMerkmale(View view) {
         vibrate();
 
+        newMap();
         final Dialog dialog = new Dialog(this);
         LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = li.inflate(R.layout.feature_layout, null, false);
