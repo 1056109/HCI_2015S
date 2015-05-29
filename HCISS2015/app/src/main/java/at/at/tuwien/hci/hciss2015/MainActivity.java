@@ -150,11 +150,11 @@ public class MainActivity extends FragmentActivity {
         send_colleague_working_msg = getResources().getString(R.string.send_colleague_working_msg);
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(VIENNA)         // Sets the center of the map to Mountain View
-                .zoom(12)               // Sets the zoom
+                .target(VIENNA)         // Sets the center of the map to Vienna
+                .zoom(18)               // Sets the zoom
                 .build();               // Creates a CameraPosition from the builder
 
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, new GoogleMap.CancelableCallback() {
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, new GoogleMap.CancelableCallback() {
 
             @Override
             public void onFinish() {        //When animation is finished, do some stuff like drawing icons and showing position
@@ -190,11 +190,20 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
+    public void addMapdetail(View view){
+        newMap();
+    }
+
+    public void addFeature(View view){
+
+    }
+
     private void drawMap() {
 
         if (mapProgress!=MapProgress.Zero)
             circle.remove();
 
+        handleCustomToast( getResources().getString(R.string.hintMap));
         circle = mMap.addCircle(new CircleOptions()
                 .center(VIENNA)
                 .fillColor(0x5064B5F6)
@@ -204,20 +213,18 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void newMap() {
+
+        drawMap();
         if (mapProgress == MapProgress.Zero) {
-            drawMap();
             mapProgress = MapProgress.One;
             circle.setRadius(circleRad1);
         } else if (mapProgress == MapProgress.One) {
-            drawMap();
             mapProgress = MapProgress.Two;
             circle.setRadius(circleRad2);
         } else if (mapProgress == MapProgress.Two) {
-            drawMap();
             mapProgress = MapProgress.Three;
             circle.setRadius(circleRad3);
         } else if (mapProgress == MapProgress.Three) {
-            drawMap();
             mapProgress = MapProgress.Four;
             circle.setRadius(circleRad4);
         }
@@ -227,10 +234,12 @@ public class MainActivity extends FragmentActivity {
         vibrate();
 
         if (mapProgress == MapProgress.Zero) {
-            //TODO customToast erstellen
+            handleCustomToast( getResources().getString(R.string.zeroMap));
         } else {
-            if (!showCircle)
+            if (!showCircle) {
                 showCircle = true;
+                handleCustomToast( getResources().getString(R.string.hintMap));
+            }
             else
                 showCircle = false;
 
@@ -260,7 +269,6 @@ public class MainActivity extends FragmentActivity {
     public void openMerkmale(View view) {
         vibrate();
 
-        newMap();
         final Dialog dialog = new Dialog(this);
         LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = li.inflate(R.layout.feature_layout, null, false);
@@ -288,12 +296,13 @@ public class MainActivity extends FragmentActivity {
     public void sendColleague(View view) {
         vibrate();
         if (colleagueState == ColleagueState.WAITING) {
-            txtColleagueState.setVisibility(TextView.VISIBLE);
+            txtColleagueState.setText(getResources().getString(R.string.send_collegue_ready));
+            colleague.setImageResource(R.drawable.btn_colleague_pressed);
             colleagueState = ColleagueState.READY;
             handleCustomToast(send_colleague_desc);
         } else if (colleagueState == ColleagueState.READY) {
             colleague.setImageResource(R.drawable.btn_colleague);
-            txtColleagueState.setVisibility(TextView.INVISIBLE);
+            txtColleagueState.setText(getResources().getString(R.string.send_collegue_start));
             colleagueState = ColleagueState.WAITING;
         } else {
             return;

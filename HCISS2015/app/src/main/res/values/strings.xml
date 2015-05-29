@@ -29,12 +29,25 @@
         <item>@drawable/ic_park</item>
     </array>
 
+    <array name="feature_categories">
+        <item>Geschlecht</item>
+        <item>Haare</item>
+        <item>Bart</item>
+        <item>Brille</item>
+        <item>Narbe</item>
+        <item>Sonstiges</item>
+    </array>
+
     <string name="mapProgress">0/4</string>
     <string name="merkmalProgress">0/7</string>
     <string name="weaponProgress">0/1</string>
 
-    <string name="send_collegue_state">READY</string>
+    <string name="send_collegue_start">WAITING</string>
+    <string name="send_collegue_ready">READY</string>
     <string name="send_colleague_desc">Waehle einen Ort aus, an dem dein Kollege eine Untersuchung fuer dich uebernehmen soll! Dein Partner kehrt nach 30 Minuten mit einem Hinweis zurueck.</string>
     <string name="send_colleague_working_msg">Dein Kollege wird an dieser Stelle seine Untersuchung beginnen</string>
     <string name="title_activity_timer">TimerActivity</string>
+
+    <string name="zeroMap">Es wurden noch keine Hinweise zum Aufenhaltsort des Taeters gefunden!</string>
+    <string name="hintMap">Der Aufenthaltort des Taeters konnte dank der gefundenen Hinweise auf diesen Bereich eingeschraenkt werden.</string>
 </resources>

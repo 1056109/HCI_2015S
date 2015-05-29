@@ -116,15 +116,14 @@
 
             <TextView
                 android:id="@+id/colleagueState"
-                android:layout_width="50dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="-8dp"
                 android:background="@drawable/curve_shape_black"
                 android:gravity="center"
-                android:text="@string/send_collegue_state"
-                android:textColor="#FFFFFF"
-                android:visibility="invisible" />
+                android:text="@string/send_collegue_start"
+                android:textColor="#FFFFFF"/>
 
             <ImageButton
                 android:id="@+id/btnColleague"
@@ -147,6 +146,23 @@
             android:background="?android:selectableItemBackground"
             android:onClick="openDrawer"
             android:src="@drawable/btn_menu" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Map-Hinweis"
+            android:onClick="addMapdetail"
+            android:id="@+id/button"
+            android:layout_gravity="center_horizontal|top" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Aussehen-Hinweis"
+            android:onClick="addFeature"
+            android:id="@+id/button2"
+            android:layout_gravity="center_horizontal|top" />
 
     </FrameLayout>
 
