@@ -1,16 +1,13 @@
 package at.at.tuwien.hci.hciss2015;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -190,11 +187,11 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
-    public void addMapdetail(View view){
+    public void addMapdetail(View view){            //testing function
         newMap();
     }
 
-    public void addFeature(View view){
+    public void addFeature(View view){              //testing function
 
     }
 
@@ -297,7 +294,7 @@ public class MainActivity extends FragmentActivity {
         vibrate();
         if (colleagueState == ColleagueState.WAITING) {
             txtColleagueState.setText(getResources().getString(R.string.send_collegue_ready));
-            colleague.setImageResource(R.drawable.btn_colleague_pressed);
+            colleague.setImageResource(R.drawable.btn_colleague_pressed2);
             colleagueState = ColleagueState.READY;
             handleCustomToast(send_colleague_desc);
         } else if (colleagueState == ColleagueState.READY) {
@@ -371,8 +368,8 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void executeTimerTask() {
-        //startTime = 900000; //15 Min
-        startTime = 10000;
+        startTime = 900000; //15 Min
+        //startTime = 10000;
         timerHandler = new Handler();
         runnable = new Runnable() {
 

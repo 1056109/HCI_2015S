@@ -1,36 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/featureView"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/dialog_borderbackground"
-    android:layout_margin="50dp">
+    android:background="@drawable/curve_shape_black"
+    android:orientation="vertical"
+    android:weightSum="1">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gefundene Hinweise zum Aussehen des Taeters: "
-            android:layout_margin="20dp"
-            android:textColor="#000000"
-            android:gravity="center"
-            android:padding="5dp"
-            android:textSize="15dp"
-            android:id="@+id/textView"
-            android:layout_gravity="center_horizontal|top" />
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Gefundene Hinweise zum Aussehen des Taeters: "
+        android:textColor="#FFFFFF"
+        android:textSize="15dp" />
 
     <ListView
+        android:id="@+id/suspectView"
         android:layout_width="match_parent"
         android:layout_height="118dp"
-        android:id="@+id/listView"
         android:layout_gravity="center_horizontal" />
 
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="300dp"
+        android:layout_height="140dp"
+        android:background="#FFFFFF"
+        android:layout_gravity="center_horizontal"
+        android:fillViewport="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/suspect1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/char1" />
+
+            <ImageView
+                android:id="@+id/suspect2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/char5" />
+
+            <ImageView
+                android:id="@+id/suspect3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/char9" />
+
+            <ImageView
+                android:id="@+id/suspect4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/char13" />
+
+            <ImageView
+                android:id="@+id/suspect5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/char7" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
     <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/btn_close"
-            android:id="@+id/closeFeature"
-            android:layout_margin="20dp"
-            android:layout_gravity="center_horizontal|bottom" />
+        android:id="@+id/closeFeature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_margin="20dp"
+        android:background="@drawable/btn_close" />
 
 </LinearLayout>

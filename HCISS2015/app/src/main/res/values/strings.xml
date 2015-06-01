@@ -31,11 +31,10 @@
 
     <array name="feature_categories">
         <item>Geschlecht</item>
-        <item>Haare</item>
+        <item>Hautfarbe</item>
         <item>Bart</item>
         <item>Brille</item>
         <item>Narbe</item>
-        <item>Sonstiges</item>
     </array>
 
     <string name="mapProgress">0/4</string>
