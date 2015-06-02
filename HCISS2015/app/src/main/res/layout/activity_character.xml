@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/firstCaseView"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/curve_shape_black"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_margin="10dp"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:text="@string/welcome_first_start"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFFFF"
+        android:text="Spielername:"
+        android:id="@+id/textView2" />
+
+    <EditText
+        android:id="@+id/char_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:background="#FFFFFF"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFFFF"
+        android:text="Geschlecht:"
+        android:id="@+id/textView3" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_female"
+            android:onClick="selectGenderFemale"
+            android:id="@+id/btn_female" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_male"
+            android:onClick="selectGenderMale"
+            android:id="@+id/btn_male" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFFFF"
+        android:text="Spielfigur:"
+        android:id="@+id/textView4" />
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="300dp"
+        android:layout_height="160dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="#FFFFFF"
+        android:fillViewport="false"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/officer1"
+                android:onClick="selectFace1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/police1" />
+
+            <ImageView
+                android:id="@+id/officer2"
+                android:onClick="selectFace2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/police2" />
+
+            <ImageView
+                android:id="@+id/officer3"
+                android:onClick="selectFace3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/police3" />
+
+            <ImageView
+                android:id="@+id/officer4"
+                android:onClick="selectFace4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/police4" />
+
+            <ImageView
+                android:id="@+id/officer5"
+                android:onClick="selectFace5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/police5" />
+
+            <ImageView
+                android:id="@+id/officer6"
+                android:onClick="selectFace6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/police6" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
+    <ImageButton
+        android:id="@+id/startFirstCase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_margin="20dp"
+        android:background="@drawable/btn_start"
+        android:onClick="checkInput" />
+
+</LinearLayout>

@@ -31,7 +31,8 @@
         android:layout_height="140dp"
         android:background="#FFFFFF"
         android:layout_gravity="center_horizontal"
-        android:fillViewport="false">
+        android:fillViewport="false"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,6 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_margin="20dp"
+        android:onClick="closeFeatures"
         android:background="@drawable/btn_close" />
 
 </LinearLayout>

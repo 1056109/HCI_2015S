@@ -2,6 +2,7 @@ package at.at.tuwien.hci.hciss2015;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.media.Image;
@@ -11,7 +12,6 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,7 +101,7 @@ public class MainActivity extends FragmentActivity {
     private SharedPreferences preferences;
 
     private boolean firstStart;
-
+    private ImageButton mapBtn;
     private MapProgress mapProgress = MapProgress.Zero;
 
 
@@ -155,16 +155,15 @@ public class MainActivity extends FragmentActivity {
         send_colleague_desc = getResources().getString(R.string.send_colleague_desc);
         send_colleague_working_msg = getResources().getString(R.string.send_colleague_working_msg);
 
+        mapBtn=(ImageButton)findViewById(R.id.btnMap);
+
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         firstStart = preferences.getBoolean("firstStart", true);
 
         if (firstStart){
-            LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View layout = li.inflate(R.layout.firststart_layout, null, false);
-            openDialog(layout);
+            Intent intent = new Intent(MainActivity.this, CharActivity.class);
+            startActivity(intent);
         }
-
-
 
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -215,7 +214,8 @@ public class MainActivity extends FragmentActivity {
     }           //testing function
 
     public void addFeature(View view){              //testing function
-
+        Intent intent = new Intent(MainActivity.this, CharActivity.class);
+        startActivity(intent);
     }
 
     private void drawMap() {
@@ -258,15 +258,15 @@ public class MainActivity extends FragmentActivity {
         } else {
             if (!showCircle) {
                 showCircle = true;
-                handleCustomToast( getResources().getString(R.string.hintMap));
+                mapBtn.setImageResource(R.drawable.btn_map_pressed);
             }
-            else
+            else {
                 showCircle = false;
+                mapBtn.setImageResource(R.drawable.btn_map);
+            }
 
             circle.setVisible(showCircle);
         }
-
-
 
        /* final Dialog dialog = new Dialog(this);
         LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -299,34 +299,12 @@ public class MainActivity extends FragmentActivity {
         dialog.setContentView(view);
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
-        final ImageButton dialogButton;
-        if (view.getId()==R.id.featureView) {
-            dialogButton = (ImageButton) dialog.findViewById(R.id.closeFeature);
-        }
-
-        else //if (view.getId()==R.id.firstCaseView) {
-            dialogButton = (ImageButton) dialog.findViewById(R.id.startFirstCase);
-       // }
-
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vibrate();
-                dialog.dismiss();
-
-                //package sets firstStart boolean in sharedpreferences for intro sequence
-                /*if (view.getId()==R.id.firstCaseView){
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean("firstStart", false);
-                    editor.commit();
-                }*/
-
-                    //TODO intro sequence
-
-            }
-        });
-
         dialog.show();
+    }
+
+    public void closeFeatures(View view){
+        vibrate();
+        dialog.dismiss();
     }
 
     public void openDrawer(View view) {
