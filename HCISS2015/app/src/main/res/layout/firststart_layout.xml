@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/featureView"
+    android:id="@+id/firstCaseView"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:background="@drawable/curve_shape_black"
@@ -15,20 +15,14 @@
         android:layout_margin="20dp"
         android:gravity="center"
         android:padding="5dp"
-        android:text="Gefundene Hinweise zum Aussehen des Taeters: "
+        android:text="@string/welcome_first_start"
         android:textColor="#FFFFFF"
         android:textSize="15dp" />
-
-    <ListView
-        android:id="@+id/suspectView"
-        android:layout_width="match_parent"
-        android:layout_height="118dp"
-        android:layout_gravity="center_horizontal" />
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
         android:layout_width="300dp"
-        android:layout_height="140dp"
+        android:layout_height="160dp"
         android:background="#FFFFFF"
         android:layout_gravity="center_horizontal"
         android:fillViewport="false">
@@ -39,43 +33,49 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/suspect1"
+                android:id="@+id/officer1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/char1" />
+                android:src="@drawable/police1" />
 
             <ImageView
-                android:id="@+id/suspect2"
+                android:id="@+id/officer2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/char5" />
+                android:src="@drawable/police2" />
 
             <ImageView
-                android:id="@+id/suspect3"
+                android:id="@+id/officer3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/char9" />
+                android:src="@drawable/police3" />
 
             <ImageView
-                android:id="@+id/suspect4"
+                android:id="@+id/officer4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/char13" />
+                android:src="@drawable/police4" />
 
             <ImageView
-                android:id="@+id/suspect5"
+                android:id="@+id/officer5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/char7" />
+                android:src="@drawable/police5" />
+
+            <ImageView
+                android:id="@+id/officer6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/police6" />
         </LinearLayout>
     </HorizontalScrollView>
 
     <ImageButton
-        android:id="@+id/closeFeature"
+        android:id="@+id/startFirstCase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_margin="20dp"
-        android:background="@drawable/btn_close" />
+        android:background="@drawable/btn_start" />
 
 </LinearLayout>

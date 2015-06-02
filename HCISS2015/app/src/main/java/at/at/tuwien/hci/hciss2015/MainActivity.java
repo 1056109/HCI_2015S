@@ -2,12 +2,16 @@ package at.at.tuwien.hci.hciss2015;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,6 +85,8 @@ public class MainActivity extends FragmentActivity {
     private String send_colleague_desc;
     private String send_colleague_working_msg;
 
+    private Dialog dialog;
+
     private long startTime;
 
     private Handler timerHandler;
@@ -92,6 +98,9 @@ public class MainActivity extends FragmentActivity {
     private int circleRad3 = 400;
     private int circleRad4 = 100;
     private boolean showCircle = false;
+    private SharedPreferences preferences;
+
+    private boolean firstStart;
 
     private MapProgress mapProgress = MapProgress.Zero;
 
@@ -146,9 +155,21 @@ public class MainActivity extends FragmentActivity {
         send_colleague_desc = getResources().getString(R.string.send_colleague_desc);
         send_colleague_working_msg = getResources().getString(R.string.send_colleague_working_msg);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        firstStart = preferences.getBoolean("firstStart", true);
+
+        if (firstStart){
+            LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = li.inflate(R.layout.firststart_layout, null, false);
+            openDialog(layout);
+        }
+
+
+
+
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(VIENNA)         // Sets the center of the map to Vienna
-                .zoom(18)               // Sets the zoom
+                .zoom(15)               // Sets the zoom
                 .build();               // Creates a CameraPosition from the builder
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, new GoogleMap.CancelableCallback() {
@@ -185,11 +206,13 @@ public class MainActivity extends FragmentActivity {
                 onFinish();
             }
         });
+
+
     }
 
     public void addMapdetail(View view){            //testing function
         newMap();
-    }
+    }           //testing function
 
     public void addFeature(View view){              //testing function
 
@@ -231,7 +254,7 @@ public class MainActivity extends FragmentActivity {
         vibrate();
 
         if (mapProgress == MapProgress.Zero) {
-            handleCustomToast( getResources().getString(R.string.zeroMap));
+            handleCustomToast(getResources().getString(R.string.zeroMap));
         } else {
             if (!showCircle) {
                 showCircle = true;
@@ -247,7 +270,7 @@ public class MainActivity extends FragmentActivity {
 
        /* final Dialog dialog = new Dialog(this);
         LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = li.inflate(R.layout.map_layout, null, false);
+        View layout = li.inflate(R.layout.gpsdialog, null, false);
         dialog.setContentView(layout);
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
@@ -265,19 +288,41 @@ public class MainActivity extends FragmentActivity {
 
     public void openMerkmale(View view) {
         vibrate();
-
-        final Dialog dialog = new Dialog(this);
         LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = li.inflate(R.layout.feature_layout, null, false);
-        dialog.setContentView(layout);
+        openDialog(layout);
+
+    }
+
+    private void openDialog(final View view){
+        dialog = new Dialog(this);
+        dialog.setContentView(view);
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
-        ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.closeFeature);
+        final ImageButton dialogButton;
+        if (view.getId()==R.id.featureView) {
+            dialogButton = (ImageButton) dialog.findViewById(R.id.closeFeature);
+        }
+
+        else //if (view.getId()==R.id.firstCaseView) {
+            dialogButton = (ImageButton) dialog.findViewById(R.id.startFirstCase);
+       // }
+
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 vibrate();
                 dialog.dismiss();
+
+                //package sets firstStart boolean in sharedpreferences for intro sequence
+                /*if (view.getId()==R.id.firstCaseView){
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("firstStart", false);
+                    editor.commit();
+                }*/
+
+                    //TODO intro sequence
+
             }
         });
 
