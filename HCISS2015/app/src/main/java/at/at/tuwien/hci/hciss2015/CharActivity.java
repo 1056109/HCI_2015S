@@ -3,146 +3,168 @@ package at.at.tuwien.hci.hciss2015;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import at.at.tuwien.hci.hciss2015.domain.User;
+import at.at.tuwien.hci.hciss2015.util.SharedPreferencesHandler;
 
 public class CharActivity extends Activity {
 
-    private String charName;
-    private String charGender;
-    private String charFace;
-    private boolean firstStart;
-    private SharedPreferences preferences;
-    SharedPreferences.Editor editor;
+    private static final String TAG = InitActivity.class.getSimpleName();
+
+    private static final int IMG_SELECTED_BACKGROUND_COLOR = 0xAAEE66CC;
+    private static final int IMG_DEFAULT_BACKGROUND_COLOR = 0xFFFFFF;
+
+    private SharedPreferencesHandler sharedPref;
+
+    private User user;
+
+    private TextView txtWelcomeMsg;
+
+    private EditText editTxtName;
+
+    private ImageButton btnGenderMale;
+    private ImageButton btnGenderFemale;
+
+    private ImageView imgOfficer1;
+    private ImageView imgOfficer2;
+    private ImageView imgOfficer3;
+    private ImageView imgOfficer4;
+    private ImageView imgOfficer5;
+    private ImageView imgOfficer6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character);
 
+        //todo @mario, warum brauchen wir das?
         Window window = this.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
 
-    }
+        Log.i(TAG, "SOURCE ACTIVITY: " + getIntent().getStringExtra("activity"));
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_char, menu);
-        return true;
-    }
+        sharedPref = new SharedPreferencesHandler(this);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        txtWelcomeMsg = (TextView) findViewById(R.id.txtWelcomeMsg);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        editTxtName = (EditText) findViewById(R.id.charName);
+
+        btnGenderMale = (ImageButton) findViewById(R.id.btn_male);
+        btnGenderFemale = (ImageButton) findViewById(R.id.btn_female);
+
+        imgOfficer1 = (ImageView) findViewById(R.id.officer1);
+        imgOfficer2 = (ImageView) findViewById(R.id.officer2);
+        imgOfficer3 = (ImageView) findViewById(R.id.officer3);
+        imgOfficer4 = (ImageView) findViewById(R.id.officer4);
+        imgOfficer5 = (ImageView) findViewById(R.id.officer5);
+        imgOfficer6 = (ImageView) findViewById(R.id.officer6);
+
+        if( "init".equals(getIntent().getStringExtra("activity")) ) {
+            txtWelcomeMsg.setText(getString(R.string.welcome_first_start));
+        } else {
+            //todo
         }
 
-        return super.onOptionsItemSelected(item);
+        user = sharedPref.getUser();
+        if(user != null) {
+            setCurrentValues();
+        } else {
+            user = new User();
+        }
+
+    }
+
+    private void setCurrentValues() {
+        System.out.println(user.getName());
+        if(user.getGender() == 'M') {
+            btnGenderMale.setImageResource(R.drawable.btn_male_pressed);
+        } else {
+            btnGenderFemale.setImageResource(R.drawable.btn_female_pressed);
+        }
+        ((ImageView) findViewById(user.getAvatarResId())).setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
     }
 
     public void checkInput(View view) {
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        editor = preferences.edit();
-
-
-        EditText name = (EditText) findViewById(R.id.char_name);
-        charName = name.getText().toString();
-        firstStart = false;
-
-        editor.putBoolean("firstStart", firstStart);
-        editor.putString("charName", charName);
-        editor.putString("charFace", charFace);
-
-        editor.commit();
-
+        user.setName(editTxtName.getText().toString());
+        sharedPref.putUser(user);
         Intent intent = new Intent(CharActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
-
-    //TODO focus richtig setzen auf ausgewaehltes Bild
     public void selectFace1(View view) {
-        charName = "police1";
         vibrate();
         deselect();
+        user.setAvatarResId(R.id.officer1);
+        imgOfficer1.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
         ((ImageView)findViewById(R.id.officer1)).setBackgroundColor(0xAAEE66CC);
     }
 
     public void selectFace2(View view) {
-        charName = "police2";
         vibrate();
         deselect();
-        ((ImageView)findViewById(R.id.officer2)).setBackgroundColor(0xAAEE66CC);
+        user.setAvatarResId(R.id.officer2);
+        imgOfficer2.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
     }
 
     public void selectFace3(View view) {
-        charName = "police3";
         vibrate();
         deselect();
-        ((ImageView)findViewById(R.id.officer3)).setBackgroundColor(0xAAEE66CC);
+        user.setAvatarResId(R.id.officer3);
+        imgOfficer3.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
     }
 
     public void selectFace4(View view) {
-        charName = "police4";
         vibrate();
         deselect();
-        ((ImageView)findViewById(R.id.officer4)).setBackgroundColor(0xAAEE66CC);
+        user.setAvatarResId(R.id.officer4);
+        imgOfficer4.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
     }
 
     public void selectFace5(View view) {
-        charName = "police5";
         vibrate();
         deselect();
-        ((ImageView)findViewById(R.id.officer5)).setBackgroundColor(0xAAEE66CC);
+        user.setAvatarResId(R.id.officer5);
+        imgOfficer5.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
     }
 
     public void selectFace6(View view) {
-        charName = "police6";
         vibrate();
         deselect();
-        ((ImageView)findViewById(R.id.officer6)).setBackgroundColor(0xAAEE66CC);
+        user.setAvatarResId(R.id.officer6);
+        imgOfficer6.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
     }
 
     public void selectGenderMale(View view) {
-        charGender = "Male";
         vibrate();
-        ((ImageButton) findViewById(R.id.btn_female)).setImageResource(R.drawable.btn_female);
-        ((ImageButton) findViewById(R.id.btn_male)).setImageResource(R.drawable.btn_male_pressed);
+        user.setGender('M');
+        btnGenderFemale.setImageResource(R.drawable.btn_female);
+        btnGenderMale.setImageResource(R.drawable.btn_male_pressed);
     }
 
     public void selectGenderFemale(View view) {
-        charGender = "Female";
         vibrate();
-        ((ImageButton) findViewById(R.id.btn_female)).setImageResource(R.drawable.btn_female_pressed);
-        ((ImageButton) findViewById(R.id.btn_male)).setImageResource(R.drawable.btn_male);
+        user.setGender('F');
+        btnGenderFemale.setImageResource(R.drawable.btn_female_pressed);
+        btnGenderMale.setImageResource(R.drawable.btn_male);
     }
 
     private void deselect(){
-        ((ImageView)findViewById(R.id.officer1)).setBackgroundColor(0xFFFFFF);
-        ((ImageView)findViewById(R.id.officer2)).setBackgroundColor(0xFFFFFF);
-        ((ImageView)findViewById(R.id.officer3)).setBackgroundColor(0xFFFFFF);
-        ((ImageView)findViewById(R.id.officer4)).setBackgroundColor(0xFFFFFF);
-        ((ImageView)findViewById(R.id.officer5)).setBackgroundColor(0xFFFFFF);
-        ((ImageView)findViewById(R.id.officer6)).setBackgroundColor(0xFFFFFF);
-
+        imgOfficer1.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
+        imgOfficer2.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
+        imgOfficer3.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
+        imgOfficer4.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
+        imgOfficer5.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
+        imgOfficer6.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
     }
 
     private void vibrate() {

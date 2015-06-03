@@ -157,6 +157,7 @@ public class MainActivity extends FragmentActivity {
 
         mapBtn=(ImageButton)findViewById(R.id.btnMap);
 
+        /*
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         firstStart = preferences.getBoolean("firstStart", true);
 
@@ -164,6 +165,7 @@ public class MainActivity extends FragmentActivity {
             Intent intent = new Intent(MainActivity.this, CharActivity.class);
             startActivity(intent);
         }
+        */
 
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -370,7 +372,10 @@ public class MainActivity extends FragmentActivity {
         }
 
         private void selectItem(int position) {
-            //TODO start new activity or replace current fragment
+            if(position == 1) {
+                Intent intent = new Intent(MainActivity.this, CharActivity.class);
+                startActivity(intent);
+            }
             myDrawerList.setItemChecked(position, true);
             myDrawerLayout.closeDrawer(myDrawerList);
 

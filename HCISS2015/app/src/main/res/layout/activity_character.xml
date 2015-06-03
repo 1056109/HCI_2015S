@@ -3,94 +3,103 @@
     android:id="@+id/firstCaseView"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
     android:background="@drawable/curve_shape_black"
     android:orientation="vertical"
     android:weightSum="1">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/txtWelcomeMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
-        android:layout_margin="10dp"
-        android:textSize="15dp"
+        android:layout_marginTop="56dp"
         android:gravity="center"
-        android:text="@string/welcome_first_start"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:textSize="15dp"
+        android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/lblName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginBottom="5dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFFFFF"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:text="Spielername:"
-        android:id="@+id/textView2" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFFFF" />
 
     <EditText
-        android:id="@+id/char_name"
+        android:id="@+id/charName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textSize="20dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:background="#FFFFFF"
         android:ems="10"
         android:hint="Name"
-        android:inputType="textPersonName"/>
+        android:inputType="textPersonName"
+        android:textSize="20dp" />
 
     <TextView
+        android:id="@+id/lblGender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginBottom="5dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFFFFF"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:text="Geschlecht:"
-        android:id="@+id/textView3" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFFFF" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
 
         <ImageButton
+            android:id="@+id/btn_female"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/btn_female"
-            android:onClick="selectGenderFemale"
-            android:id="@+id/btn_female" />
+            android:onClick="selectGenderFemale" />
 
         <ImageButton
+            android:id="@+id/btn_male"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/btn_male"
-            android:onClick="selectGenderMale"
-            android:id="@+id/btn_male" />
+            android:onClick="selectGenderMale" />
     </LinearLayout>
 
     <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="10dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFFFFF"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:text="Spielfigur:"
-        android:id="@+id/textView4" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFFFF" />
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
         android:layout_width="300dp"
         android:layout_height="160dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:background="#FFFFFF"
         android:fillViewport="false"
         android:scrollbars="none">
@@ -98,66 +107,63 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:clickable="true">
+            android:clickable="true"
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/officer1"
-                android:onClick="selectFace1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/police1"/>
+                android:onClick="selectFace1"
+                android:src="@drawable/police1" />
 
             <ImageView
                 android:id="@+id/officer2"
-                android:onClick="selectFace2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/police2"
-                android:layout_marginLeft="5dp"/>
+                android:layout_marginLeft="5dp"
+                android:onClick="selectFace2"
+                android:src="@drawable/police2" />
 
             <ImageView
                 android:id="@+id/officer3"
-                android:onClick="selectFace3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/police3"
-                android:layout_marginLeft="5dp"/>
+                android:layout_marginLeft="5dp"
+                android:onClick="selectFace3"
+                android:src="@drawable/police3" />
 
             <ImageView
                 android:id="@+id/officer4"
-                android:onClick="selectFace4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/police4"
-                android:layout_marginLeft="5dp"/>
+                android:layout_marginLeft="5dp"
+                android:onClick="selectFace4"
+                android:src="@drawable/police4" />
 
             <ImageView
                 android:id="@+id/officer5"
-                android:onClick="selectFace5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/police5"
-                android:layout_marginLeft="5dp"/>
+                android:layout_marginLeft="5dp"
+                android:onClick="selectFace5"
+                android:src="@drawable/police5" />
 
             <ImageView
                 android:id="@+id/officer6"
-                android:onClick="selectFace6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/police6"
-                android:layout_marginLeft="5dp"/>
+                android:layout_marginLeft="5dp"
+                android:onClick="selectFace6"
+                android:src="@drawable/police6" />
         </LinearLayout>
     </HorizontalScrollView>
-
 
     <ImageButton
         android:id="@+id/startFirstCase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_margin="20dp"
+        android:layout_gravity="center|bottom"
         android:background="@drawable/btn_start"
         android:onClick="checkInput" />
-
 </LinearLayout>
