@@ -98,49 +98,55 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:clickable="true">
 
             <ImageView
                 android:id="@+id/officer1"
                 android:onClick="selectFace1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/police1" />
+                android:src="@drawable/police1"/>
 
             <ImageView
                 android:id="@+id/officer2"
                 android:onClick="selectFace2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/police2" />
+                android:src="@drawable/police2"
+                android:layout_marginLeft="5dp"/>
 
             <ImageView
                 android:id="@+id/officer3"
                 android:onClick="selectFace3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/police3" />
+                android:src="@drawable/police3"
+                android:layout_marginLeft="5dp"/>
 
             <ImageView
                 android:id="@+id/officer4"
                 android:onClick="selectFace4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/police4" />
+                android:src="@drawable/police4"
+                android:layout_marginLeft="5dp"/>
 
             <ImageView
                 android:id="@+id/officer5"
                 android:onClick="selectFace5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/police5" />
+                android:src="@drawable/police5"
+                android:layout_marginLeft="5dp"/>
 
             <ImageView
                 android:id="@+id/officer6"
                 android:onClick="selectFace6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/police6" />
+                android:src="@drawable/police6"
+                android:layout_marginLeft="5dp"/>
         </LinearLayout>
     </HorizontalScrollView>
 

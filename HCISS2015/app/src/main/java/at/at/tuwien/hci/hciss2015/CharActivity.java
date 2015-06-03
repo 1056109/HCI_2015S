@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class CharActivity extends Activity {
 
@@ -80,26 +81,44 @@ public class CharActivity extends Activity {
     //TODO focus richtig setzen auf ausgewaehltes Bild
     public void selectFace1(View view) {
         charName = "police1";
+        vibrate();
+        deselect();
+        ((ImageView)findViewById(R.id.officer1)).setBackgroundColor(0xAAEE66CC);
     }
 
     public void selectFace2(View view) {
         charName = "police2";
+        vibrate();
+        deselect();
+        ((ImageView)findViewById(R.id.officer2)).setBackgroundColor(0xAAEE66CC);
     }
 
     public void selectFace3(View view) {
         charName = "police3";
+        vibrate();
+        deselect();
+        ((ImageView)findViewById(R.id.officer3)).setBackgroundColor(0xAAEE66CC);
     }
 
     public void selectFace4(View view) {
         charName = "police4";
+        vibrate();
+        deselect();
+        ((ImageView)findViewById(R.id.officer4)).setBackgroundColor(0xAAEE66CC);
     }
 
     public void selectFace5(View view) {
         charName = "police5";
+        vibrate();
+        deselect();
+        ((ImageView)findViewById(R.id.officer5)).setBackgroundColor(0xAAEE66CC);
     }
 
     public void selectFace6(View view) {
         charName = "police6";
+        vibrate();
+        deselect();
+        ((ImageView)findViewById(R.id.officer6)).setBackgroundColor(0xAAEE66CC);
     }
 
     public void selectGenderMale(View view) {
@@ -114,6 +133,16 @@ public class CharActivity extends Activity {
         vibrate();
         ((ImageButton) findViewById(R.id.btn_female)).setImageResource(R.drawable.btn_female_pressed);
         ((ImageButton) findViewById(R.id.btn_male)).setImageResource(R.drawable.btn_male);
+    }
+
+    private void deselect(){
+        ((ImageView)findViewById(R.id.officer1)).setBackgroundColor(0xFFFFFF);
+        ((ImageView)findViewById(R.id.officer2)).setBackgroundColor(0xFFFFFF);
+        ((ImageView)findViewById(R.id.officer3)).setBackgroundColor(0xFFFFFF);
+        ((ImageView)findViewById(R.id.officer4)).setBackgroundColor(0xFFFFFF);
+        ((ImageView)findViewById(R.id.officer5)).setBackgroundColor(0xFFFFFF);
+        ((ImageView)findViewById(R.id.officer6)).setBackgroundColor(0xFFFFFF);
+
     }
 
     private void vibrate() {
