@@ -46,10 +46,6 @@ enum ColleagueState {
     WAITING, READY, WORKING
 }
 
-enum MapProgress {
-    Zero, One, Two, Three, Four
-}
-
 public class MainActivity extends FragmentActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -93,16 +89,18 @@ public class MainActivity extends FragmentActivity {
     private Runnable runnable;
 
     private Circle circle;
-    private int circleRad1 = 4500;
-    private int circleRad2 = 1500;
-    private int circleRad3 = 400;
-    private int circleRad4 = 100;
+    private int circleRad1 = 2000;
+    private int circleRad2 = 600;
+    private int circleRad3 = 100;
     private boolean showCircle = false;
+    private TextView mapTxt;
+    private static int mapProgress = 0;
     private SharedPreferences preferences;
+
+
 
     private boolean firstStart;
     private ImageButton mapBtn;
-    private MapProgress mapProgress = MapProgress.Zero;
 
 
     @Override
@@ -156,6 +154,7 @@ public class MainActivity extends FragmentActivity {
         send_colleague_working_msg = getResources().getString(R.string.send_colleague_working_msg);
 
         mapBtn=(ImageButton)findViewById(R.id.btnMap);
+        mapTxt=(TextView)findViewById(R.id.mapProgress);
 
         /*
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -222,7 +221,7 @@ public class MainActivity extends FragmentActivity {
 
     private void drawMap() {
 
-        if (mapProgress!=MapProgress.Zero)
+        if (mapProgress!=0)
             circle.remove();
 
         handleCustomToast( getResources().getString(R.string.hintMap));
@@ -236,26 +235,27 @@ public class MainActivity extends FragmentActivity {
 
     private void newMap() {
 
-        drawMap();
-        if (mapProgress == MapProgress.Zero) {
-            mapProgress = MapProgress.One;
-            circle.setRadius(circleRad1);
-        } else if (mapProgress == MapProgress.One) {
-            mapProgress = MapProgress.Two;
-            circle.setRadius(circleRad2);
-        } else if (mapProgress == MapProgress.Two) {
-            mapProgress = MapProgress.Three;
-            circle.setRadius(circleRad3);
-        } else if (mapProgress == MapProgress.Three) {
-            mapProgress = MapProgress.Four;
-            circle.setRadius(circleRad4);
+        if (mapProgress<3) {
+            drawMap();
+            if (mapProgress == 0) {
+                mapProgress++;
+                circle.setRadius(circleRad1);
+            } else if (mapProgress == 1) {
+                mapProgress++;
+                circle.setRadius(circleRad2);
+            } else if (mapProgress == 2) {
+                mapProgress++;
+                circle.setRadius(circleRad3);
+            }
+            mapBtn.setImageResource(R.drawable.btn_map_pressed);
+            mapTxt.setText(mapProgress + "/3");
         }
     }
 
     public void openMap(View view) {
         vibrate();
 
-        if (mapProgress == MapProgress.Zero) {
+        if (mapProgress == 0) {
             handleCustomToast(getResources().getString(R.string.zeroMap));
         } else {
             if (!showCircle) {

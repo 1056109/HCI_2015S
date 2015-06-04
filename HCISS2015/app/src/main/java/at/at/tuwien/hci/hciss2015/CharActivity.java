@@ -20,7 +20,7 @@ public class CharActivity extends Activity {
 
     private static final String TAG = InitActivity.class.getSimpleName();
 
-    private static final int IMG_SELECTED_BACKGROUND_COLOR = 0xAAEE66CC;
+    private static final int IMG_SELECTED_BACKGROUND_COLOR = 0xAAAA66CC;
     private static final int IMG_DEFAULT_BACKGROUND_COLOR = 0xFFFFFF;
 
     private SharedPreferencesHandler sharedPref;
@@ -47,8 +47,10 @@ public class CharActivity extends Activity {
         setContentView(R.layout.activity_character);
 
         //todo @mario, warum brauchen wir das?
-        Window window = this.getWindow();
-        window.setBackgroundDrawableResource(android.R.color.transparent);
+        //todo @amer unser costum layout hat abgerundete ecken, dahinter würde man einen grauen bereich sehen
+        //todo mit dieser zeile passiert das nicht mehr, sie werden transparent gesetzt
+
+        this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         Log.i(TAG, "SOURCE ACTIVITY: " + getIntent().getStringExtra("activity"));
 
