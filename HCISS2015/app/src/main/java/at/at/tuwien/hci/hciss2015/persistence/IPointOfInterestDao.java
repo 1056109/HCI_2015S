@@ -14,6 +14,7 @@ public interface IPointOfInterestDao {
     List<PointOfInterest> getAllVisitedPOIs();
     List<PointOfInterest> getAllUnvisitedPOIs();
     List<PointOfInterest> getAllPOIs();
+    List<PointOfInterest> getAllPOIs(int areaSize);
     long countPOIs();
     int updatePOIFlag(int id, int flag);
     int updatePOI(PointOfInterest poi);

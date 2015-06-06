@@ -45,7 +45,7 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
     protected Boolean doInBackground(Void... params) {
         handleBitmapDescriptors();
 
-        List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getAllPOIs());
+        List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getAllPOIs(4000));
         for(int i = 0; i < pois.size(); i++) {
             publishProgress(pois.get(i));
         }

@@ -13,6 +13,7 @@ public class PointOfInterest {
     private double lat;
     private double lng;
     private int flag;
+    private int area;
 
     //non db fields
     private int drawable;
@@ -81,6 +82,10 @@ public class PointOfInterest {
         return new LatLng(getLat(), getLng());
     }
 
+    public int getArea() { return area; }
+
+    public void setArea(int area) { this.area = area; }
+
     public int getDrawable() {
         return drawable;
     }
@@ -96,7 +101,5 @@ public class PointOfInterest {
                "type: " + type + "\n" +
                "lat: " + lat + ", lng: " + lng + "\n" +
                "flag: " + flag;
-
-
     }
 }

@@ -46,6 +46,7 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
         public static final String LAT = "lat";
         public static final String LNG = "lng";
         public static final String FLAG = "flag";
+        public static final String AREA = "area";
     }
 
     @Override
@@ -159,6 +160,33 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
 
         SQLiteDatabase db = myDbHelper.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, sortOrder);
+
+        PointOfInterest poi = null;
+        while (cursor.moveToNext()) {
+            poi = new PointOfInterest();
+            poi.setId(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.ID)));
+            poi.setType(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.TYPE)));
+            poi.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(TableEntry.DESCRIPTION)));
+            poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
+            poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
+            poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
+            poiList.add(poi);
+        }
+
+        cursor.close();
+        db.close();
+
+        return poiList;
+    }
+
+    @Override
+    public List<PointOfInterest> getAllPOIs(int areaSize) {
+        List<PointOfInterest> poiList = new ArrayList<PointOfInterest>();
+        String sortOrder = TableEntry.ID + " ASC";
+        String selection = "("+TableEntry.AREA + ">" + areaSize + " OR " + TableEntry.AREA + " IS NULL) AND " + TableEntry.FLAG + " = 0";
+
+        SQLiteDatabase db = myDbHelper.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, sortOrder);
 
         PointOfInterest poi = null;
         while (cursor.moveToNext()) {
