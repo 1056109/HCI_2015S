@@ -6,10 +6,10 @@
 
     <string name="gps_message">Um dieses Spiel zu spielen, muss das GPS aktiv sein. Moechtest du es jetzt einschalten?</string>
 
-   <!-- <string name="welcome_first_start">Willkommen bei Vienna Cop! Bitte geben Sie Ihren Namen ein, waehlen Sie Geschlecht und Spielfigur, und klicken
-    Sie auf Start, um Ihre Polizeikarriere in Wien zu beginnen:</string>-->
+    <string name="welcome_first_start">Willkommen bei Vienna Cop! Bitte geben Sie Ihren Namen ein, waehlen Sie Geschlecht und Spielfigur, und klicken
+    Sie auf Start, um Ihre Polizeikarriere in Wien zu beginnen:</string>
 
-    <string name="welcome_first_start">Willkommen bei Vienna Cop!</string>
+    <!--<string name="welcome_first_start">Willkommen bei Vienna Cop!</string>-->
 
     <array name="nav_drawer_items">
         <item>Karte</item>
