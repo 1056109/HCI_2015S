@@ -62,6 +62,8 @@
     <string name="zeroMap">Es wurden noch keine Hinweise zum Aufenhaltsort des Taeters gefunden!</string>
     <string name="hintMap">Der Aufenthaltort des Taeters konnte dank der gefundenen Hinweise auf diesen Bereich eingeschraenkt werden.</string>
     <string name="title_activity_char">charActivity</string>
+
+    <string name="benutzerdaten">Hier kannst du deine Daten aktualisieren.</string>
     
     <string name="sharedPref">MySharedPref</string>
 </resources>

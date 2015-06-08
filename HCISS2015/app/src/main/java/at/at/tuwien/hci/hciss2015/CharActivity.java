@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,7 +21,7 @@ public class CharActivity extends Activity {
 
     private static final String TAG = InitActivity.class.getSimpleName();
 
-    private static final int IMG_SELECTED_BACKGROUND_COLOR = 0xAAAA66CC;
+    private static final int IMG_SELECTED_BACKGROUND_COLOR = 0xEEEE66CC;
     private static final int IMG_DEFAULT_BACKGROUND_COLOR = 0xFFFFFF;
 
     private SharedPreferencesHandler sharedPref;
@@ -31,8 +32,8 @@ public class CharActivity extends Activity {
 
     private EditText editTxtName;
 
-    private ImageButton btnGenderMale;
-    private ImageButton btnGenderFemale;
+    private Button btnGenderMale;
+    private Button btnGenderFemale;
 
     private ImageView imgOfficer1;
     private ImageView imgOfficer2;
@@ -49,6 +50,7 @@ public class CharActivity extends Activity {
         //todo @mario, warum brauchen wir das?
         //todo @amer unser costum layout hat abgerundete ecken, dahinter würde man einen grauen bereich sehen
         //todo mit dieser zeile passiert das nicht mehr, sie werden transparent gesetzt
+        //todo ja genau diesr graue bereich, den man sehen würde, wird transparent gesetzt ;)
 
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
@@ -60,8 +62,8 @@ public class CharActivity extends Activity {
 
         editTxtName = (EditText) findViewById(R.id.charName);
 
-        btnGenderMale = (ImageButton) findViewById(R.id.btn_male);
-        btnGenderFemale = (ImageButton) findViewById(R.id.btn_female);
+        btnGenderMale = (Button) findViewById(R.id.btn_male);
+        btnGenderFemale = (Button) findViewById(R.id.btn_female);
 
         imgOfficer1 = (ImageView) findViewById(R.id.officer1);
         imgOfficer2 = (ImageView) findViewById(R.id.officer2);
@@ -73,7 +75,7 @@ public class CharActivity extends Activity {
         if( "init".equals(getIntent().getStringExtra("activity")) ) {
             txtWelcomeMsg.setText(getString(R.string.welcome_first_start));
         } else {
-            //todo
+            txtWelcomeMsg.setText(getString(R.string.benutzerdaten));
         }
 
         user = sharedPref.getUser();
@@ -86,16 +88,19 @@ public class CharActivity extends Activity {
     }
 
     private void setCurrentValues() {
-        System.out.println(user.getName());
         if(user.getGender() == 'M') {
-            btnGenderMale.setImageResource(R.drawable.btn_male_pressed);
+            btnGenderMale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
         } else {
-            btnGenderFemale.setImageResource(R.drawable.btn_female_pressed);
+            btnGenderFemale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
         }
         ((ImageView) findViewById(user.getAvatarResId())).setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
+
+        editTxtName.setText(user.getName());
     }
 
     public void checkInput(View view) {
+        //todo sicherheitsabfragen ob alles eingetragen ist
+        vibrate();
         user.setName(editTxtName.getText().toString());
         sharedPref.putUser(user);
         Intent intent = new Intent(CharActivity.this, MainActivity.class);
@@ -108,7 +113,6 @@ public class CharActivity extends Activity {
         deselect();
         user.setAvatarResId(R.id.officer1);
         imgOfficer1.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
-        ((ImageView)findViewById(R.id.officer1)).setBackgroundColor(0xAAEE66CC);
     }
 
     public void selectFace2(View view) {
@@ -149,15 +153,15 @@ public class CharActivity extends Activity {
     public void selectGenderMale(View view) {
         vibrate();
         user.setGender('M');
-        btnGenderFemale.setImageResource(R.drawable.btn_female);
-        btnGenderMale.setImageResource(R.drawable.btn_male_pressed);
+        btnGenderFemale.setBackgroundResource(R.drawable.btn_bckgrnd);
+        btnGenderMale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectGenderFemale(View view) {
         vibrate();
         user.setGender('F');
-        btnGenderFemale.setImageResource(R.drawable.btn_female_pressed);
-        btnGenderMale.setImageResource(R.drawable.btn_male);
+        btnGenderFemale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
+        btnGenderMale.setBackgroundResource(R.drawable.btn_bckgrnd);
     }
 
     private void deselect(){
