@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
     private static PointOfInterestDaoImpl instance;
 
     public static final String TABLE_NAME = "point_of_interest";
+    private static final double earthRadius = 6378137.0;
 
     private PointOfInterestDaoImpl() {}
 
@@ -65,6 +67,7 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
             poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
             poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
             poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
+            poi.setArea(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.AREA)));
         }
         cursor.close();
         db.close();
@@ -90,6 +93,7 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
             poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
             poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
             poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
+            poi.setArea(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.AREA)));
             poiList.add(poi);
         }
 
@@ -117,6 +121,7 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
             poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
             poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
             poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
+            poi.setArea(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.AREA)));
             poiList.add(poi);
         }
 
@@ -144,6 +149,7 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
             poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
             poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
             poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
+            poi.setArea(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.AREA)));
             poiList.add(poi);
         }
 
@@ -170,6 +176,7 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
             poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
             poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
             poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
+            poi.setArea(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.AREA)));
             poiList.add(poi);
         }
 
@@ -180,7 +187,7 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
     }
 
     @Override
-    public List<PointOfInterest> getAllPOIs(int areaSize) {
+    public List<PointOfInterest> getPOIsByArea(int areaSize) {
         List<PointOfInterest> poiList = new ArrayList<PointOfInterest>();
         String sortOrder = TableEntry.ID + " ASC";
         String selection = "("+TableEntry.AREA + ">" + areaSize + " OR " + TableEntry.AREA + " IS NULL) AND " + TableEntry.FLAG + " = 0";
@@ -197,6 +204,149 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
             poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
             poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
             poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
+            poi.setArea(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.AREA)));
+            poiList.add(poi);
+        }
+
+        cursor.close();
+        db.close();
+
+        return poiList;
+    }
+
+    @Override
+    public List<PointOfInterest> getPOIsByPosition(double latitude, double longitude, int radius) {
+        List<PointOfInterest> poiList = new ArrayList<PointOfInterest>();
+        String sortOrder = TableEntry.ID + " ASC";
+        double lngSouth = longitude - getLongitudeDistance(latitude, radius);
+        double lngNorth = longitude + getLongitudeDistance(latitude, radius);
+        double latWest = latitude - getLatitudeDistance(radius);
+        double latEast = latitude + getLatitudeDistance(radius);
+
+        String selection = "("+TableEntry.LNG + " BETWEEN " + lngSouth + " AND " + lngNorth + ") AND "
+                + "("+TableEntry.LAT + " BETWEEN " + latWest + " AND " + latEast + ")";
+
+        SQLiteDatabase db = myDbHelper.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, null, sortOrder);
+
+        PointOfInterest poi = null;
+        while (cursor.moveToNext()) {
+            poi = new PointOfInterest();
+            poi.setId(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.ID)));
+            poi.setType(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.TYPE)));
+            poi.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(TableEntry.DESCRIPTION)));
+            poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
+            poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
+            poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
+            poi.setArea(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.AREA)));
+            poiList.add(poi);
+        }
+
+        cursor.close();
+        db.close();
+
+        return poiList;
+    }
+
+    @Override
+    public List<PointOfInterest> getVisitedPOIsByPosition(double latitude, double longitude, int radius) {
+        List<PointOfInterest> poiList = new ArrayList<PointOfInterest>();
+        String sortOrder = TableEntry.ID + " ASC";
+        double lngSouth = longitude - getLongitudeDistance(latitude, radius);
+        double lngNorth = longitude + getLongitudeDistance(latitude, radius);
+        double latWest = latitude - getLatitudeDistance(radius);
+        double latEast = latitude + getLatitudeDistance(radius);
+
+        String selection = "("+TableEntry.LNG + " BETWEEN " + lngSouth + " AND " + lngNorth + ") AND "
+                + "("+TableEntry.LAT + " BETWEEN " + latWest + " AND " + latEast + ") AND "
+                + TableEntry.FLAG + " = 1";
+
+        SQLiteDatabase db = myDbHelper.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, sortOrder);
+
+        PointOfInterest poi = null;
+        while (cursor.moveToNext()) {
+            poi = new PointOfInterest();
+            poi.setId(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.ID)));
+            poi.setType(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.TYPE)));
+            poi.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(TableEntry.DESCRIPTION)));
+            poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
+            poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
+            poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
+            poi.setArea(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.AREA)));
+            poiList.add(poi);
+        }
+
+        cursor.close();
+        db.close();
+
+        return poiList;
+    }
+
+    @Override
+    public List<PointOfInterest> getUnvisitedPOIsByPosition(double latitude, double longitude, int radius) {
+        List<PointOfInterest> poiList = new ArrayList<PointOfInterest>();
+        String sortOrder = TableEntry.ID + " ASC";
+        double lngSouth = longitude - getLongitudeDistance(latitude, radius);
+        double lngNorth = longitude + getLongitudeDistance(latitude, radius);
+        double latWest = latitude - getLatitudeDistance(radius);
+        double latEast = latitude + getLatitudeDistance(radius);
+
+        //Log.i(PointOfInterestDaoImpl.class.getSimpleName(),lngSouth + " " + lngNorth + " " + latWest + " " + latEast);
+        //Log.i(PointOfInterestDaoImpl.class.getSimpleName(), getLongitudeDistance  + " " +  getLatitudeDistance(radius));
+
+        String selection = "("+TableEntry.LNG + " BETWEEN " + lngSouth + " AND " + lngNorth + ") AND "
+                + "("+TableEntry.LAT + " BETWEEN " + latWest + " AND " + latEast + ") AND "
+                + TableEntry.FLAG + " = 0";
+
+        SQLiteDatabase db = myDbHelper.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, sortOrder);
+
+        PointOfInterest poi = null;
+        while (cursor.moveToNext()) {
+            poi = new PointOfInterest();
+            poi.setId(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.ID)));
+            poi.setType(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.TYPE)));
+            poi.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(TableEntry.DESCRIPTION)));
+            poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
+            poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
+            poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
+            poi.setArea(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.AREA)));
+            poiList.add(poi);
+        }
+
+        cursor.close();
+        db.close();
+
+        return poiList;
+    }
+
+    @Override
+    public List<PointOfInterest> getPOIsByPositionType(double latitude, double longitude, int radius, int type) {
+        List<PointOfInterest> poiList = new ArrayList<PointOfInterest>();
+        String sortOrder = TableEntry.ID + " ASC";
+        double lngSouth = longitude - getLongitudeDistance(latitude, radius);
+        double lngNorth = longitude + getLongitudeDistance(latitude, radius);
+        double latWest = latitude - getLatitudeDistance(radius);
+        double latEast = latitude + getLatitudeDistance(radius);
+
+        String selection = "("+TableEntry.LNG + " BETWEEN " + lngSouth + " AND " + lngNorth + ") AND "
+                + "("+TableEntry.LAT + " BETWEEN " + latWest + " AND " + latEast + ") AND "
+                + TableEntry.TYPE + " = " + type;
+
+        SQLiteDatabase db = myDbHelper.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, sortOrder);
+
+        PointOfInterest poi = null;
+        while (cursor.moveToNext()) {
+            poi = new PointOfInterest();
+            poi.setId(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.ID)));
+            poi.setType(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.TYPE)));
+            poi.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(TableEntry.DESCRIPTION)));
+            poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
+            poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
+            poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
+            poi.setArea(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.AREA)));
             poiList.add(poi);
         }
 
@@ -284,4 +434,19 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
         return count;
     }
 
+    private double getLongitudeDistance(double latitude, int meter) {
+        return rad2deg(meter/(earthRadius*Math.cos(deg2rad(latitude))));
+    }
+
+    private double getLatitudeDistance(int meter) {
+        return rad2deg(meter/earthRadius);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
 }

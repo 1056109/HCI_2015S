@@ -3,10 +3,12 @@ package at.at.tuwien.hci.hciss2015.util;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -45,7 +47,11 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
     protected Boolean doInBackground(Void... params) {
         handleBitmapDescriptors();
 
-        List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getAllPOIs(4000));
+        //LatLng test = new LatLng(48.209272, 16.372801);
+        //Log.i(MyMarkerDrawer.class.getSimpleName(), test.latitude + " " + test.longitude);
+
+        List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getPOIsByArea(9000));
+        //List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getUnvisitedPOIsByPosition(48.209272, 16.372801, 1000));
         for(int i = 0; i < pois.size(); i++) {
             publishProgress(pois.get(i));
         }
