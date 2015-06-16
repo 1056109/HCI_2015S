@@ -11,25 +11,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:gravity="center"
-        android:padding="5dp"
-        android:text="Gefundene Hinweise zum Aussehen des Taeters: "
+        android:padding="3dp"
+        android:text="Taetermerkmale:"
         android:textColor="#FFFFFF"
-        android:textSize="15dp" />
+        android:textSize="20dp" />
 
     <ListView
-        android:id="@+id/suspectView"
-        android:layout_width="match_parent"
-        android:layout_height="118dp"
+        android:id="@+id/feature_list_names"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" />
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
         android:layout_width="300dp"
         android:layout_height="140dp"
-        android:background="#FFFFFF"
         android:layout_gravity="center_horizontal"
+        android:background="#FFFFFF"
         android:fillViewport="false"
         android:scrollbars="none">
 
@@ -75,11 +75,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
-        android:padding="5dp"
         android:layout_marginTop="20dp"
-        android:text="Schließen"
-        android:textSize="22dp"
+        android:background="@drawable/btn_bckgrnd"
         android:onClick="closeFeatures"
-        android:background="@drawable/btn_bckgrnd" />
+        android:padding="5dp"
+        android:text="Schließen"
+        android:textSize="22dp" />
 
 </LinearLayout>

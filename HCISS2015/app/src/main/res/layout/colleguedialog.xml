@@ -13,9 +13,39 @@
         android:textColor="#FFFFFF"
         android:gravity="center"
         android:textSize="20dp"
+        android:layout_margin="10dp"
         android:padding="5dp"
         android:id="@+id/textView2"
         android:layout_gravity="center_horizontal" />
+
+    <LinearLayout
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/infos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:src="@drawable/info_weapon" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:src="@drawable/info_map" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:src="@drawable/info_feature" />
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"

@@ -48,9 +48,9 @@ public class CharActivity extends Activity {
         setContentView(R.layout.activity_character);
 
         //todo @mario, warum brauchen wir das?
-        //todo @amer unser costum layout hat abgerundete ecken, dahinter würde man einen grauen bereich sehen
+        //todo @amer unser costum layout hat abgerundete ecken, dahinter wuerde man einen grauen bereich sehen
         //todo mit dieser zeile passiert das nicht mehr, sie werden transparent gesetzt
-        //todo ja genau diesr graue bereich, den man sehen würde, wird transparent gesetzt ;)
+        //todo ja genau diesr graue bereich, den man sehen wuerde, wird transparent gesetzt ;)
 
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
@@ -93,7 +93,7 @@ public class CharActivity extends Activity {
         } else {
             btnGenderFemale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
         }
-        ((ImageView) findViewById(user.getAvatarResId())).setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
+        ((ImageView) findViewById(user.getAvatarResId())).setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
 
         editTxtName.setText(user.getName());
     }
@@ -112,42 +112,42 @@ public class CharActivity extends Activity {
         vibrate();
         deselect();
         user.setAvatarResId(R.id.officer1);
-        imgOfficer1.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
+        imgOfficer1.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectFace2(View view) {
         vibrate();
         deselect();
         user.setAvatarResId(R.id.officer2);
-        imgOfficer2.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
+        imgOfficer2.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectFace3(View view) {
         vibrate();
         deselect();
         user.setAvatarResId(R.id.officer3);
-        imgOfficer3.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
+        imgOfficer3.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectFace4(View view) {
         vibrate();
         deselect();
         user.setAvatarResId(R.id.officer4);
-        imgOfficer4.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
+        imgOfficer4.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectFace5(View view) {
         vibrate();
         deselect();
         user.setAvatarResId(R.id.officer5);
-        imgOfficer5.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
+        imgOfficer5.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectFace6(View view) {
         vibrate();
         deselect();
         user.setAvatarResId(R.id.officer6);
-        imgOfficer6.setBackgroundColor(IMG_SELECTED_BACKGROUND_COLOR);
+        imgOfficer6.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectGenderMale(View view) {

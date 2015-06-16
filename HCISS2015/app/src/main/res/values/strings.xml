@@ -49,7 +49,7 @@
 	
     <array name="nav_drawer_items">
         <item>Karte</item>
-        <item>Benutzerdata</item>
+        <item>Benutzerdaten</item>
         <item>Fall verwerfen</item>
         <item>Statistik</item>
         <item>Help</item>
@@ -93,9 +93,9 @@
     <string name="send_collegue_ready">READY</string>
     <string name="send_colleague_desc">Waehle einen Ort aus, an dem dein Kollege eine Untersuchung fuer dich uebernehmen soll! 
 	Dein Partner kehrt nach 30 Minuten mit einem Hinweis zurueck.</string>
-    <string name="send_collegue_really">Moechten Sie den Kollegen wirklich hier nach einem der oben zu sehenden Hinweise suchen lassen?</string>
+    <string name="send_collegue_really">Moechtest du deinen Kollegen nach einem der folgenden Hinweise suchen lassen?</string>
     <string name="send_colleague_working_msg">Dein Kollege wird an dieser Stelle seine Untersuchung beginnen!</string>
-    <string name="send_collegue_yes">Ja, Kollege schicken</string>
+    <string name="send_collegue_yes">Ja, Kollege losschicken</string>
     <string name="send_collegue_no">Nein, anderen Ort wählen</string>
     <string name="title_activity_timer">TimerActivity</string>
 
@@ -103,7 +103,7 @@
     <string name="hintMap">Der Aufenthaltort des Taeters konnte dank der gefundenen Hinweise auf diesen Bereich eingeschraenkt werden.</string>
     <string name="title_activity_char">charActivity</string>
 
-    <string name="benutzerdaten">Hier kannst du deine Daten aktualisieren.</string>
+    <string name="benutzerdaten">In diesem Menü kannst du deine Spielerdaten aktualisieren</string>
     
     <string name="sharedPref">MySharedPref</string>
 </resources>

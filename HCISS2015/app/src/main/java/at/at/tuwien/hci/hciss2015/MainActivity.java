@@ -20,8 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +45,7 @@ import at.at.tuwien.hci.hciss2015.domain.NavDrawerItem;
 import at.at.tuwien.hci.hciss2015.persistence.MyDatabaseHelper;
 import at.at.tuwien.hci.hciss2015.persistence.PointOfInterestDaoImpl;
 import at.at.tuwien.hci.hciss2015.util.MyDrawerAdapter;
+import at.at.tuwien.hci.hciss2015.util.MyListAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyMarkerDrawer;
 
 enum ColleagueState {
@@ -99,7 +103,14 @@ public class MainActivity extends FragmentActivity {
     private static int mapProgress = 0;
     private SharedPreferences preferences;
 
+    private String[] names = new String[] { "Hautfarbe", "Haarfarbe", "Bart",
+            "Brille", "Narbe"};
+    private ArrayList<String> listNames = new ArrayList<String>();
 
+    public String[] values = new String[] { "Weiss", "Braun", "Vollbart",
+            "ja", "ja"};
+
+    private ListView featureList;
 
     private boolean firstStart;
     private ImageButton mapBtn;
@@ -155,8 +166,8 @@ public class MainActivity extends FragmentActivity {
         send_colleague_desc = getResources().getString(R.string.send_colleague_desc);
         send_colleague_working_msg = getResources().getString(R.string.send_colleague_working_msg);
 
-        mapBtn=(ImageButton)findViewById(R.id.btnMap);
-        mapTxt=(TextView)findViewById(R.id.mapProgress);
+        mapBtn = (ImageButton) findViewById(R.id.btnMap);
+        mapTxt = (TextView) findViewById(R.id.mapProgress);
 
         /*
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -203,9 +214,11 @@ public class MainActivity extends FragmentActivity {
                 onFinish();
             }
         });
-
-
+        for (int i = 0; i < values.length; ++i) {
+            listNames.add(values[i]);
+        }
     }
+
 
     public void addMapdetail(View view){            //testing function
         newMap();
@@ -281,8 +294,21 @@ public class MainActivity extends FragmentActivity {
         dialog.setContentView(layout);
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
+
+
         dialog.show();
+        if (view==R.layout.feature_layout)
+            setList(layout);
     }
+
+    private void setList(View layout){
+        MyListAdapter adapter = new MyListAdapter(getApplicationContext(), names, values);
+        featureList = (ListView)layout.findViewById(R.id.feature_list_names);
+        featureList.setAdapter(adapter);
+    }
+
+
+
 
     public void closeFeatures(View view){
         vibrate();
