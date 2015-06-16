@@ -245,16 +245,30 @@ public class MainActivity extends FragmentActivity {
             drawMap();
             if (mapProgress == 0) {
                 mapProgress++;
+                mapTxt.setText("1/3");
                 circle.setRadius(circleRad1);
             } else if (mapProgress == 1) {
                 mapProgress++;
+                mapTxt.setText("2/3");
                 circle.setRadius(circleRad2);
             } else if (mapProgress == 2) {
                 mapProgress++;
+                mapTxt.setText("3/3");
                 circle.setRadius(circleRad3);
             }
+
+            int zoomLevel=15;
+            switch (mapProgress){
+                case 1:  zoomLevel = 13;
+                    break;
+                case 2:  zoomLevel = 15;
+                    break;
+                case 3:  zoomLevel = 17;
+                    break;
+            }
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(VIENNA, zoomLevel));
             mapBtn.setImageResource(R.drawable.btn_map_pressed);
-            mapTxt.setText(mapProgress + "/3");
         }
     }
 
