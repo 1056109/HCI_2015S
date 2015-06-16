@@ -5,6 +5,8 @@
     <string name="action_settings">Settings</string>
 
     <string name="gps_message">Um dieses Spiel zu spielen, muss das GPS aktiv sein. Moechtest du es jetzt einschalten?</string>
+    <string name="gps_on">Ja, einschalten</string>
+    <string name="gps_off">Nein, beenden</string>
 
     <string name="welcome_first_start">Willkommen bei Vienna Cop! Bitte geben Sie Ihren Namen ein, waehlen Sie Geschlecht und Spielfigur, und klicken
     Sie auf Start, um Ihre Polizeikarriere in Wien zu beginnen:</string>
@@ -91,7 +93,10 @@
     <string name="send_collegue_ready">READY</string>
     <string name="send_colleague_desc">Waehle einen Ort aus, an dem dein Kollege eine Untersuchung fuer dich uebernehmen soll! 
 	Dein Partner kehrt nach 30 Minuten mit einem Hinweis zurueck.</string>
+    <string name="send_collegue_really">Moechten Sie den Kollegen wirklich hier nach einem der oben zu sehenden Hinweise suchen lassen?</string>
     <string name="send_colleague_working_msg">Dein Kollege wird an dieser Stelle seine Untersuchung beginnen!</string>
+    <string name="send_collegue_yes">Ja, Kollege schicken</string>
+    <string name="send_collegue_no">Nein, anderen Ort wählen</string>
     <string name="title_activity_timer">TimerActivity</string>
 
     <string name="zeroMap">Es wurden noch keine Hinweise zum Aufenhaltsort des Taeters gefunden!</string>

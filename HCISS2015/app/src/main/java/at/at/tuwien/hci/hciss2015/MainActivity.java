@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.media.Image;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -188,13 +190,8 @@ public class MainActivity extends FragmentActivity {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         if (colleagueState.equals(ColleagueState.READY)) {
-                            //TODO: make popup-window for asking if collegue should really go there
+                            openDialog(R.layout.colleguedialog);
 
-                            colleague.setImageResource(R.drawable.info_collegue);
-                            colleague.setClickable(false);
-                            handleCustomToast(send_colleague_working_msg);
-                            executeTimerTask();
-                            colleagueState = ColleagueState.WORKING;
                         }
                         return false;
                     }
@@ -266,39 +263,22 @@ public class MainActivity extends FragmentActivity {
                 showCircle = false;
                 mapBtn.setImageResource(R.drawable.btn_map);
             }
-
             circle.setVisible(showCircle);
         }
-
-       /* final Dialog dialog = new Dialog(this);
-        LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = li.inflate(R.layout.gpsdialog, null, false);
-        dialog.setContentView(layout);
-        Window window = dialog.getWindow();
-        window.setBackgroundDrawableResource(android.R.color.transparent);
-        ImageButton dialogButton = (ImageButton) dialog.findViewById(R.id.closeMap);
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                vibrate();
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();*/
     }
+
+
 
     public void openMerkmale(View view) {
         vibrate();
-        LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = li.inflate(R.layout.feature_layout, null, false);
-        openDialog(layout);
-
+        openDialog(R.layout.feature_layout);
     }
 
-    private void openDialog(final View view){
+    private void openDialog(final int view){
         dialog = new Dialog(this);
-        dialog.setContentView(view);
+        LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = li.inflate(view, null, false);
+        dialog.setContentView(layout);
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
         dialog.show();
@@ -329,6 +309,19 @@ public class MainActivity extends FragmentActivity {
         } else {
             return;
         }
+    }
+
+    public void send(View view){
+        colleague.setImageResource(R.drawable.info_collegue);
+        colleague.setClickable(false);
+        handleCustomToast(send_colleague_working_msg);
+        executeTimerTask();
+        colleagueState = ColleagueState.WORKING;
+        dialog.dismiss();
+    }
+
+    public void sendNot(View view){
+        dialog.dismiss();
     }
 
     private void handleCustomToast(String message) {

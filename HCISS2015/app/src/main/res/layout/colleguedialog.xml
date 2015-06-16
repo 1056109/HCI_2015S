@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/featureView"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/curve_shape_black"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_collegue_really"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:padding="5dp"
+        android:id="@+id/textView2"
+        android:layout_gravity="center_horizontal" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="@string/send_collegue_no"
+            android:textColor="#AA66CC"
+            android:onClick="sendNot"
+            android:background="@drawable/btn_android"
+            android:id="@+id/button3" />
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="@string/send_collegue_yes"
+            android:onClick="send"
+            android:textColor="#AA66CC"
+            android:background="@drawable/btn_android"
+            android:id="@+id/button4" />
+    </LinearLayout>
+</LinearLayout>
