@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import at.at.tuwien.hci.hciss2015.R;
+import at.at.tuwien.hci.hciss2015.domain.Case;
+import at.at.tuwien.hci.hciss2015.domain.Suspect;
 import at.at.tuwien.hci.hciss2015.domain.User;
 
 /**
@@ -18,6 +20,8 @@ public class SharedPreferencesHandler {
     private SharedPreferences.Editor editor;
 
     private final String USER = "user";
+    private final String SUSPECT = "suspect";
+    private final String CASE = "case";
 
     public SharedPreferencesHandler(Context context) {
         sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.sharedPref), context.MODE_PRIVATE);
@@ -42,4 +46,27 @@ public class SharedPreferencesHandler {
         return MyJsonParser.parseJson(sharedPref.getString(USER, ""), User.class);
     }
 
+    public void putSuspect(Suspect suspect) {
+        editor.putString(SUSPECT, MyJsonParser.toJson(suspect));
+        editor.commit();
+    }
+
+    public Suspect getSuspect() {
+        if("".equals(sharedPref.getString(SUSPECT, ""))) {
+            return null;
+        }
+        return MyJsonParser.parseJson(sharedPref.getString(SUSPECT,""), Suspect.class);
+    }
+
+    public void putCase(Case crimeCase) {
+        editor.putString(CASE, MyJsonParser.toJson(crimeCase));
+        editor.commit();
+    }
+
+    public Case getCase() {
+        if("".equals(sharedPref.getString(CASE, ""))) {
+            return null;
+        }
+        return MyJsonParser.parseJson(sharedPref.getString(CASE,""), Case.class);
+    }
 }
