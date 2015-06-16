@@ -1,30 +1,26 @@
 package at.at.tuwien.hci.hciss2015;
 
+import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,12 +99,12 @@ public class MainActivity extends FragmentActivity {
     private static int mapProgress = 0;
     private SharedPreferences preferences;
 
-    private String[] names = new String[] { "Hautfarbe", "Haarfarbe", "Bart",
-            "Brille", "Narbe"};
+    private String[] names = new String[] { "Hautfarbe:", "Haarfarbe:", "Bart:",
+            "Brille:", "Narbe:"};
     private ArrayList<String> listNames = new ArrayList<String>();
 
-    public String[] values = new String[] { "Weiss", "Braun", "Vollbart",
-            "ja", "ja"};
+    public String[] values = new String[] { "", "Braun", "",
+            "ja", ""};
 
     private ListView featureList;
 

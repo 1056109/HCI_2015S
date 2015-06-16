@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/send_collegue_really"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:gravity="center"
         android:textSize="20dp"
         android:layout_margin="10dp"
@@ -28,14 +28,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:src="@drawable/info_weapon" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:src="@drawable/info_map" />
 
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:src="@drawable/info_feature" />
     </LinearLayout>
 
@@ -56,10 +56,11 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="20dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:text="@string/send_collegue_no"
-            android:textColor="#AA66CC"
+            android:textColor="@color/violett"
             android:onClick="sendNot"
             android:background="@drawable/btn_android"
             android:id="@+id/button3" />
@@ -68,11 +69,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_margin="20dp"
             android:layout_weight="1"
             android:text="@string/send_collegue_yes"
             android:onClick="send"
-            android:textColor="#AA66CC"
+            android:textColor="@color/violett"
             android:background="@drawable/btn_android"
             android:id="@+id/button4" />
     </LinearLayout>

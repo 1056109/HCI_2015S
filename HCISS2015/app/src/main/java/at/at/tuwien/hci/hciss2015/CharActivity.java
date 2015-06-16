@@ -21,7 +21,6 @@ public class CharActivity extends Activity {
 
     private static final String TAG = InitActivity.class.getSimpleName();
 
-    private static final int IMG_SELECTED_BACKGROUND_COLOR = 0xEEEE66CC;
     private static final int IMG_DEFAULT_BACKGROUND_COLOR = 0xFFFFFF;
 
     private SharedPreferencesHandler sharedPref;
@@ -90,8 +89,10 @@ public class CharActivity extends Activity {
     private void setCurrentValues() {
         if(user.getGender() == 'M') {
             btnGenderMale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
+            btnGenderMale.setTextColor(getResources().getColor(R.color.black));
         } else {
             btnGenderFemale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
+            btnGenderFemale.setTextColor(getResources().getColor(R.color.black));
         }
         ((ImageView) findViewById(user.getAvatarResId())).setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
 
@@ -153,15 +154,19 @@ public class CharActivity extends Activity {
     public void selectGenderMale(View view) {
         vibrate();
         user.setGender('M');
-        btnGenderFemale.setBackgroundResource(R.drawable.btn_bckgrnd);
+        btnGenderFemale.setBackgroundResource(R.drawable.btn_android);
+        btnGenderFemale.setTextColor(getResources().getColor(R.color.violett));
         btnGenderMale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
+        btnGenderMale.setTextColor(getResources().getColor(R.color.black));
     }
 
     public void selectGenderFemale(View view) {
         vibrate();
         user.setGender('F');
         btnGenderFemale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
-        btnGenderMale.setBackgroundResource(R.drawable.btn_bckgrnd);
+        btnGenderFemale.setTextColor(getResources().getColor(R.color.black));
+        btnGenderMale.setBackgroundResource(R.drawable.btn_android);
+        btnGenderMale.setTextColor(getResources().getColor(R.color.violett));
     }
 
     private void deselect(){

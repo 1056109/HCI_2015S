@@ -16,7 +16,7 @@
         android:layout_gravity="center_horizontal|top"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textStyle="bold" />
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_marginTop="8dp"
         android:text="Spielername:"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFFFFF" />
+        android:textColor="@color/white" />
 
     <EditText
         android:id="@+id/charName"
@@ -38,7 +38,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:ems="10"
         android:hint="Name"
         android:inputType="textPersonName"
@@ -53,7 +53,7 @@
         android:layout_marginTop="8dp"
         android:text="Geschlecht:"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFFFFF" />
+        android:textColor="@color/white" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -69,8 +69,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Weiblich"
+            android:textColor="@color/violett"
             android:textSize="22dp"
-            android:background="@drawable/btn_bckgrnd"
+            android:background="@drawable/btn_android"
             android:onClick="selectGenderFemale" />
 
         <Button
@@ -78,9 +79,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/violett"
             android:text="Männlich"
             android:textSize="22dp"
-            android:background="@drawable/btn_bckgrnd"
+            android:background="@drawable/btn_android"
             android:onClick="selectGenderMale" />
     </LinearLayout>
 
@@ -93,7 +95,7 @@
         android:layout_marginTop="8dp"
         android:text="Spielfigur:"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFFFFF" />
+        android:textColor="@color/white" />
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
@@ -103,7 +105,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:fillViewport="false"
         android:scrollbars="none">
 
@@ -167,10 +169,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
-        android:layout_margin="30dp"
+        android:layout_marginTop="100dp"
         android:text="Fertig"
         android:textSize="22dp"
-        android:textColor="#AA66CC"
+        android:textColor="@color/violett"
         android:background="@drawable/btn_android"
         android:onClick="checkInput" />
 </LinearLayout>

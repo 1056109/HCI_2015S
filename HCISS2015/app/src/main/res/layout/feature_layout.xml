@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/featureView"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/curve_shape_black"
     android:orientation="vertical">
@@ -15,12 +15,15 @@
         android:gravity="center"
         android:padding="3dp"
         android:text="Taetermerkmale:"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textSize="20dp" />
 
     <ListView
         android:id="@+id/feature_list_names"
         android:layout_width="fill_parent"
+        android:footerDividersEnabled="true"
+        android:headerDividersEnabled="true"
+        android:layout_margin="10dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" />
 
@@ -28,8 +31,10 @@
         android:id="@+id/horizontalScrollView"
         android:layout_width="300dp"
         android:layout_height="140dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_gravity="center_horizontal"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:fillViewport="false"
         android:scrollbars="none">
 
@@ -75,10 +80,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/btn_bckgrnd"
+        android:layout_margin="10dp"
+        android:textColor="@color/violett"
+        android:background="@drawable/btn_android"
         android:onClick="closeFeatures"
-        android:padding="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:text="Schließen"
         android:textSize="22dp" />
 
