@@ -2,38 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/featureView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
     android:background="@drawable/curve_shape_black"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/feature_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:gravity="center"
-        android:padding="3dp"
+        android:padding="2dp"
         android:text="Taetermerkmale:"
         android:textColor="@color/white"
         android:textSize="20dp" />
 
     <ListView
         android:id="@+id/feature_list_names"
-        android:layout_width="fill_parent"
-        android:footerDividersEnabled="true"
-        android:headerDividersEnabled="true"
-        android:layout_margin="10dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
+        android:visibility="gone"
         android:layout_width="300dp"
         android:layout_height="140dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_gravity="center_horizontal"
         android:background="@color/white"
         android:fillViewport="false"
         android:scrollbars="none">
@@ -47,46 +47,72 @@
                 android:id="@+id/suspect1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="selectSuspect1"
                 android:src="@drawable/char1" />
 
             <ImageView
                 android:id="@+id/suspect2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="selectSuspect2"
                 android:src="@drawable/char5" />
 
             <ImageView
                 android:id="@+id/suspect3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="selectSuspect3"
                 android:src="@drawable/char9" />
 
             <ImageView
                 android:id="@+id/suspect4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="selectSuspect4"
                 android:src="@drawable/char13" />
 
             <ImageView
                 android:id="@+id/suspect5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="selectSuspect5"
                 android:src="@drawable/char7" />
         </LinearLayout>
     </HorizontalScrollView>
 
-    <Button
-        android:id="@+id/closeFeature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_margin="10dp"
-        android:textColor="@color/violett"
-        android:background="@drawable/btn_android"
-        android:onClick="closeFeatures"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:text="Schließen"
-        android:textSize="22dp" />
+    <LinearLayout
+        android:id="@+id/feature_btn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/choose_suspect_btn"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_android"
+            android:onClick="closeFeatures"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Ausgewaehlten Verdaechtigen verhaften"
+            android:textColor="@color/violett" />
+
+        <Button
+            android:id="@+id/close_feature_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_android"
+            android:onClick="closeFeatures"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Schließen"
+            android:textColor="@color/violett" />
+
+    </LinearLayout>
 
 </LinearLayout>

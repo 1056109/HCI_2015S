@@ -104,6 +104,9 @@
     <string name="title_activity_char">charActivity</string>
 
     <string name="benutzerdaten">In diesem Menü kannst du deine Spielerdaten aktualisieren</string>
+
+    <string name="choose_suspect">Wir konnten die Verdaechtigen eingrenzen. Waehle anhand deiner gesammelten Hinweise
+        den/die TaeterIn. Bist du dir unsicher, dann suche weitere Hinweise und komm spaeter wieder</string>
     
     <string name="sharedPref">MySharedPref</string>
 </resources>

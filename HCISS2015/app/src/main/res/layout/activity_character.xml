@@ -171,7 +171,6 @@
         android:layout_gravity="center|bottom"
         android:layout_marginTop="100dp"
         android:text="Fertig"
-        android:textSize="22dp"
         android:textColor="@color/violett"
         android:background="@drawable/btn_android"
         android:onClick="checkInput" />

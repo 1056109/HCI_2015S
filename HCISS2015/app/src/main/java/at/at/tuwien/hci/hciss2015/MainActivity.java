@@ -1,6 +1,5 @@
 package at.at.tuwien.hci.hciss2015;
 
-import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
+import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -35,6 +35,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import at.at.tuwien.hci.hciss2015.domain.NavDrawerItem;
@@ -43,6 +45,7 @@ import at.at.tuwien.hci.hciss2015.persistence.PointOfInterestDaoImpl;
 import at.at.tuwien.hci.hciss2015.util.MyDrawerAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyListAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyMarkerDrawer;
+import at.at.tuwien.hci.hciss2015.util.SharedPreferencesHandler;
 
 enum ColleagueState {
     WAITING, READY, WORKING
@@ -71,8 +74,6 @@ public class MainActivity extends FragmentActivity {
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
 
-    private FrameLayout myFrameLayout;
-
     private Context context = this;
 
     private PointOfInterestDaoImpl daoInstance;
@@ -97,7 +98,7 @@ public class MainActivity extends FragmentActivity {
     private boolean showCircle = false;
     private TextView mapTxt;
     private static int mapProgress = 0;
-    private SharedPreferences preferences;
+    private SharedPreferencesHandler sharedPref;
 
     private String[] names = new String[] { "Hautfarbe:", "Haarfarbe:", "Bart:",
             "Brille:", "Narbe:"};
@@ -108,8 +109,15 @@ public class MainActivity extends FragmentActivity {
 
     private ListView featureList;
 
-    private boolean firstStart;
+    private static boolean hasDestination = false;
     private ImageButton mapBtn;
+    private ImageButton featureBtn;
+    private TextView featureText;
+    private Button featureCloseBtn;
+    private Button chooseSuspectBtn;
+    private LinearLayout featureBtnLayout;
+    private HorizontalScrollView scrollView;
+
 
 
     @Override
@@ -164,17 +172,9 @@ public class MainActivity extends FragmentActivity {
 
         mapBtn = (ImageButton) findViewById(R.id.btnMap);
         mapTxt = (TextView) findViewById(R.id.mapProgress);
+        featureBtn = (ImageButton) findViewById(R.id.btnFeature);
 
-        /*
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        firstStart = preferences.getBoolean("firstStart", true);
-
-        if (firstStart){
-            Intent intent = new Intent(MainActivity.this, CharActivity.class);
-            startActivity(intent);
-        }
-        */
-
+        sharedPref = new SharedPreferencesHandler(this);
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(VIENNA)         // Sets the center of the map to Vienna
@@ -221,8 +221,7 @@ public class MainActivity extends FragmentActivity {
     }           //testing function
 
     public void addFeature(View view){              //testing function
-        Intent intent = new Intent(MainActivity.this, CharActivity.class);
-        startActivity(intent);
+            hasDestination=true;
     }
 
     private void drawMap() {
@@ -294,6 +293,7 @@ public class MainActivity extends FragmentActivity {
 
     public void openMerkmale(View view) {
         vibrate();
+        featureBtn.setImageResource(R.drawable.btn_feature_pressed);
         openDialog(R.layout.feature_layout);
     }
 
@@ -304,11 +304,29 @@ public class MainActivity extends FragmentActivity {
         dialog.setContentView(layout);
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
+        if (view==R.layout.feature_layout) {
+            setList(layout);
+            if (hasDestination)
+                showSuspects(layout);
 
+        }
 
         dialog.show();
-        if (view==R.layout.feature_layout)
-            setList(layout);
+    }
+
+    private void showSuspects(View layout){
+        featureText = (TextView) layout.findViewById(R.id.feature_txt);
+        chooseSuspectBtn = (Button) layout.findViewById(R.id.choose_suspect_btn);
+        scrollView = (HorizontalScrollView) layout.findViewById(R.id.horizontalScrollView);
+        featureText.setText(getResources().getString(R.string.choose_suspect));
+        featureText.setTextSize(13);
+        scrollView.setVisibility(View.VISIBLE);
+        chooseSuspectBtn.setVisibility(View.VISIBLE);
+    }
+
+    private void hideSuspects(){
+        scrollView.setVisibility(View.GONE);
+        chooseSuspectBtn.setVisibility(View.GONE);
     }
 
     private void setList(View layout){
@@ -322,6 +340,7 @@ public class MainActivity extends FragmentActivity {
 
     public void closeFeatures(View view){
         vibrate();
+        featureBtn.setImageResource(R.drawable.btn_feature);
         dialog.dismiss();
     }
 
@@ -456,6 +475,26 @@ public class MainActivity extends FragmentActivity {
         };
 
         timerHandler.post(runnable);
+    }
+
+    public void selectSuspect1(View view){
+
+    }
+
+    public void selectSuspect2(View view){
+
+    }
+
+    public void selectSuspect3(View view){
+
+    }
+
+    public void selectSuspect4(View view){
+
+    }
+
+    public void selectSuspect5(View view){
+
     }
 
 }
