@@ -438,6 +438,7 @@ public class MainActivity extends FragmentActivity {
             }
             if(position == 3) {
                 //startActivity Statistik
+                openDialog(R.layout.statisticsdialog);
             }
             if(position == 4) {
                 //startActivity Help

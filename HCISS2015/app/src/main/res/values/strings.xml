@@ -110,6 +110,9 @@
     <string name="info">App-Info</string>
     <string name="infoMsg">ViennaCop ist ein Studenten-Projekt, welches im Rahmen des HCI-Seminars (SS2015) der Forschungsgruppe DECO (INSO) an der TU Wien entstanden ist. \n\nTeam-Mitglieder: \n\tAmer Salkovic\n\tMario Vorstandlechner\n\tMichael Traxler\n\tAlex Brandner</string>
 
+    <string name="stat">Statistk</string>
+    <string name="statMsg">Aufklärungsrate</string>
+
     <string name="choose_suspect">Wir konnten die Verdaechtigen eingrenzen. Waehle anhand deiner gesammelten Hinweise
         den/die TaeterIn. Bist du dir unsicher, dann suche weitere Hinweise und komm spaeter wieder</string>
 
