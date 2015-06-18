@@ -1,6 +1,7 @@
 package at.at.tuwien.hci.hciss2015;
 
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -29,6 +30,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,6 +50,7 @@ import java.util.ArrayList;
 import at.at.tuwien.hci.hciss2015.domain.NavDrawerItem;
 import at.at.tuwien.hci.hciss2015.persistence.MyDatabaseHelper;
 import at.at.tuwien.hci.hciss2015.persistence.PointOfInterestDaoImpl;
+import at.at.tuwien.hci.hciss2015.util.GeofenceTransitionsIntentService;
 import at.at.tuwien.hci.hciss2015.util.MyDrawerAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyListAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyMarkerDrawer;
@@ -54,7 +60,7 @@ enum ColleagueState {
     WAITING, READY, WORKING
 }
 
-public class MainActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener {
+public class MainActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status> {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -112,11 +118,11 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private ImageView imgSuspect4;
     private ImageView imgSuspect5;
 
-    private String[] names = new String[] { "Hautfarbe:", "Haarfarbe:", "Bart:",
+    private String[] names = new String[]{"Hautfarbe:", "Haarfarbe:", "Bart:",
             "Brille:", "Narbe:"};
     private ArrayList<String> listNames = new ArrayList<String>();
 
-    public String[] values = new String[] { "", "Braun", "",
+    public String[] values = new String[]{"", "Braun", "",
             "ja", ""};
 
     private ListView featureList;
@@ -130,6 +136,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private HorizontalScrollView scrollView;
 
     protected GoogleApiClient mGoogleApiClient;
+
+    protected ArrayList<Geofence> mGeofenceList;
+
+    private PendingIntent mGeofencePendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +201,12 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             listNames.add(values[i]);
         }
 
+        mGeofenceList = new ArrayList<Geofence>();
+
+        mGeofencePendingIntent = null;
+
+        populateGeofenceList();
+
         buildGoogleApiClient();
     }
 
@@ -206,7 +222,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
         //if my location is null, set last location to VIENNA
         CameraPosition cameraPosition = null;
-        if(myLocation != null) {
+        if (myLocation != null) {
             cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))
                     .zoom(15)
@@ -242,26 +258,28 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             }
 
             @Override
-            public void onCancel() { onFinish(); }
+            public void onCancel() {
+                onFinish();
+            }
         });
     }
 
 
-    public void addMapdetail(View view){            //testing function
+    public void addMapdetail(View view) {            //testing function
         newMap();
     }           //testing function
 
-    public void addFeature(View view){              //testing function
-        hasDestination=true;
+    public void addFeature(View view) {              //testing function
+        hasDestination = true;
         openMerkmale(view);
     }
 
     private void drawMap() {
 
-        if (mapProgress!=0)
+        if (mapProgress != 0)
             circle.remove();
 
-        handleCustomToast( getResources().getString(R.string.hintMap));
+        handleCustomToast(getResources().getString(R.string.hintMap));
         circle = mMap.addCircle(new CircleOptions()
                 .center(VIENNA)
                 .fillColor(0x5064B5F6)
@@ -272,7 +290,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
     private void newMap() {
 
-        if (mapProgress<3) {
+        if (mapProgress < 3) {
             drawMap();
             if (mapProgress == 0) {
                 mapProgress++;
@@ -288,13 +306,16 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 circle.setRadius(circleRad3);
             }
 
-            int zoomLevel=15;
-            switch (mapProgress){
-                case 1:  zoomLevel = 13;
+            int zoomLevel = 15;
+            switch (mapProgress) {
+                case 1:
+                    zoomLevel = 13;
                     break;
-                case 2:  zoomLevel = 15;
+                case 2:
+                    zoomLevel = 15;
                     break;
-                case 3:  zoomLevel = 17;
+                case 3:
+                    zoomLevel = 17;
                     break;
             }
 
@@ -312,8 +333,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             if (!showCircle) {
                 showCircle = true;
                 mapBtn.setImageResource(R.drawable.btn_map_pressed);
-            }
-            else {
+            } else {
                 showCircle = false;
                 mapBtn.setImageResource(R.drawable.btn_map);
             }
@@ -322,23 +342,22 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     }
 
 
-
     public void openMerkmale(View view) {
         vibrate();
         featureBtn.setImageResource(R.drawable.btn_feature_pressed);
         openDialog(R.layout.feature_layout);
     }
 
-    private void openDialog(final int view){
+    private void openDialog(final int view) {
         dialog = new Dialog(this);
         LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = li.inflate(view, null, false);
         dialog.setContentView(layout);
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
-        if (view==R.layout.feature_layout) {
+        if (view == R.layout.feature_layout) {
             setList(layout);
-            if (hasDestination&&!firstTimeSuspects)
+            if (hasDestination && !firstTimeSuspects)
                 showSuspects(layout);
 
         }
@@ -346,8 +365,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         dialog.show();
     }
 
-    private void showSuspects(View layout){
-        firstTimeSuspects=true;
+    private void showSuspects(View layout) {
+        firstTimeSuspects = true;
         imgSuspect1 = (ImageView) layout.findViewById(R.id.suspect1);
         imgSuspect2 = (ImageView) layout.findViewById(R.id.suspect2);
         imgSuspect3 = (ImageView) layout.findViewById(R.id.suspect3);
@@ -363,19 +382,19 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         chooseSuspectBtn.setVisibility(View.VISIBLE);
     }
 
-    private void setList(View layout){
+    private void setList(View layout) {
         MyListAdapter adapter = new MyListAdapter(getApplicationContext(), names, values);
-        featureList = (ListView)layout.findViewById(R.id.feature_list_names);
+        featureList = (ListView) layout.findViewById(R.id.feature_list_names);
         featureList.setAdapter(adapter);
     }
 
-    public void closeFeatures(View view){
+    public void closeFeatures(View view) {
         vibrate();
         featureBtn.setImageResource(R.drawable.btn_feature);
         dialog.dismiss();
     }
 
-    public void closeDialog(View view){
+    public void closeDialog(View view) {
         //vibrate();
         dialog.dismiss();
     }
@@ -402,7 +421,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         }
     }
 
-    public void send(View view){
+    public void send(View view) {
         colleague.setImageResource(R.drawable.info_collegue);
         colleague.setClickable(false);
         handleCustomToast(send_colleague_working_msg);
@@ -411,7 +430,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         dialog.dismiss();
     }
 
-    public void sendNot(View view){
+    public void sendNot(View view) {
         dialog.dismiss();
     }
 
@@ -436,6 +455,12 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     @Override
     protected void onStop() {
         super.onStop();
+
+        LocationServices.GeofencingApi.removeGeofences(
+            mGoogleApiClient,
+            getGeofencePendingIntent()
+        ).setResultCallback(this);
+
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
@@ -445,6 +470,12 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     public void onConnected(Bundle bundle) {
         Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         initCamera(myLocation);
+
+        LocationServices.GeofencingApi.addGeofences(
+            mGoogleApiClient,
+            getGeofencingRequest(),
+            getGeofencePendingIntent()
+        ).setResultCallback(this);
     }
 
     @Override
@@ -456,6 +487,16 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+    }
+
+    @Override
+    public void onResult(Status status) {
+        if (status.isSuccess()) {
+
+            Toast.makeText(this, "geofence transition - enter",Toast.LENGTH_SHORT).show();
+        } else {
+            Log.e(TAG, "something is wrong");
+        }
     }
 
     private class MyInfoWindowAdapter implements InfoWindowAdapter {
@@ -487,23 +528,23 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         }
 
         private void selectItem(int position) {
-            if(position == 1) {
+            if (position == 1) {
                 Intent intent = new Intent(MainActivity.this, CharActivity.class);
                 startActivity(intent);
                 finish();
             }
-            if(position == 2) {
+            if (position == 2) {
                 //startActivity Fall verwerfen
             }
-            if(position == 3) {
+            if (position == 3) {
                 //startActivity Statistik
                 openDialog(R.layout.statisticsdialog);
             }
-            if(position == 4) {
+            if (position == 4) {
                 //startActivity Help
                 startActivity(new Intent(MainActivity.this, AnimationSampleActivity.class));
             }
-            if(position == 5) {
+            if (position == 5) {
                 //startActivity Info
                 //Intent intent = new Intent(MainActivity.this, InfoActivity.class);
                 //startActivity(intent);
@@ -562,40 +603,40 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         timerHandler.post(runnable);
     }
 
-    public void selectSuspect1(View view){
+    public void selectSuspect1(View view) {
         vibrate();
         deselect();
         imgSuspect1.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
-    public void selectSuspect2(View view){
+    public void selectSuspect2(View view) {
         vibrate();
         deselect();
         imgSuspect2.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
-    public void selectSuspect3(View view){
+    public void selectSuspect3(View view) {
         vibrate();
         deselect();
         imgSuspect3.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
 
     }
 
-    public void selectSuspect4(View view){
+    public void selectSuspect4(View view) {
         vibrate();
         deselect();
         imgSuspect4.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
 
     }
 
-    public void selectSuspect5(View view){
+    public void selectSuspect5(View view) {
         vibrate();
         deselect();
         imgSuspect5.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
 
     }
 
-    private void deselect(){
+    private void deselect() {
         imgSuspect1.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
         imgSuspect2.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
         imgSuspect3.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
@@ -603,18 +644,68 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         imgSuspect5.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
     }
 
-    public void chooseSuspect(View view){
+    public void chooseSuspect(View view) {
         //todo abfrage ob suspect id gleich ausgewaehlter id
         //wenn ja erfolgsmeldung, sonst negativmeldung
         dialog.dismiss();
         openDialog(R.layout.end_case_layout);
     }
 
-    public void endCase(View view){
+    public void endCase(View view) {
         //todo neuen fall beginnen
     }
 
+    private GeofencingRequest getGeofencingRequest() {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.addGeofences(mGeofenceList);
+        return builder.build();
+    }
+
+    private PendingIntent getGeofencePendingIntent() {
+        //if (mGeofencePendingIntent != null) {
+        //    return mGeofencePendingIntent;
+        //}
+        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public void populateGeofenceList() {
+        mGeofenceList.add(new Geofence.Builder()
+                .setRequestId("1")
+                .setCircularRegion(48.178454, 16.369699, 10)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                        | GeofencingRequest.INITIAL_TRIGGER_EXIT)
+                .build());
+
+        mGeofenceList.add(new Geofence.Builder()
+                .setRequestId("2")
+                .setCircularRegion(48.17755, 16.369114, 10)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                        | GeofencingRequest.INITIAL_TRIGGER_EXIT)
+                .build());
+
+        mGeofenceList.add(new Geofence.Builder()
+                .setRequestId("Nina Wohnung")
+                .setCircularRegion(48.173957, 16.382527, 10)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                        | GeofencingRequest.INITIAL_TRIGGER_EXIT)
+                .build());
+
+        mGeofenceList.add(new Geofence.Builder()
+                .setRequestId("Reumannplatz")
+                .setCircularRegion(48.175213, 16.377489, 10)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                        | GeofencingRequest.INITIAL_TRIGGER_EXIT)
+                .build());
+    }
 }
+
+
 
 //ArrayList<LatLng> hospitals = new ArrayList<>();
 

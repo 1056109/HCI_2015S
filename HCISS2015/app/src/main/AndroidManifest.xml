@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="at.at.tuwien.hci.hciss2015" >
-
-    <!--
-    <permission
-        android:name="com.vogella.android.locationapi.maps.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature" />
-    -->
+    package="at.at.tuwien.hci.hciss2015">
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -25,16 +19,31 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyCh3YVt13AnwpEltD9napXZiNtYdQx8gP4" />
+
+        <!--
+             API Keys:
+            mario: AIzaSyCh3YVt13AnwpEltD9napXZiNtYdQx8gP4
+            amer: AIzaSyDc2pzCszMJmtVKeMzPq7Rql7_hPGizumQ
+        -->
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
         </activity>
+
         <activity
             android:name=".InitActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,22 +51,16 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCh3YVt13AnwpEltD9napXZiNtYdQx8gP4" />
-        <!--
-             API Keys:
-            mario: AIzaSyCh3YVt13AnwpEltD9napXZiNtYdQx8gP4
-            amer: AIzaSyDc2pzCszMJmtVKeMzPq7Rql7_hPGizumQ
-        -->
         <activity
             android:name=".CharActivity"
-            android:label="@string/title_activity_char" >
+            android:label="@string/title_activity_char">
         </activity>
-        <activity android:name=".AnimationSampleActivity" />
+
+        <activity
+            android:name=".AnimationSampleActivity">
+        </activity>
+
+        <service android:name="at.at.tuwien.hci.hciss2015.util.GeofenceTransitionsIntentService" />
     </application>
 
 </manifest>
