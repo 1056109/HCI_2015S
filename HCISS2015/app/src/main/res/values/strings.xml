@@ -130,6 +130,6 @@
     <string name="anim_third">Wenn du auf das Kartensymbol drückst, wird dir der Radius angezeigt in dem sich der Täter versteckt hält.</string>
     <string name="anim_fourth">Hier kannst du dir alle gesammelten Täterhinweise noch einmal ansehen. Außerdem wird automatisch eine Liste von Verdächtigen generiert über die du den Täter auswählen kannst.</string>
 
-    <string name="next">Nächster Tipp</string>
+    <string name="next">\u0020Nächster Tipp\u0020</string>
     <string name="close">Schließen</string>
 </resources>

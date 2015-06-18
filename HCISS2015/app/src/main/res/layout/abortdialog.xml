@@ -7,7 +7,9 @@
     android:layout_marginRight="16dp"
     android:background="@drawable/curve_shape_black"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:onClick="endCase"
+    android:nestedScrollingEnabled="false">
 
     <TextView
         android:id="@+id/statisticsHeaderMsg"
