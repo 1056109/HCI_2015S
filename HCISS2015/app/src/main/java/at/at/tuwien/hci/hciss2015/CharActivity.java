@@ -85,16 +85,22 @@ public class CharActivity extends Activity {
     }
 
     private void setCurrentValues() {
-        if(user.getGender() == 'M') {
-            btnGenderMale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
-            btnGenderMale.setTextColor(getResources().getColor(R.color.black));
-        } else {
-            btnGenderFemale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
-            btnGenderFemale.setTextColor(getResources().getColor(R.color.black));
+        if(user.getGender() != ' ') {
+            if (user.getGender() == 'M') {
+                btnGenderMale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
+                btnGenderMale.setTextColor(getResources().getColor(R.color.black));
+            } else {
+                btnGenderFemale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
+                btnGenderFemale.setTextColor(getResources().getColor(R.color.black));
+            }
         }
-        ((ImageView) findViewById(user.getAvatarResId())).setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
 
-        editTxtName.setText(user.getName());
+        if(user.getAvatarResId() != 0) {
+            ((ImageView) findViewById(user.getAvatarResId())).setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
+        }
+
+        if(!"".equals(user.getName()))
+            editTxtName.setText(user.getName());
     }
 
     public void checkInput(View view) {

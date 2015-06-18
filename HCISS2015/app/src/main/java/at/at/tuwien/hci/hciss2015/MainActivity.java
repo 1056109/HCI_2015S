@@ -432,6 +432,7 @@ public class MainActivity extends FragmentActivity {
             if(position == 1) {
                 Intent intent = new Intent(MainActivity.this, CharActivity.class);
                 startActivity(intent);
+                finish();
             }
             if(position == 2) {
                 //startActivity Fall verwerfen
