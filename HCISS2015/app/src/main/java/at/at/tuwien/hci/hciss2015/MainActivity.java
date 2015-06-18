@@ -4,11 +4,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -47,7 +54,7 @@ enum ColleagueState {
     WAITING, READY, WORKING
 }
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -122,7 +129,7 @@ public class MainActivity extends FragmentActivity {
     private Button chooseSuspectBtn;
     private HorizontalScrollView scrollView;
 
-
+    protected GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,10 +187,33 @@ public class MainActivity extends FragmentActivity {
 
         sharedPref = new SharedPreferencesHandler(this);
 
+        for (int i = 0; i < values.length; ++i) {
+            listNames.add(values[i]);
+        }
+
+        buildGoogleApiClient();
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    private void initCamera(Location myLocation) {
+
+        //if my location is null, set last location to VIENNA
+        if(myLocation == null) {
+            myLocation.setLatitude(VIENNA.latitude);
+            myLocation.setLongitude(VIENNA.longitude);
+        }
+
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(VIENNA)         // Sets the center of the map to Vienna
-                .zoom(15)               // Sets the zoom
-                .build();               // Creates a CameraPosition from the builder
+                .target(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))
+                .zoom(15)
+                .build();
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, new GoogleMap.CancelableCallback() {
 
@@ -214,9 +244,6 @@ public class MainActivity extends FragmentActivity {
                 onFinish();
             }
         });
-        for (int i = 0; i < values.length; ++i) {
-            listNames.add(values[i]);
-        }
     }
 
 
@@ -398,6 +425,37 @@ public class MainActivity extends FragmentActivity {
         toast.setView(customToastLayout);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        initCamera(myLocation);
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        Log.i(TAG, "Connection suspended");
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
     }
 
     private class MyInfoWindowAdapter implements InfoWindowAdapter {

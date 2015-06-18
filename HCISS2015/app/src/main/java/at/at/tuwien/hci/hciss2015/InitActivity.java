@@ -75,7 +75,7 @@ public class InitActivity extends Activity {
             public void run() {
                 Intent intent = null;
                 if (sharedPrefs.getUser() != null) {
-                    Log.i(TAG, "user: " + sharedPrefs.getUser().toString());
+                    //Log.i(TAG, "user: " + sharedPrefs.getUser().toString());
                     intent = new Intent(InitActivity.this, MainActivity.class);
                     startActivity(intent);
                     Log.i(TAG, "Starting MainActivity");
