@@ -107,6 +107,11 @@
 
     <string name="choose_suspect">Wir konnten die Verdaechtigen eingrenzen. Waehle anhand deiner gesammelten Hinweise
         den/die TaeterIn. Bist du dir unsicher, dann suche weitere Hinweise und komm spaeter wieder</string>
+
+    <string name="end_case_positive">Glueckwunsch! Du hast den richtigen Verdaechtigen gewaehlt, er hat die Tat gestanden.
+    Weiter so!</string>
+    <string name="end_case_negative">Es hat sich leider herausgestellt dass du die falsche Person beschuldigt hast, der wirkliche
+    Taeter hat in der Zwischenzeit erneut zugeschlagen und wurde dabei von Kollegen festgenommen. Pass beim naechsten Mal besser auf!</string>
     
     <string name="sharedPref">MySharedPref</string>
 </resources>
