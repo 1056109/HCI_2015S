@@ -205,34 +205,36 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private void initCamera(Location myLocation) {
 
         //if my location is null, set last location to VIENNA
-        if(myLocation == null) {
-            myLocation.setLatitude(VIENNA.latitude);
-            myLocation.setLongitude(VIENNA.longitude);
+        CameraPosition cameraPosition = null;
+        if(myLocation != null) {
+            cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))
+                    .zoom(15)
+                    .build();
+        } else {
+            cameraPosition = new CameraPosition.Builder()
+                    .target(VIENNA)
+                    .zoom(15)
+                    .build();
         }
-
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()))
-                .zoom(15)
-                .build();
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, new GoogleMap.CancelableCallback() {
 
             @Override
-            public void onFinish() {        //When animation is finished, do some stuff like drawing icons and showing position
+            public void onFinish() {
 
                 MyMarkerDrawer markerDrawer = new MyMarkerDrawer(context, mMap);
                 markerDrawer.execute();
 
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);      //show MyLocation-Button
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
                 mMap.getUiSettings().setMapToolbarEnabled(false);
-                mMap.setMyLocationEnabled(true);                            //Show my location
+                mMap.setMyLocationEnabled(true);
                 mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         if (colleagueState.equals(ColleagueState.READY)) {
                             openDialog(R.layout.colleguedialog);
-
                         }
                         return false;
                     }
@@ -240,9 +242,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             }
 
             @Override
-            public void onCancel() {       //if animation gets cancelled do something
-                onFinish();
-            }
+            public void onCancel() { onFinish(); }
         });
     }
 
