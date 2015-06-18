@@ -107,6 +107,9 @@
 
     <string name="benutzerdaten">In diesem Menü kannst du deine Spielerdaten aktualisieren</string>
 
+    <string name="info">App-Info</string>
+    <string name="infoMsg">ViennaCop ist ein Studenten-Projekt, welches im Rahmen des HCI-Seminars (SS2015) der Forschungsgruppe DECO (INSO) an der TU Wien entstanden ist. \n\nTeam-Mitglieder: \n\tAmer Salkovic\n\tMario Vorstandlechner\n\tMichael Traxler\n\tAlex Brandner</string>
+
     <string name="choose_suspect">Wir konnten die Verdaechtigen eingrenzen. Waehle anhand deiner gesammelten Hinweise
         den/die TaeterIn. Bist du dir unsicher, dann suche weitere Hinweise und komm spaeter wieder</string>
 
@@ -116,4 +119,12 @@
     Taeter hat in der Zwischenzeit erneut zugeschlagen und wurde dabei von Kollegen festgenommen. Pass beim naechsten Mal besser auf!</string>
     
     <string name="sharedPref">MySharedPref</string>
+
+    <string name="anim_first">Mit diesem Button kannst du einen Kollegen zu einem Punkt deiner Wahl schicken. Nach 15 Minuten erhältst du wichtige Hinweise zu deinem Fall.</string>
+    <string name="anim_second">Wenn du alle Informationen bezüglich der Tatwaffe gesammelt hast, erhältst du neue Hinweise zum Täter.</string>
+    <string name="anim_third">Wenn du auf das Kartensymbol drückst, wird dir der Radius angezeigt in dem sich der Täter versteckt hält.</string>
+    <string name="anim_fourth">Hier kannst du dir alle gesammelten Täterhinweise noch einmal ansehen. Außerdem wird automatisch eine Liste von Verdächtigen generiert über die du den Täter auswählen kannst.</string>
+
+    <string name="next">Nächster Tipp</string>
+    <string name="close">Schließen</string>
 </resources>

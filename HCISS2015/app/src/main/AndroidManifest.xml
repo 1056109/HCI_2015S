@@ -57,6 +57,7 @@
             android:name=".CharActivity"
             android:label="@string/title_activity_char" >
         </activity>
+        <activity android:name=".AnimationSampleActivity" />
     </application>
 
 </manifest>

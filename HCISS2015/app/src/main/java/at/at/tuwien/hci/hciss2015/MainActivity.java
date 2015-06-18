@@ -3,13 +3,11 @@ package at.at.tuwien.hci.hciss2015;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,20 +19,19 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 
 import java.util.ArrayList;
 
@@ -351,6 +348,11 @@ public class MainActivity extends FragmentActivity {
         dialog.dismiss();
     }
 
+    public void closeDialog(View view){
+        //vibrate();
+        dialog.dismiss();
+    }
+
     public void openDrawer(View view) {
         vibrate();
 
@@ -430,6 +432,22 @@ public class MainActivity extends FragmentActivity {
             if(position == 1) {
                 Intent intent = new Intent(MainActivity.this, CharActivity.class);
                 startActivity(intent);
+            }
+            if(position == 2) {
+                //startActivity Fall verwerfen
+            }
+            if(position == 3) {
+                //startActivity Statistik
+            }
+            if(position == 4) {
+                //startActivity Help
+                startActivity(new Intent(MainActivity.this, AnimationSampleActivity.class));
+            }
+            if(position == 5) {
+                //startActivity Info
+                //Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+                //startActivity(intent);
+                openDialog(R.layout.infodialog);
             }
             myDrawerList.setItemChecked(position, true);
             myDrawerLayout.closeDrawer(myDrawerList);

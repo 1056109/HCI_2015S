@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/anim_first"
+        android:id="@+id/help1"
+        android:layout_marginTop="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:visibility="visible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/anim_second"
+        android:id="@+id/help2"
+        android:layout_marginTop="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/anim_third"
+        android:id="@+id/help3"
+        android:layout_marginTop="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/anim_fourth"
+        android:id="@+id/help4"
+        android:layout_marginTop="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="92dp"
+        android:layout_height="121dp"
+        android:layout_gravity="right|bottom"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/merkmalProgress"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="-8dp"
+            android:background="@drawable/curve_shape_black"
+            android:gravity="center"
+            android:text="@string/merkmalProgress"
+            android:textColor="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btnFeature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_margin="10dp"
+            android:background="?android:selectableItemBackground"
+            android:src="@drawable/btn_feature" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="73dp"
+        android:layout_height="90dp"
+        android:layout_gravity="center|bottom"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/mapProgress"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="-8dp"
+            android:background="@drawable/curve_shape_black"
+            android:gravity="center"
+            android:text="@string/mapProgress"
+            android:textColor="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btnMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_margin="10dp"
+            android:background="?android:selectableItemBackground"
+            android:src="@drawable/btn_map" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="73dp"
+        android:layout_height="121dp"
+        android:layout_gravity="left|bottom"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/weaponProgress"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="-8dp"
+            android:background="@drawable/curve_shape_black"
+            android:gravity="center"
+            android:text="@string/weaponProgress"
+            android:textColor="@color/white" />
+
+
+        <ImageButton
+            android:id="@+id/btnWeapon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_margin="10dp"
+            android:background="?android:selectableItemBackground"
+            android:src="@drawable/info_weapon" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="73dp"
+        android:layout_height="121dp"
+        android:layout_gravity="left|bottom"
+        android:layout_marginBottom="80dp"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/colleagueState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="-8dp"
+            android:background="@drawable/curve_shape_black"
+            android:gravity="center"
+            android:text="@string/send_collegue_start"
+            android:textColor="@color/white"/>
+
+        <ImageButton
+            android:id="@+id/btnColleague"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_margin="10dp"
+            android:background="?android:selectableItemBackground"
+            android:src="@drawable/btn_colleague" />
+
+    </LinearLayout>
+    </FrameLayout>
+</RelativeLayout>
