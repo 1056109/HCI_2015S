@@ -534,20 +534,19 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 finish();
             }
             if (position == 2) {
-                //startActivity Fall verwerfen
+                //startDialog Fall verwerfen
+                openDialog(R.layout.abortdialog);
             }
             if (position == 3) {
-                //startActivity Statistik
+                //startDialog Statistik
                 openDialog(R.layout.statisticsdialog);
             }
             if (position == 4) {
-                //startActivity Help
+                //startDialog Help
                 startActivity(new Intent(MainActivity.this, AnimationSampleActivity.class));
             }
             if (position == 5) {
-                //startActivity Info
-                //Intent intent = new Intent(MainActivity.this, InfoActivity.class);
-                //startActivity(intent);
+                //startDialog Info
                 openDialog(R.layout.infodialog);
             }
             myDrawerList.setItemChecked(position, true);

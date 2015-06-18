@@ -113,6 +113,8 @@
     <string name="stat">Statistk</string>
     <string name="statMsg">Aufklärungsrate</string>
 
+    <string name="abort">Wollen Sie den Fall wirklich abbrechen?</string>
+
     <string name="choose_suspect">Wir konnten die Verdaechtigen eingrenzen. Waehle anhand deiner gesammelten Hinweise
         den/die TaeterIn. Bist du dir unsicher, dann suche weitere Hinweise und komm spaeter wieder</string>
 

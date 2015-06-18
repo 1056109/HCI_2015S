@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/abortDialog"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:background="@drawable/curve_shape_black"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/statisticsHeaderMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:text="@string/abort" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/buttonLayout">
+
+        <Button
+            android:id="@+id/abortYes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="JA"
+            android:textColor="@color/violett"
+            android:background="@drawable/btn_android"
+            android:onClick="closeDialog"
+            android:nestedScrollingEnabled="false"
+            android:layout_margin="40dp" />
+
+        <Button
+            android:id="@+id/abortNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NEIN"
+            android:textColor="@color/violett"
+            android:background="@drawable/btn_android"
+            android:onClick="closeDialog"
+            android:nestedScrollingEnabled="false"
+            android:layout_margin="40dp" />
+    </LinearLayout>
+
+</LinearLayout>
