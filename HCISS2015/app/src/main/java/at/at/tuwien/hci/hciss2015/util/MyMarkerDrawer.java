@@ -36,7 +36,7 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
         this.context = context;
         this.map = map;
 
-        bmpDescriptors = new BitmapDescriptor[4];
+        bmpDescriptors = new BitmapDescriptor[5];
 
         PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(context));
         daoInstance = PointOfInterestDaoImpl.getInstance();
@@ -50,8 +50,8 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
         //LatLng test = new LatLng(48.209272, 16.372801);
         //Log.i(MyMarkerDrawer.class.getSimpleName(), test.latitude + " " + test.longitude);
 
-        List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getPOIsByArea(9000));
-        //List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getUnvisitedPOIsByPosition(48.209272, 16.372801, 1000));
+        List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getAllUnvisitedPOIs());
+        //List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getVisitedPOIsByMinMaxPosition(48.209272, 16.372801, 500, 3000));
         for(int i = 0; i < pois.size(); i++) {
             publishProgress(pois.get(i));
         }
@@ -88,6 +88,7 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
         bmpDescriptors[1] = BitmapDescriptorFactory.fromResource(myMarkerIcons.getResourceId(1, -1));
         bmpDescriptors[2] = BitmapDescriptorFactory.fromResource(myMarkerIcons.getResourceId(2, -1));
         bmpDescriptors[3] = BitmapDescriptorFactory.fromResource(myMarkerIcons.getResourceId(3, -1));
+        bmpDescriptors[4] = BitmapDescriptorFactory.fromResource(myMarkerIcons.getResourceId(4, -1));
 
         myMarkerIcons.recycle();
     }

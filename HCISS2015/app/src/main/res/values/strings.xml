@@ -70,6 +70,8 @@
         <item>@drawable/ic_hospital</item>
         <item>@drawable/ic_subway</item>
         <item>@drawable/ic_park</item>
+        <item>@drawable/ic_murder</item>
+        <item>@drawable/ic_weapon</item>
     </array>
 
     <array name="feature_categories">
