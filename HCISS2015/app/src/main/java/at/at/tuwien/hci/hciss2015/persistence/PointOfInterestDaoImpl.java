@@ -379,16 +379,16 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
         double latWestMax = latitude - getLatitudeDistance(maxRadius);
         double latEastMax = latitude + getLatitudeDistance(maxRadius);
 
-        Log.i(PointOfInterestDaoImpl.class.getSimpleName(),lngSouthMin + " " + lngNorthMin + " " + latWestMin + " " + latEastMin);
+        /*Log.i(PointOfInterestDaoImpl.class.getSimpleName(),lngSouthMin + " " + lngNorthMin + " " + latWestMin + " " + latEastMin);
         Log.i(PointOfInterestDaoImpl.class.getSimpleName(), getLongitudeDistance(latitude, minRadius)  + " " +  getLatitudeDistance(minRadius));
         Log.i(PointOfInterestDaoImpl.class.getSimpleName(),lngSouthMax + " " + lngNorthMax + " " + latWestMax + " " + latEastMax);
-        Log.i(PointOfInterestDaoImpl.class.getSimpleName(), getLongitudeDistance(latitude, maxRadius)  + " " +  getLatitudeDistance(maxRadius));
+        Log.i(PointOfInterestDaoImpl.class.getSimpleName(), getLongitudeDistance(latitude, maxRadius)  + " " +  getLatitudeDistance(maxRadius));*/
 
         String selection = "("+TableEntry.AREA + ">" + MIN_AREA + " OR " + TableEntry.AREA + " IS NULL) AND "
-                + "("+TableEntry.LNG + " BETWEEN " + lngSouthMax + " AND " + lngNorthMax + ") AND "
-                + "("+TableEntry.LAT + " BETWEEN " + latWestMax + " AND " + latEastMax + ") AND "
-                + "("+TableEntry.LNG + " NOT BETWEEN " + lngSouthMin + " AND " + lngNorthMin + ") AND "
-                + "("+TableEntry.LAT + " NOT BETWEEN " + latWestMin + " AND " + latEastMin + ")";
+                + "(("+TableEntry.LNG + " BETWEEN " + lngSouthMax + " AND " + lngNorthMax + ") AND "
+                + "("+TableEntry.LAT + " BETWEEN " + latWestMax + " AND " + latEastMax + ")) AND "
+                + "(("+TableEntry.LNG + " NOT BETWEEN " + lngSouthMin + " AND " + lngNorthMin + ") OR "
+                + "("+TableEntry.LAT + " NOT BETWEEN " + latWestMin + " AND " + latEastMin + "))";
 
         SQLiteDatabase db = myDbHelper.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, null, sortOrder);
@@ -425,25 +425,11 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
         double latWestMax = latitude - getLatitudeDistance(maxRadius);
         double latEastMax = latitude + getLatitudeDistance(maxRadius);
 
-        /*String selection = "("+TableEntry.AREA + ">" + MIN_AREA + " OR " + TableEntry.AREA + " IS NULL) AND "
-                + "("+TableEntry.LNG + " BETWEEN " + lngSouthMax + " AND " + lngNorthMax + ") AND "
-                + "("+TableEntry.LAT + " BETWEEN " + latWestMax + " AND " + latEastMax + ")) AND "
-                + "(("+TableEntry.LNG + " NOT BETWEEN " + lngSouthMin + " AND " + lngNorthMin + ") AND "
-                + "("+TableEntry.LAT + " NOT BETWEEN " + latWestMin + " AND " + latEastMin + ") AND "
-                + TableEntry.FLAG + " = 1";*/
-
-        /*String selection = "("+TableEntry.AREA + ">" + MIN_AREA + " OR " + TableEntry.AREA + " IS NULL) AND "
-                + "("+TableEntry.LNG + " BETWEEN " + lngSouthMax + " AND " + lngNorthMax + ") AND "
-                + "("+TableEntry.LAT + " BETWEEN " + latWestMax + " AND " + latEastMax + ")) AND "
-                + "("+TableEntry.LNG + " < " + lngSouthMin + " AND " + TableEntry.LNG + " > "  + lngNorthMin + " AND "
-                + TableEntry.LAT + " < " + latWestMin + " AND " + TableEntry.LAT + " > "  + latEastMin + ") AND "
-                + TableEntry.FLAG + " = 1";*/
-
         String selection = "("+TableEntry.AREA + ">" + MIN_AREA + " OR " + TableEntry.AREA + " IS NULL) AND "
-                + "((("+TableEntry.LNG + " BETWEEN " + lngSouthMax + " AND " + lngSouthMin + ") OR "
-                + "("+TableEntry.LNG + " BETWEEN " + lngNorthMin + " AND " + lngNorthMax + ")) OR "
-                + "(("+TableEntry.LAT + " BETWEEN " + latWestMax + " AND " + latWestMin + ") OR "
-                + "("+TableEntry.LAT + " BETWEEN " + latEastMin + " AND " + latEastMax + "))) AND "
+                + "(("+TableEntry.LNG + " BETWEEN " + lngSouthMax + " AND " + lngNorthMax + ") AND "
+                + "("+TableEntry.LAT + " BETWEEN " + latWestMax + " AND " + latEastMax + ")) AND "
+                + "(("+TableEntry.LNG + " NOT BETWEEN " + lngSouthMin + " AND " + lngNorthMin + ") OR "
+                + "("+TableEntry.LAT + " NOT BETWEEN " + latWestMin + " AND " + latEastMin + ")) AND "
                 + TableEntry.FLAG + " = 1";
 
         SQLiteDatabase db = myDbHelper.getReadableDatabase();
@@ -481,16 +467,11 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
         double latWestMax = latitude - getLatitudeDistance(maxRadius);
         double latEastMax = latitude + getLatitudeDistance(maxRadius);
 
-        Log.i(PointOfInterestDaoImpl.class.getSimpleName(),lngSouthMin + " " + lngNorthMin + " " + latWestMin + " " + latEastMin);
-        Log.i(PointOfInterestDaoImpl.class.getSimpleName(), getLongitudeDistance(latitude, minRadius)  + " " +  getLatitudeDistance(minRadius));
-        Log.i(PointOfInterestDaoImpl.class.getSimpleName(),lngSouthMax + " " + lngNorthMax + " " + latWestMax + " " + latEastMax);
-        Log.i(PointOfInterestDaoImpl.class.getSimpleName(), getLongitudeDistance(latitude, maxRadius)  + " " +  getLatitudeDistance(maxRadius));
-
         String selection = "("+TableEntry.AREA + ">" + MIN_AREA + " OR " + TableEntry.AREA + " IS NULL) AND "
-                + "("+TableEntry.LNG + " BETWEEN " + lngSouthMax + " AND " + lngNorthMax + ") AND "
-                + "("+TableEntry.LAT + " BETWEEN " + latWestMax + " AND " + latEastMax + ") AND "
-                + "("+TableEntry.LNG + " NOT BETWEEN " + lngSouthMin + " AND " + lngNorthMin + ") AND "
-                + "("+TableEntry.LAT + " NOT BETWEEN " + latWestMin + " AND " + latEastMin + ") AND "
+                + "(("+TableEntry.LNG + " BETWEEN " + lngSouthMax + " AND " + lngNorthMax + ") AND "
+                + "("+TableEntry.LAT + " BETWEEN " + latWestMax + " AND " + latEastMax + ")) AND "
+                + "(("+TableEntry.LNG + " NOT BETWEEN " + lngSouthMin + " AND " + lngNorthMin + ") OR "
+                + "("+TableEntry.LAT + " NOT BETWEEN " + latWestMin + " AND " + latEastMin + ")) AND "
                 + TableEntry.FLAG + " = 0";
 
         SQLiteDatabase db = myDbHelper.getReadableDatabase();
@@ -529,10 +510,10 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
         double latEastMax = latitude + getLatitudeDistance(maxRadius);
 
         String selection = "("+TableEntry.AREA + ">" + MIN_AREA + " OR " + TableEntry.AREA + " IS NULL) AND "
-                + "("+TableEntry.LNG + " BETWEEN " + lngSouthMax + " AND " + lngNorthMax + ") AND "
-                + "("+TableEntry.LAT + " BETWEEN " + latWestMax + " AND " + latEastMax + ") AND "
-                + "("+TableEntry.LNG + " NOT BETWEEN " + lngSouthMin + " AND " + lngNorthMin + ") AND "
-                + "("+TableEntry.LAT + " NOT BETWEEN " + latWestMin + " AND " + latEastMin + ") AND "
+                + "(("+TableEntry.LNG + " BETWEEN " + lngSouthMax + " AND " + lngNorthMax + ") AND "
+                + "("+TableEntry.LAT + " BETWEEN " + latWestMax + " AND " + latEastMax + ")) AND "
+                + "(("+TableEntry.LNG + " NOT BETWEEN " + lngSouthMin + " AND " + lngNorthMin + ") OR "
+                + "("+TableEntry.LAT + " NOT BETWEEN " + latWestMin + " AND " + latEastMin + ")) AND "
                 + TableEntry.TYPE + " = " + type;
 
         SQLiteDatabase db = myDbHelper.getReadableDatabase();

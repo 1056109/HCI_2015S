@@ -51,7 +51,8 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
         //Log.i(MyMarkerDrawer.class.getSimpleName(), test.latitude + " " + test.longitude);
 
         List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getAllUnvisitedPOIs());
-        //List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getVisitedPOIsByMinMaxPosition(48.209272, 16.372801, 500, 3000));
+        //List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getVisitedPOIsByPosition(48.209272, 16.372801, 1000));
+        //List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getVisitedPOIsByMinMaxPosition(48.209272, 16.372801, 1000, 3000));
         for(int i = 0; i < pois.size(); i++) {
             publishProgress(pois.get(i));
         }
