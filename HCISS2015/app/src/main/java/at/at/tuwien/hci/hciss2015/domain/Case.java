@@ -10,6 +10,10 @@ public class Case {
     private PointOfInterest suspectResidence;
     private PointOfInterest weaponLocation;
     private List<Suspect> suspectList;
+    private int mapProgress;
+    private Suspect suspectProgress;
+    private boolean suspectResidenceFound;
+    private boolean weaponLocationFound;
 
     public Case(PointOfInterest crimeScene, PointOfInterest suspectResidence, PointOfInterest weaponLocation, List<Suspect> suspectList) {
         this.crimeScene = crimeScene;
@@ -48,5 +52,46 @@ public class Case {
 
     public void setSuspectList(List<Suspect> suspectList) {
         this.suspectList = suspectList;
+    }
+
+    public int getMapProgress() {
+        return mapProgress;
+    }
+
+    public void setMapProgress(int mapProgress) {
+        this.mapProgress = mapProgress;
+    }
+
+    public Suspect getSuspectProgress() {
+        return suspectProgress;
+    }
+
+    public void setSuspectProgress(Suspect suspectProgress) {
+        this.suspectProgress = suspectProgress;
+    }
+
+    public boolean isSuspectResidenceFound() {
+        return suspectResidenceFound;
+    }
+
+    public void setSuspectResidenceFound(boolean suspectResidenceFound) {
+        this.suspectResidenceFound = suspectResidenceFound;
+    }
+
+    public boolean isWeaponLocationFound() {
+        return weaponLocationFound;
+    }
+
+    public void setWeaponLocationFound(boolean weaponLocationFound) {
+        this.weaponLocationFound = weaponLocationFound;
+    }
+
+    public Suspect getCrimeCommitter() throws Exception {
+        for(Suspect suspect : suspectList) {
+            if(suspect.isCrimeCommitter()) {
+                return suspect;
+            }
+        }
+        throw new Exception("Kein Taeter festgelegt");
     }
 }
