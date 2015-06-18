@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/endCaseView"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/curve_shape_black"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_collegue_really"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:id="@+id/end_case_text"
+        android:layout_gravity="center_horizontal" />
+
+    <LinearLayout
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/infos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:id="@+id/crime_"
+            android:layout_weight="1"
+            android:src="@drawable/char38" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:text="@string/send_collegue_no"
+            android:textColor="@color/violett"
+            android:onClick="sendNot"
+            android:background="@drawable/btn_android"
+            android:id="@+id/button3" />
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:text="@string/send_collegue_yes"
+            android:onClick="send"
+            android:textColor="@color/violett"
+            android:background="@drawable/btn_android"
+            android:id="@+id/button4" />
+    </LinearLayout>
+</LinearLayout>

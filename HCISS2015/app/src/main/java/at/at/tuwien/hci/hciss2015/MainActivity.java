@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,8 +35,6 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -64,6 +63,9 @@ public class MainActivity extends FragmentActivity {
     private static final int MAX_ZOOM = 16;
 
     private static final String TILE_SERVER_URL = "http://tile.openstreetmap.org/";
+
+
+    private static final int IMG_DEFAULT_BACKGROUND_COLOR = 0xFFFFFF;
 
     private DrawerLayout myDrawerLayout;
     private ListView myDrawerList;
@@ -100,6 +102,12 @@ public class MainActivity extends FragmentActivity {
     private static int mapProgress = 0;
     private SharedPreferencesHandler sharedPref;
 
+    private ImageView imgSuspect1;
+    private ImageView imgSuspect2;
+    private ImageView imgSuspect3;
+    private ImageView imgSuspect4;
+    private ImageView imgSuspect5;
+
     private String[] names = new String[] { "Hautfarbe:", "Haarfarbe:", "Bart:",
             "Brille:", "Narbe:"};
     private ArrayList<String> listNames = new ArrayList<String>();
@@ -110,12 +118,11 @@ public class MainActivity extends FragmentActivity {
     private ListView featureList;
 
     private static boolean hasDestination = false;
+    private static boolean firstTimeSuspects = false;
     private ImageButton mapBtn;
     private ImageButton featureBtn;
     private TextView featureText;
-    private Button featureCloseBtn;
     private Button chooseSuspectBtn;
-    private LinearLayout featureBtnLayout;
     private HorizontalScrollView scrollView;
 
 
@@ -221,7 +228,8 @@ public class MainActivity extends FragmentActivity {
     }           //testing function
 
     public void addFeature(View view){              //testing function
-            hasDestination=true;
+        hasDestination=true;
+        openMerkmale(view);
     }
 
     private void drawMap() {
@@ -306,7 +314,7 @@ public class MainActivity extends FragmentActivity {
         window.setBackgroundDrawableResource(android.R.color.transparent);
         if (view==R.layout.feature_layout) {
             setList(layout);
-            if (hasDestination)
+            if (hasDestination&&!firstTimeSuspects)
                 showSuspects(layout);
 
         }
@@ -315,6 +323,13 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void showSuspects(View layout){
+        firstTimeSuspects=true;
+        imgSuspect1 = (ImageView) layout.findViewById(R.id.suspect1);
+        imgSuspect2 = (ImageView) layout.findViewById(R.id.suspect2);
+        imgSuspect3 = (ImageView) layout.findViewById(R.id.suspect3);
+        imgSuspect4 = (ImageView) layout.findViewById(R.id.suspect4);
+        imgSuspect5 = (ImageView) layout.findViewById(R.id.suspect5);
+
         featureText = (TextView) layout.findViewById(R.id.feature_txt);
         chooseSuspectBtn = (Button) layout.findViewById(R.id.choose_suspect_btn);
         scrollView = (HorizontalScrollView) layout.findViewById(R.id.horizontalScrollView);
@@ -324,19 +339,11 @@ public class MainActivity extends FragmentActivity {
         chooseSuspectBtn.setVisibility(View.VISIBLE);
     }
 
-    private void hideSuspects(){
-        scrollView.setVisibility(View.GONE);
-        chooseSuspectBtn.setVisibility(View.GONE);
-    }
-
     private void setList(View layout){
         MyListAdapter adapter = new MyListAdapter(getApplicationContext(), names, values);
         featureList = (ListView)layout.findViewById(R.id.feature_list_names);
         featureList.setAdapter(adapter);
     }
-
-
-
 
     public void closeFeatures(View view){
         vibrate();
@@ -478,23 +485,55 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void selectSuspect1(View view){
-
+        vibrate();
+        deselect();
+        imgSuspect1.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectSuspect2(View view){
-
+        vibrate();
+        deselect();
+        imgSuspect2.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectSuspect3(View view){
+        vibrate();
+        deselect();
+        imgSuspect3.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
 
     }
 
     public void selectSuspect4(View view){
+        vibrate();
+        deselect();
+        imgSuspect4.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
 
     }
 
     public void selectSuspect5(View view){
+        vibrate();
+        deselect();
+        imgSuspect5.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
 
+    }
+
+    private void deselect(){
+        imgSuspect1.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
+        imgSuspect2.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
+        imgSuspect3.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
+        imgSuspect4.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
+        imgSuspect5.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
+    }
+
+    public void chooseSuspect(View view){
+        //todo abfrage ob suspect id gleich ausgewaehlter id
+        //wenn ja erfolgsmeldung, sonst negativmeldung
+        dialog.dismiss();
+        openDialog(R.layout.end_case_layout);
+    }
+
+    public void endCase(View view){
+        //todo neuen fall beginnen
     }
 
 }
