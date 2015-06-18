@@ -69,4 +69,9 @@ public class SharedPreferencesHandler {
         }
         return MyJsonParser.parseJson(sharedPref.getString(CASE,""), Case.class);
     }
+
+    public void removeCase() {
+        editor.remove(CASE);
+        editor.commit();
+    }
 }
