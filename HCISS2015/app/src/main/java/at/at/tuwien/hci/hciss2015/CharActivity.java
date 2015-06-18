@@ -108,8 +108,13 @@ public class CharActivity extends Activity {
         vibrate();
         user.setName(editTxtName.getText().toString());
         sharedPref.putUser(user);
-        Intent intent = new Intent(CharActivity.this, MainActivity.class);
-        startActivity(intent);
+        if( "init".equals(getIntent().getStringExtra("activity")) ) {
+            Intent intent = new Intent(CharActivity.this, AnimationSampleActivity.class);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(CharActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
         finish();
     }
 
