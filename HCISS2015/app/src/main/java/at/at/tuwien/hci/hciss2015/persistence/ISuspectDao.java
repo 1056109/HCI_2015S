@@ -10,7 +10,7 @@ import at.at.tuwien.hci.hciss2015.domain.Suspect;
 public interface ISuspectDao {
 
     List<Suspect> getAllSuspects();
-    List<Suspect> getSuspectsByCharacterisitcs(String scar, String glasses, String skincolor, String haircolor, String beard);
+    List<Suspect> getSuspectsByCharacterisitcs(String scar, String glasses, String skincolor, String haircolor, String beard, List<Integer> usedIds);
     Suspect getSuspect(int id);
     long countSuspects();
 

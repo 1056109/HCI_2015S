@@ -95,7 +95,7 @@ public class SuspectDaoImpl implements ISuspectDao {
     }
 
     @Override
-    public List<Suspect> getSuspectsByCharacterisitcs(String scar, String glasses, String skincolor, String haircolor, String beard) {
+    public List<Suspect> getSuspectsByCharacterisitcs(String scar, String glasses, String skincolor, String haircolor, String beard, List<Integer> usedIds) {
 
         List<Suspect> suspectList = new ArrayList<Suspect>();
         String sortOrder = TableEntry.ID + " ASC";
@@ -106,11 +106,24 @@ public class SuspectDaoImpl implements ISuspectDao {
         if(haircolor == null) { haircolor = "%"; }
         if(beard == null) { beard = "%"; }
 
-        String selection = TableEntry.SCAR + " like " + scar + "  AND "
-                + TableEntry.GLASSES + " like " + glasses + "  AND "
-                + TableEntry.SKINCOLOR + " like " + skincolor + "  AND "
-                + TableEntry.HAIRCOLOR + " like " + haircolor + "  AND "
-                + TableEntry.BEARD + " like " + beard;
+        String selection = TableEntry.SCAR + " like '" + scar + "' AND "
+                + TableEntry.GLASSES + " like '" + glasses + "' AND "
+                + TableEntry.SKINCOLOR + " like '" + skincolor + "' AND "
+                + TableEntry.HAIRCOLOR + " like '" + haircolor + "' AND "
+                + TableEntry.BEARD + " like '" + beard + "'";
+        if(!usedIds.isEmpty()) {
+            selection = selection + " AND " + TableEntry.ID + " NOT IN (";
+
+            for (int i = 0; i < usedIds.size(); i++) {
+                if (i == usedIds.size()-1) {
+                    selection = selection + usedIds.get(i).intValue();
+                } else {
+                    selection = selection + usedIds.get(i).intValue() + ",";
+                }
+            }
+            selection = selection + ")";
+        }
+
 
         SQLiteDatabase db = myDbHelper.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, sortOrder);
