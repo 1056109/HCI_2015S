@@ -79,4 +79,14 @@ public class Suspect {
     public void setCrimeCommitter(boolean crimeCommitter) {
         this.crimeCommitter = crimeCommitter;
     }
+
+    public String toString() {
+        return "suspectId: " + suspectId + "\n" +
+                "skinColor: " + skinColor + "\n" +
+                "hairColor: " + hairColor + "\n" +
+                "beard: " + beard + "\n" +
+                "glasses: " + glasses + "\n" +
+                "scar: " + scar + "\n" +
+                "crimeCommitter: " + crimeCommitter + "\n";
+    }
 }

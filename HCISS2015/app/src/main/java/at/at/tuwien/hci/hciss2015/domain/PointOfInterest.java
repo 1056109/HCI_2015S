@@ -18,9 +18,7 @@ public class PointOfInterest {
     //non db fields
     private int drawable;
 
-    public PointOfInterest() {
-
-    }
+    public PointOfInterest() { }
 
     public PointOfInterest(int type, String description, double lat, double lng) {
         this.type = type;
@@ -96,8 +94,8 @@ public class PointOfInterest {
 
     @Override
     public String toString() {
-        return "POI: " + id + "\n" +
-               "desc: " + description + "\n" +
+        return "id: " + id + "\n" +
+               "description: " + description + "\n" +
                "type: " + type + "\n" +
                "lat: " + lat + ", lng: " + lng + "\n" +
                "flag: " + flag;
