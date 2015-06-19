@@ -46,10 +46,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
+import at.at.tuwien.hci.hciss2015.domain.Case;
 import at.at.tuwien.hci.hciss2015.domain.NavDrawerItem;
+import at.at.tuwien.hci.hciss2015.domain.PointOfInterest;
+import at.at.tuwien.hci.hciss2015.domain.Suspect;
 import at.at.tuwien.hci.hciss2015.persistence.MyDatabaseHelper;
 import at.at.tuwien.hci.hciss2015.persistence.PointOfInterestDaoImpl;
+import at.at.tuwien.hci.hciss2015.persistence.SuspectDaoImpl;
+import at.at.tuwien.hci.hciss2015.persistence.Types;
 import at.at.tuwien.hci.hciss2015.util.GeofenceTransitionsIntentService;
 import at.at.tuwien.hci.hciss2015.util.MyDrawerAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyListAdapter;
@@ -88,7 +95,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
     private Context context = this;
 
-    private PointOfInterestDaoImpl daoInstance;
+    private PointOfInterestDaoImpl daoPoiInstance;
+    private SuspectDaoImpl daoSuspectInstance;
 
     private ImageButton colleague;
     private ColleagueState colleagueState;
@@ -110,7 +118,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private boolean showCircle = false;
     private TextView mapTxt;
     private static int mapProgress = 0;
-    private SharedPreferencesHandler sharedPref;
+    private SharedPreferencesHandler sharedPrefs;
 
     private ImageView imgSuspect1;
     private ImageView imgSuspect2;
@@ -141,6 +149,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
     private PendingIntent mGeofencePendingIntent;
 
+    private Random randomizer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,8 +158,13 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
         colleagueState = ColleagueState.WAITING;
 
+        randomizer = new Random();
+
         PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(context));
-        daoInstance = PointOfInterestDaoImpl.getInstance();
+        daoPoiInstance = PointOfInterestDaoImpl.getInstance();
+
+        SuspectDaoImpl.initializeInstance(new MyDatabaseHelper(context));
+        daoSuspectInstance = SuspectDaoImpl.getInstance();
 
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
         navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
@@ -195,7 +210,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         mapTxt = (TextView) findViewById(R.id.mapProgress);
         featureBtn = (ImageButton) findViewById(R.id.btnFeature);
 
-        sharedPref = new SharedPreferencesHandler(this);
+        sharedPrefs = new SharedPreferencesHandler(this);
 
         for (int i = 0; i < values.length; ++i) {
             listNames.add(values[i]);
@@ -208,6 +223,13 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         populateGeofenceList();
 
         buildGoogleApiClient();
+
+        if (sharedPrefs.getCase() == null) {
+            openDialog(R.layout.start_case_layout);
+        } /*else {
+            Log.i(TAG, sharedPrefs.getCase().toString());
+        }*/
+
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -652,6 +674,75 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
     public void endCase(View view) {
         //todo neuen fall beginnen
+    }
+
+    public void startCase(View view) {
+        vibrate();
+        daoPoiInstance = PointOfInterestDaoImpl.getInstance();
+        daoSuspectInstance = SuspectDaoImpl.getInstance();
+        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        List<PointOfInterest> crimeScenePois;
+        if (myLocation != null) {
+            crimeScenePois = new ArrayList<PointOfInterest>(
+                    daoPoiInstance.getPOIsByPositionType(myLocation.getLatitude(), myLocation.getLongitude(), 300, Types.OTHER));
+        } else {
+            crimeScenePois = new ArrayList<PointOfInterest>(
+                    daoPoiInstance.getPOIsByPositionType(VIENNA.latitude, VIENNA.longitude, 300, Types.OTHER));
+        }
+        PointOfInterest crimeScene = crimeScenePois.get(randomizer.nextInt(crimeScenePois.size()));
+
+        List<PointOfInterest> suspectResidencePois =  new ArrayList<PointOfInterest>(
+                daoPoiInstance.getPOIsByMinMaxPositionType(crimeScene.getLat(), crimeScene.getLng(), 500, 2000, Types.OTHER));
+        PointOfInterest suspectResidence = suspectResidencePois.get(randomizer.nextInt(suspectResidencePois.size()));
+
+        List<PointOfInterest> weaponLocationPois =  new ArrayList<PointOfInterest>(
+                daoPoiInstance.getPOIsByMinMaxPositionType(crimeScene.getLat(), crimeScene.getLng(), 300, 1000, Types.OTHER));
+        PointOfInterest weaponLocation = weaponLocationPois.get(randomizer.nextInt(weaponLocationPois.size()));
+
+        List<Integer> usedIds = new ArrayList<Integer>();
+        List<Suspect> suspectListHelper = new ArrayList<Suspect>(daoSuspectInstance.getAllSuspects());
+        Suspect crimeCommitter = suspectListHelper.get(randomizer.nextInt(suspectListHelper.size()));
+        crimeCommitter.setCrimeCommitter(true);
+        List<Suspect> suspectList = new ArrayList<Suspect>();
+        suspectList.add(crimeCommitter);
+        usedIds.add(crimeCommitter.getSuspectId());
+
+        suspectListHelper = new ArrayList<Suspect>(daoSuspectInstance.getSuspectsByCharacterisitcs(
+                crimeCommitter.getScar(),crimeCommitter.getGlasses(), crimeCommitter.getSkinColor(),
+                crimeCommitter.getHairColor(), null, usedIds));
+        Suspect suspect = suspectListHelper.get(randomizer.nextInt(suspectListHelper.size()));
+        suspect.setCrimeCommitter(false);
+        suspectList.add(suspect);
+        usedIds.add(suspect.getSuspectId());
+
+        suspectListHelper = new ArrayList<Suspect>(daoSuspectInstance.getSuspectsByCharacterisitcs(
+                crimeCommitter.getScar(),crimeCommitter.getGlasses(), crimeCommitter.getSkinColor(),
+                null, null, usedIds));
+        suspect = suspectListHelper.get(randomizer.nextInt(suspectListHelper.size()));
+        suspect.setCrimeCommitter(false);
+        suspectList.add(suspect);
+        usedIds.add(suspect.getSuspectId());
+
+        suspectListHelper = new ArrayList<Suspect>(daoSuspectInstance.getSuspectsByCharacterisitcs(
+                crimeCommitter.getScar(),crimeCommitter.getGlasses(), null,
+                null, null, usedIds));
+        suspect = suspectListHelper.get(randomizer.nextInt(suspectListHelper.size()));
+        suspect.setCrimeCommitter(false);
+        suspectList.add(suspect);
+        usedIds.add(suspect.getSuspectId());
+
+        suspectListHelper = new ArrayList<Suspect>(daoSuspectInstance.getSuspectsByCharacterisitcs(
+                crimeCommitter.getScar(),null, null,
+                null, null, usedIds));
+        suspect = suspectListHelper.get(randomizer.nextInt(suspectListHelper.size()));
+        suspect.setCrimeCommitter(false);
+        suspectList.add(suspect);
+        usedIds.add(suspect.getSuspectId());
+
+        Case crimeCase = new Case(crimeScene, suspectResidence, weaponLocation, suspectList);
+        sharedPrefs.putCase(crimeCase);
+        dialog.dismiss();
     }
 
     private GeofencingRequest getGeofencingRequest() {
