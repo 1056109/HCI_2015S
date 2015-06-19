@@ -21,7 +21,7 @@ public class SharedPreferencesHandler {
 
     private final String USER = "user";
     private final String SUSPECT = "suspect";
-    private final String CASE = "case";
+    private final String CASE = "crimeCase";
 
     public SharedPreferencesHandler(Context context) {
         sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.sharedPref), context.MODE_PRIVATE);
