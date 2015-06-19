@@ -117,8 +117,17 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private int circleRad3 = 100;
     private boolean showCircle = false;
     private TextView mapTxt;
+    private TextView weaponTxt;
     private static int mapProgress = 0;
     private SharedPreferencesHandler sharedPrefs;
+
+    private static String skinColor;
+    private static String hairColor;
+    private static String beard;
+    private static String glasses;
+    private static String scar;
+    private static int suspectId;
+    private static Case activeCase;
 
     private ImageView imgSuspect1;
     private ImageView imgSuspect2;
@@ -140,6 +149,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private ImageButton mapBtn;
     private ImageButton featureBtn;
     private TextView featureText;
+    private TextView featureProgress;
     private Button chooseSuspectBtn;
     private HorizontalScrollView scrollView;
 
@@ -205,10 +215,12 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         txtColleagueState = (TextView) findViewById(R.id.colleagueState);
         send_colleague_desc = getResources().getString(R.string.send_colleague_desc);
         send_colleague_working_msg = getResources().getString(R.string.send_colleague_working_msg);
+        weaponTxt = (TextView)findViewById(R.id.weaponProgress);
 
         mapBtn = (ImageButton) findViewById(R.id.btnMap);
         mapTxt = (TextView) findViewById(R.id.mapProgress);
         featureBtn = (ImageButton) findViewById(R.id.btnFeature);
+        featureProgress = (TextView) findViewById(R.id.merkmalProgress);
 
         sharedPrefs = new SharedPreferencesHandler(this);
 
@@ -229,6 +241,25 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         } /*else {
             Log.i(TAG, sharedPrefs.getCase().toString());
         }*/
+
+        updateCaseProgress();
+
+    }
+
+    private void updateCaseProgress(){
+        activeCase = sharedPrefs.getCase();
+        skinColor = activeCase.getSuspectProgress().getSkinColor();
+        beard = activeCase.getSuspectProgress().getBeard();
+        glasses = activeCase.getSuspectProgress().getGlasses();
+        hairColor = activeCase.getSuspectProgress().getHairColor();
+        scar = activeCase.getSuspectProgress().getScar();
+        suspectId = activeCase.getSuspectProgress().getSuspectId();
+        mapProgress = activeCase.getMapProgress();
+        values[0]=skinColor;
+        values[1]=hairColor;
+        values[2]=beard;
+        values[3]=glasses;
+        values[4]=scar;
 
     }
 
@@ -291,9 +322,23 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         newMap();
     }           //testing function
 
-    public void addFeature(View view) {              //testing function
+    public void standort(View view) {              //testing function
         hasDestination = true;
         openMerkmale(view);
+    }
+
+    public void addFeature(View view){
+        skinColor="weiss";
+        hairColor="schwarz";
+        scar="nein";
+
+        values[0]=skinColor;
+        values[1]=hairColor;
+        values[4]=scar;
+
+        weaponTxt.setText("1/1");
+        featureProgress.setText("3/5");
+
     }
 
     private void drawMap() {
@@ -311,34 +356,25 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     }
 
     private void newMap() {
-
         if (mapProgress < 3) {
             drawMap();
+            int zoomLevel = 15;
+
             if (mapProgress == 0) {
                 mapProgress++;
                 mapTxt.setText("1/3");
                 circle.setRadius(circleRad1);
+                zoomLevel = 13;
             } else if (mapProgress == 1) {
                 mapProgress++;
                 mapTxt.setText("2/3");
                 circle.setRadius(circleRad2);
+                zoomLevel = 15;
             } else if (mapProgress == 2) {
                 mapProgress++;
                 mapTxt.setText("3/3");
                 circle.setRadius(circleRad3);
-            }
-
-            int zoomLevel = 15;
-            switch (mapProgress) {
-                case 1:
-                    zoomLevel = 13;
-                    break;
-                case 2:
-                    zoomLevel = 15;
-                    break;
-                case 3:
-                    zoomLevel = 17;
-                    break;
+                zoomLevel = 17;
             }
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(VIENNA, zoomLevel));
@@ -372,6 +408,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
     private void openDialog(final int view) {
         dialog = new Dialog(this);
+        dialog.setCancelable(false);
         LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = li.inflate(view, null, false);
         dialog.setContentView(layout);
@@ -379,7 +416,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         window.setBackgroundDrawableResource(android.R.color.transparent);
         if (view == R.layout.feature_layout) {
             setList(layout);
-            if (hasDestination && !firstTimeSuspects)
+            if (hasDestination)
                 showSuspects(layout);
 
         }
@@ -388,7 +425,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     }
 
     private void showSuspects(View layout) {
-        firstTimeSuspects = true;
         imgSuspect1 = (ImageView) layout.findViewById(R.id.suspect1);
         imgSuspect2 = (ImageView) layout.findViewById(R.id.suspect2);
         imgSuspect3 = (ImageView) layout.findViewById(R.id.suspect3);
@@ -431,7 +467,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         vibrate();
         if (colleagueState == ColleagueState.WAITING) {
             txtColleagueState.setText(getResources().getString(R.string.send_collegue_ready));
-            colleague.setImageResource(R.drawable.btn_colleague_pressed2);
+            colleague.setImageResource(R.drawable.btn_colleague_pressed4);
             colleagueState = ColleagueState.READY;
             handleCustomToast(send_colleague_desc);
         } else if (colleagueState == ColleagueState.READY) {
@@ -673,7 +709,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     }
 
     public void endCase(View view) {
-        //todo neuen fall beginnen
+        vibrate();
+        dialog.dismiss();
+        startCase(view);
     }
 
     public void startCase(View view) {

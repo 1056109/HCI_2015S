@@ -88,7 +88,7 @@
     <string name="first_start">firstStart</string>
 
     <string name="mapProgress">0/3</string>
-    <string name="merkmalProgress">0/6</string>
+    <string name="merkmalProgress">0/5</string>
     <string name="weaponProgress">0/1</string>
 
     <string name="send_collegue_start">WAITING</string>

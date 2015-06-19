@@ -150,18 +150,26 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Map-Hinweis"
-            android:onClick="addMapdetail"
-            android:id="@+id/button"
-            android:layout_gravity="center_horizontal|top" />
+            android:layout_marginTop="40dp"
+            android:text="Tatwaffe"
+            android:onClick="addFeature"
+            android:id="@+id/button2"
+            android:layout_gravity="center_horizontal" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="Aussehen-Hinweis"
-            android:onClick="addFeature"
-            android:id="@+id/button2"
+            android:text="Täterstandort"
+            android:onClick="standort"
+            android:id="@+id/button3"
+            android:layout_gravity="right|top" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Map-Hinweis"
+            android:onClick="addMapdetail"
+            android:id="@+id/button"
             android:layout_gravity="center_horizontal|top" />
 
     </FrameLayout>
