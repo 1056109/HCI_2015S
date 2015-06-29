@@ -466,8 +466,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     public void sendColleague(View view) {
         vibrate();
         if (colleagueState == ColleagueState.WAITING) {
-            txtColleagueState.setText(getResources().getString(R.string.send_collegue_ready));
-            colleague.setImageResource(R.drawable.btn_colleague_pressed4);
+            colleague.setImageResource(R.drawable.btn_colleague_pressed);
             colleagueState = ColleagueState.READY;
             handleCustomToast(send_colleague_desc);
         } else if (colleagueState == ColleagueState.READY) {

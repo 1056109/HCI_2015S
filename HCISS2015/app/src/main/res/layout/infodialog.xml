@@ -7,7 +7,9 @@
     android:layout_marginRight="16dp"
     android:background="@drawable/curve_shape_black"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:minHeight="300dp"
+    android:minWidth="300dp">
 
     <TextView
         android:id="@+id/infoHeaderMsg"
@@ -26,14 +28,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/infoScrollView"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="20dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/infoTextMsg"
             android:layout_gravity="center_horizontal"
-            android:height="350dp"
             android:textColor="@color/white"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
