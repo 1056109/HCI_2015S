@@ -12,7 +12,14 @@ public class Suspect {
     private String scar;
     private boolean crimeCommitter;
 
-    public Suspect () { }
+    public Suspect () {
+        this.skinColor = "";
+        this.hairColor = "";
+        this.beard = "";
+        this.glasses = "";
+        this.scar = "";
+        this.crimeCommitter = false;
+    }
 
     public Suspect(int suspectId, String skinColor, String hairColor, String beard, String glasses, String scar, boolean crimeCommitter) {
         this.suspectId = suspectId;

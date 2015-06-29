@@ -46,12 +46,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 
 import at.at.tuwien.hci.hciss2015.domain.Case;
 import at.at.tuwien.hci.hciss2015.domain.NavDrawerItem;
 import at.at.tuwien.hci.hciss2015.domain.PointOfInterest;
+import at.at.tuwien.hci.hciss2015.domain.Stats;
 import at.at.tuwien.hci.hciss2015.domain.Suspect;
 import at.at.tuwien.hci.hciss2015.persistence.MyDatabaseHelper;
 import at.at.tuwien.hci.hciss2015.persistence.PointOfInterestDaoImpl;
@@ -132,12 +135,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private TextView featureHeader;
     private Button chooseSuspectBtn;
     private HorizontalScrollView scrollView;
-    private static String skinColor;        //static case- and feature-variables
-    private static String hairColor;
-    private static String beard;
-    private static String glasses;
-    private static String scar;
+
     private static Case activeCase;
+    private static Stats myStats;
 
     private SharedPreferencesHandler sharedPrefs;
 
@@ -155,10 +155,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private ImageView imgSuspect4;
     private ImageView imgSuspect5;
 
-    private String[] names = new String[]{"Hautfarbe:", "Haarfarbe:", "Bart:",
-            "Brille:", "Narbe:"};           //array for labeling in featuredialog
+    private LinkedHashMap<String, String> features;
+    //= new String[]{"Hautfarbe:", "Haarfarbe:", "Bart:",
+          //  "Brille:", "Narbe:"};           //array for labeling in featuredialog
 
-    public String[] values = new String[]{"", "", "", "", ""};      //array for features
 
     protected GoogleApiClient mGoogleApiClient;
 
@@ -172,6 +172,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        features = new LinkedHashMap<>();
 
         colleagueState = ColleagueState.WAITING;
 
@@ -252,21 +253,16 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
     private void updateCaseProgress(){
         activeCase = sharedPrefs.getCase();
-        skinColor = activeCase.getSuspectProgress().getSkinColor();
-        beard = activeCase.getSuspectProgress().getBeard();
-        glasses = activeCase.getSuspectProgress().getGlasses();
-        hairColor = activeCase.getSuspectProgress().getHairColor();
-        scar = activeCase.getSuspectProgress().getScar();
         mapProgress = activeCase.getMapProgress();
         merkmalProgress = activeCase.getMerkmalProgress();
         hasDestination = activeCase.isSuspectResidenceFound();
         colleagueUsed = activeCase.isColleagueUsed();
 
-        values[0]=skinColor;        //array for features of suspect
-        values[1]=hairColor;
-        values[2]=beard;
-        values[3]=glasses;
-        values[4]=scar;
+        features.put("Hautfarbe", activeCase.getSuspectProgress().getSkinColor());        //features of suspect
+        features.put("Haarfarbe", activeCase.getSuspectProgress().getHairColor());
+        features.put("Bart", activeCase.getSuspectProgress().getBeard());
+        features.put("Brille", activeCase.getSuspectProgress().getGlasses());
+        features.put("Narbe", activeCase.getSuspectProgress().getScar());
 
         if (activeCase.isWeaponLocationFound())
             weaponTxt.setText("1/1");
@@ -276,10 +272,14 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         if (colleagueUsed)
             hideColleague();
 
-
-
         mapTxt.setText(""+mapProgress+"/3");
         featureTxt.setText(""+merkmalProgress+"/5");
+
+        myStats = sharedPrefs.getStats();
+        if (myStats==null){
+            myStats = new Stats();
+            sharedPrefs.putStats(myStats);
+        }
     }
 
     private void hideColleague(){
@@ -345,8 +345,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     public void addMapdetail(View view) {            //testing function
         if (mapProgress!=3){
             mapProgress++;
-        activeCase.setMapProgress(mapProgress);
-        sharedPrefs.putCase(activeCase);
+            activeCase.setMapProgress(mapProgress);
+            sharedPrefs.putCase(activeCase);
+            myStats.setMap();
+            sharedPrefs.putStats(myStats);
         }
         drawMap();
     }           //testing function
@@ -355,32 +357,42 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         hasDestination = true;
         activeCase.setSuspectResidenceFound(true);
         sharedPrefs.putCase(activeCase);
+        myStats.setMap();
+        sharedPrefs.putStats(myStats);
         openMerkmale(view);
     }
 
     public void addWeapon(View view){ //TODO implementierung tatwaffen-logik
         //Eintrgaege nur für testen, ersetzt durch random-auswahl
 
-        skinColor="weiss";
-        hairColor="dunkelhäutig";
-        scar="nein";
-
-        activeCase.getSuspectProgress().setHairColor(hairColor);
-        activeCase.getSuspectProgress().setSkinColor(skinColor);
-        activeCase.getSuspectProgress().setScar(scar);
-
-        values[0]=skinColor;
-        values[1]=hairColor;
-        values[4]=scar;
         activeCase.setWeaponLocationFound(true);
         merkmalProgress=3;
         activeCase.setMerkmalProgress(merkmalProgress);
         sharedPrefs.putCase(activeCase);
-        sharedPrefs.putCase(activeCase);
 
         weaponTxt.setText("1/1");
-        featureTxt.setText("3/5");
+        featureTxt.setText("1/5");
 
+    }
+
+    public void addFeature(String feature, String value) {       //method for adding features
+        features.put(feature, value);
+        if (feature.equals("Hautfarbe"))
+            activeCase.getSuspectProgress().setSkinColor(value);
+        else if (feature.equals("Haarfarbe"))
+            activeCase.getSuspectProgress().setHairColor(value);
+        else if (feature.equals("Bart"))
+            activeCase.getSuspectProgress().setBeard(value);
+        else if (feature.equals("Brille"))
+            activeCase.getSuspectProgress().setGlasses(value);
+        else
+            activeCase.getSuspectProgress().setScar(value);
+
+        sharedPrefs.putCase(activeCase);
+        featureBtn.setImageResource(R.drawable.btn_feature_pressed);
+        myStats.setFeatures();
+        sharedPrefs.putStats(myStats);
+        openDialog(R.layout.feature_layout);
     }
 
     private void drawMap() {
@@ -460,6 +472,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
         }
 
+        else if (view == R.layout.statisticsdialog)
+            setStats(layout);
+
         dialog.show();
     }
 
@@ -484,9 +499,28 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     }
 
     private void setList(View layout) {
-        MyListAdapter adapter = new MyListAdapter(getApplicationContext(), names, values);
+        MyListAdapter adapter = new MyListAdapter(getApplicationContext(), features);
         featureList = (ListView) layout.findViewById(R.id.feature_list_names);
         featureList.setAdapter(adapter);
+    }
+
+    private void setStats(View layout){
+        TextView solved = (TextView)layout.findViewById(R.id.solvedRate);
+        solved.setText(""+sharedPrefs.getStats().getSolved());
+        TextView missed = (TextView)layout.findViewById(R.id.missedRate);
+        missed.setText(""+sharedPrefs.getStats().getMissed());
+        TextView mapSolved = (TextView)layout.findViewById(R.id.mapRate);
+        mapSolved.setText(""+sharedPrefs.getStats().getMap());
+        TextView featureSolved = (TextView)layout.findViewById(R.id.featureRate);
+        featureSolved.setText(""+sharedPrefs.getStats().getFeatures());
+        TextView rate = (TextView)layout.findViewById(R.id.statRate);
+        int ratenumber;
+        if (sharedPrefs.getStats().getSolved()==0 && sharedPrefs.getStats().getMissed()==0)
+            ratenumber = 0;
+        else
+            ratenumber = sharedPrefs.getStats().getSolved() /
+                (sharedPrefs.getStats().getSolved()+sharedPrefs.getStats().getMissed());
+        rate.setText(""+ratenumber+" %");
     }
 
     public void closeFeatures(View view) {

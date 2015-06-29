@@ -6,6 +6,7 @@ import android.util.Log;
 
 import at.at.tuwien.hci.hciss2015.R;
 import at.at.tuwien.hci.hciss2015.domain.Case;
+import at.at.tuwien.hci.hciss2015.domain.Stats;
 import at.at.tuwien.hci.hciss2015.domain.Suspect;
 import at.at.tuwien.hci.hciss2015.domain.User;
 
@@ -22,6 +23,7 @@ public class SharedPreferencesHandler {
     private final String USER = "user";
     private final String SUSPECT = "suspect";
     private final String CASE = "crimeCase";
+    private final String STATS = "myStats";
 
     public SharedPreferencesHandler(Context context) {
         sharedPref = context.getSharedPreferences(context.getResources().getString(R.string.sharedPref), context.MODE_PRIVATE);
@@ -68,6 +70,18 @@ public class SharedPreferencesHandler {
             return null;
         }
         return MyJsonParser.parseJson(sharedPref.getString(CASE,""), Case.class);
+    }
+
+    public void putStats(Stats myStats) {
+        editor.putString(STATS, MyJsonParser.toJson(myStats));
+        editor.commit();
+    }
+
+    public Stats getStats() {
+        if("".equals(sharedPref.getString(STATS, ""))) {
+            return null;
+        }
+        return MyJsonParser.parseJson(sharedPref.getString(STATS,""), Stats.class);
     }
 
     public void removeCase() {
