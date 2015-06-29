@@ -11,9 +11,11 @@ public class Case {
     private PointOfInterest weaponLocation;
     private List<Suspect> suspectList;
     private int mapProgress;
+    private int merkmalProgress;
     private Suspect suspectProgress;
     private boolean suspectResidenceFound;
     private boolean weaponLocationFound;
+    private boolean colleagueUsed;
 
     public Case() { }
 
@@ -23,9 +25,11 @@ public class Case {
         this.weaponLocation = weaponLocation;
         this.suspectList = suspectList;
         this.mapProgress = 0;
+        this.merkmalProgress = 0;
         this.suspectProgress = new Suspect();
         this.suspectResidenceFound = false;
         this.weaponLocationFound = false;
+        colleagueUsed=false;
     }
 
     public PointOfInterest getCrimeScene() {
@@ -68,6 +72,14 @@ public class Case {
         this.mapProgress = mapProgress;
     }
 
+    public int getMerkmalProgress(){
+        return merkmalProgress;
+    }
+
+    public void setMerkmalProgress(int merkmalProgress){
+        this.merkmalProgress = merkmalProgress;
+    }
+
     public Suspect getSuspectProgress() {
         return suspectProgress;
     }
@@ -99,6 +111,14 @@ public class Case {
             }
         }
         throw new Exception("Kein Taeter festgelegt");
+    }
+
+    public void setColleagueUsed(boolean colleagueUsed) {
+        this.colleagueUsed = colleagueUsed;
+    }
+
+    public boolean isColleagueUsed() {
+        return colleagueUsed;
     }
 
     public String toString() {

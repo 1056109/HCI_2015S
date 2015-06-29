@@ -99,10 +99,47 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private SuspectDaoImpl daoSuspectInstance;
 
     private ImageButton colleague;
+    private ImageButton mapBtn;
+    private ImageButton featureBtn;
+    private ImageButton weaponBtn;
+
     private ColleagueState colleagueState;
-    private TextView txtColleagueState;
     private String send_colleague_desc;
     private String send_colleague_working_msg;
+
+    private TextView mapTxt;            //UI-textviews
+    private TextView weaponTxt;
+    private TextView featureTxt;
+    private TextView txtColleagueState;
+
+    private static int mapProgress = 0;     //static variables for case progress
+    private static int merkmalProgress = 0;
+    private static boolean colleagueUsed = false;
+
+    private Circle circle;
+    private int circleRad1 = 2000;          //radius for suspectresidence-circle
+    private int circleRad2 = 600;
+    private int circleRad3 = 100;
+    private boolean showCircle = false;
+    private TextView merkmalText;           //textviews in selectsuspect-dialog
+    private TextView verdaechtigeText;
+
+    private ListView featureList;
+
+    private static boolean hasDestination = false;
+    private static boolean firstTimeSuspects = false;
+
+    private TextView featureHeader;
+    private Button chooseSuspectBtn;
+    private HorizontalScrollView scrollView;
+    private static String skinColor;        //static case- and feature-variables
+    private static String hairColor;
+    private static String beard;
+    private static String glasses;
+    private static String scar;
+    private static Case activeCase;
+
+    private SharedPreferencesHandler sharedPrefs;
 
     private Dialog dialog;
 
@@ -111,23 +148,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private Handler timerHandler;
     private Runnable runnable;
 
-    private Circle circle;
-    private int circleRad1 = 2000;
-    private int circleRad2 = 600;
-    private int circleRad3 = 100;
-    private boolean showCircle = false;
-    private TextView mapTxt;
-    private TextView weaponTxt;
-    private static int mapProgress = 0;
-    private SharedPreferencesHandler sharedPrefs;
-
-    private static String skinColor;
-    private static String hairColor;
-    private static String beard;
-    private static String glasses;
-    private static String scar;
-    private static int suspectId;
-    private static Case activeCase;
 
     private ImageView imgSuspect1;
     private ImageView imgSuspect2;
@@ -136,22 +156,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private ImageView imgSuspect5;
 
     private String[] names = new String[]{"Hautfarbe:", "Haarfarbe:", "Bart:",
-            "Brille:", "Narbe:"};
-    private ArrayList<String> listNames = new ArrayList<String>();
+            "Brille:", "Narbe:"};           //array for labeling in featuredialog
 
-    public String[] values = new String[]{"", "Braun", "",
-            "ja", ""};
-
-    private ListView featureList;
-
-    private static boolean hasDestination = false;
-    private static boolean firstTimeSuspects = false;
-    private ImageButton mapBtn;
-    private ImageButton featureBtn;
-    private TextView featureText;
-    private TextView featureProgress;
-    private Button chooseSuspectBtn;
-    private HorizontalScrollView scrollView;
+    public String[] values = new String[]{"", "", "", "", ""};      //array for features
 
     protected GoogleApiClient mGoogleApiClient;
 
@@ -220,13 +227,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         mapBtn = (ImageButton) findViewById(R.id.btnMap);
         mapTxt = (TextView) findViewById(R.id.mapProgress);
         featureBtn = (ImageButton) findViewById(R.id.btnFeature);
-        featureProgress = (TextView) findViewById(R.id.merkmalProgress);
+        featureTxt = (TextView) findViewById(R.id.merkmalProgress);
 
         sharedPrefs = new SharedPreferencesHandler(this);
-
-        for (int i = 0; i < values.length; ++i) {
-            listNames.add(values[i]);
-        }
 
         mGeofenceList = new ArrayList<Geofence>();
 
@@ -242,7 +245,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             Log.i(TAG, sharedPrefs.getCase().toString());
         }*/
 
-        updateCaseProgress();
+        if (sharedPrefs.getCase()!=null)
+            updateCaseProgress();
 
     }
 
@@ -253,14 +257,34 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         glasses = activeCase.getSuspectProgress().getGlasses();
         hairColor = activeCase.getSuspectProgress().getHairColor();
         scar = activeCase.getSuspectProgress().getScar();
-        suspectId = activeCase.getSuspectProgress().getSuspectId();
         mapProgress = activeCase.getMapProgress();
-        values[0]=skinColor;
+        merkmalProgress = activeCase.getMerkmalProgress();
+        hasDestination = activeCase.isSuspectResidenceFound();
+        colleagueUsed = activeCase.isColleagueUsed();
+
+        values[0]=skinColor;        //array for features of suspect
         values[1]=hairColor;
         values[2]=beard;
         values[3]=glasses;
         values[4]=scar;
 
+        if (activeCase.isWeaponLocationFound())
+            weaponTxt.setText("1/1");
+        else
+            weaponTxt.setText("0/1");
+
+        if (colleagueUsed)
+            hideColleague();
+
+
+
+        mapTxt.setText(""+mapProgress+"/3");
+        featureTxt.setText(""+merkmalProgress+"/5");
+    }
+
+    private void hideColleague(){
+        txtColleagueState.setVisibility(View.GONE);
+        colleague.setVisibility(View.GONE);
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -319,79 +343,94 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
 
     public void addMapdetail(View view) {            //testing function
-        newMap();
+        if (mapProgress!=3){
+            mapProgress++;
+        activeCase.setMapProgress(mapProgress);
+        sharedPrefs.putCase(activeCase);
+        }
+        drawMap();
     }           //testing function
 
     public void standort(View view) {              //testing function
         hasDestination = true;
+        activeCase.setSuspectResidenceFound(true);
+        sharedPrefs.putCase(activeCase);
         openMerkmale(view);
     }
 
-    public void addFeature(View view){
+    public void addWeapon(View view){ //TODO implementierung tatwaffen-logik
+        //Eintrgaege nur für testen, ersetzt durch random-auswahl
+
         skinColor="weiss";
-        hairColor="schwarz";
+        hairColor="dunkelhäutig";
         scar="nein";
+
+        activeCase.getSuspectProgress().setHairColor(hairColor);
+        activeCase.getSuspectProgress().setSkinColor(skinColor);
+        activeCase.getSuspectProgress().setScar(scar);
 
         values[0]=skinColor;
         values[1]=hairColor;
         values[4]=scar;
+        activeCase.setWeaponLocationFound(true);
+        merkmalProgress=3;
+        activeCase.setMerkmalProgress(merkmalProgress);
+        sharedPrefs.putCase(activeCase);
+        sharedPrefs.putCase(activeCase);
 
         weaponTxt.setText("1/1");
-        featureProgress.setText("3/5");
+        featureTxt.setText("3/5");
 
     }
 
     private void drawMap() {
+        int zoomLevel=15;
 
-        if (mapProgress != 0)
+        if (circle != null)
             circle.remove();
 
         handleCustomToast(getResources().getString(R.string.hintMap));
+
+        //TODO choose random point in radius of suspect residance
         circle = mMap.addCircle(new CircleOptions()
-                .center(VIENNA)
+                .center(activeCase.getSuspectResidence().getLatLng())
                 .fillColor(0x5064B5F6)
                 .strokeWidth(4));
+
+        if (mapProgress == 1) {
+            circle.setRadius(circleRad1);
+            zoomLevel = 13;
+        } else if (mapProgress == 2) {
+            circle.setRadius(circleRad2);
+            zoomLevel = 15;
+        } else if (mapProgress == 3) {
+            circle.setRadius(circleRad3);
+            zoomLevel = 17;
+        }
+        mapTxt.setText("" + mapProgress + "/3");
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(activeCase.getSuspectResidence().getLatLng(), zoomLevel));
+        mapBtn.setImageResource(R.drawable.btn_map_pressed);
 
         showCircle = true;
     }
 
-    private void newMap() {
-        if (mapProgress < 3) {
-            drawMap();
-            int zoomLevel = 15;
-
-            if (mapProgress == 0) {
-                mapProgress++;
-                mapTxt.setText("1/3");
-                circle.setRadius(circleRad1);
-                zoomLevel = 13;
-            } else if (mapProgress == 1) {
-                mapProgress++;
-                mapTxt.setText("2/3");
-                circle.setRadius(circleRad2);
-                zoomLevel = 15;
-            } else if (mapProgress == 2) {
-                mapProgress++;
-                mapTxt.setText("3/3");
-                circle.setRadius(circleRad3);
-                zoomLevel = 17;
-            }
-
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(VIENNA, zoomLevel));
-            mapBtn.setImageResource(R.drawable.btn_map_pressed);
-        }
-    }
 
     public void openMap(View view) {
         vibrate();
 
         if (mapProgress == 0) {
             handleCustomToast(getResources().getString(R.string.zeroMap));
-        } else {
+        }
+
+        else if (circle==null)
+            drawMap();
+        else {
             if (!showCircle) {
                 showCircle = true;
                 mapBtn.setImageResource(R.drawable.btn_map_pressed);
-            } else {
+            }
+            else {
                 showCircle = false;
                 mapBtn.setImageResource(R.drawable.btn_map);
             }
@@ -431,11 +470,15 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         imgSuspect4 = (ImageView) layout.findViewById(R.id.suspect4);
         imgSuspect5 = (ImageView) layout.findViewById(R.id.suspect5);
 
-        featureText = (TextView) layout.findViewById(R.id.feature_txt);
+        featureHeader = (TextView) layout.findViewById(R.id.feature_txt);
+        merkmalText = (TextView) layout.findViewById(R.id.merkmale);
+        verdaechtigeText = (TextView) layout.findViewById(R.id.verdaechtige);
         chooseSuspectBtn = (Button) layout.findViewById(R.id.choose_suspect_btn);
         scrollView = (HorizontalScrollView) layout.findViewById(R.id.horizontalScrollView);
-        featureText.setText(getResources().getString(R.string.choose_suspect));
-        featureText.setTextSize(13);
+        featureHeader.setText(getResources().getString(R.string.choose_suspect));
+        merkmalText.setVisibility(View.VISIBLE);
+        verdaechtigeText.setVisibility(View.VISIBLE);
+        featureHeader.setTextSize(13);
         scrollView.setVisibility(View.VISIBLE);
         chooseSuspectBtn.setVisibility(View.VISIBLE);
     }
@@ -453,8 +496,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     }
 
     public void closeDialog(View view) {
-        //vibrate();
+        vibrate();
         dialog.dismiss();
+        myDrawerList.setItemChecked(0, true);
     }
 
     public void openDrawer(View view) {
@@ -488,6 +532,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     }
 
     public void sendNot(View view) {
+        vibrate();
         dialog.dismiss();
     }
 
@@ -606,6 +651,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 //startDialog Info
                 openDialog(R.layout.infodialog);
             }
+            vibrate();
             myDrawerList.setItemChecked(position, true);
             myDrawerLayout.closeDrawer(myDrawerList);
 
@@ -626,8 +672,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     }
 
     private void executeTimerTask() {
-        startTime = 900000; //15 Min
-        //startTime = 10000;
+        //startTime = 900000; //15 Min
+        startTime = 10000;
         timerHandler = new Handler();
         runnable = new Runnable() {
 
@@ -648,8 +694,11 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 if (startTime > 0) {
                     startTime -= 1000;
                     timerHandler.postDelayed(this, 1000);
-                } else {
-                    txtColleagueState.setVisibility(TextView.INVISIBLE);
+                } else { //TODO colleague-logic comes here
+                    activeCase.setColleagueUsed(true);
+                    colleagueUsed=true;
+                    sharedPrefs.putCase(activeCase);
+                    hideColleague();
                     timerHandler.removeCallbacks(runnable);
                     //fire info dialog
                 }
@@ -715,6 +764,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
     public void startCase(View view) {
         vibrate();
+
+        mapBtn.setImageResource(R.drawable.btn_map);
+        featureBtn.setImageResource(R.drawable.btn_feature);
+
         daoPoiInstance = PointOfInterestDaoImpl.getInstance();
         daoSuspectInstance = SuspectDaoImpl.getInstance();
         Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -779,6 +832,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
         Case crimeCase = new Case(crimeScene, suspectResidence, weaponLocation, suspectList);
         sharedPrefs.putCase(crimeCase);
+        updateCaseProgress();
         dialog.dismiss();
     }
 
