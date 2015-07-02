@@ -34,6 +34,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,12 +46,13 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import at.at.tuwien.hci.hciss2015.domain.Case;
 import at.at.tuwien.hci.hciss2015.domain.NavDrawerItem;
@@ -70,7 +73,11 @@ enum ColleagueState {
     WAITING, READY, WORKING
 }
 
-public class MainActivity extends FragmentActivity implements ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status> {
+public class MainActivity extends FragmentActivity implements
+        ConnectionCallbacks,
+        OnConnectionFailedListener,
+        ResultCallback<Status>,
+        LocationListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -168,6 +175,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
     private Random randomizer;
 
+    private List<Marker> markers = new ArrayList<Marker>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -236,7 +245,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
         mGeofencePendingIntent = null;
 
-        populateGeofenceList();
+        //populateGeofenceList();
 
         buildGoogleApiClient();
 
@@ -520,7 +529,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         else
             ratenumber = sharedPrefs.getStats().getSolved() /
                 (sharedPrefs.getStats().getSolved()+sharedPrefs.getStats().getMissed());
-        rate.setText(""+ratenumber+" %");
+        rate.setText("" + ratenumber + " %");
     }
 
     public void closeFeatures(View view) {
@@ -592,10 +601,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     protected void onStop() {
         super.onStop();
 
-        LocationServices.GeofencingApi.removeGeofences(
+        /*LocationServices.GeofencingApi.removeGeofences(
             mGoogleApiClient,
             getGeofencePendingIntent()
-        ).setResultCallback(this);
+        ).setResultCallback(this);*/
 
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
@@ -604,14 +613,57 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
     @Override
     public void onConnected(Bundle bundle) {
+        Log.i(TAG, "GoogleApiClient connected");
         Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        initCamera(myLocation);
 
-        LocationServices.GeofencingApi.addGeofences(
+        /*LocationServices.GeofencingApi.addGeofences(
             mGoogleApiClient,
             getGeofencingRequest(),
             getGeofencePendingIntent()
-        ).setResultCallback(this);
+        ).setResultCallback(this);*/
+
+        LocationRequest locationRequest;
+        // Create a LocationRequest object
+        locationRequest = LocationRequest.create();
+        // Use high accuracy
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        // Set the update interval to 2 seconds
+        locationRequest.setInterval(TimeUnit.SECONDS.toMillis(2));
+        // Set the fastest update interval to 2 seconds
+        locationRequest.setFastestInterval(TimeUnit.SECONDS.toMillis(2));
+        // Set the minimum displacement
+        locationRequest.setSmallestDisplacement(2);
+        // Register for location updates
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+
+        initCamera(myLocation);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        // Log the output for debugging
+        Log.v("myNewLocation", "Latitude: " + location.getLatitude() +
+                ", Longitude: " + location.getLongitude());
+        checkMarkers(location);
+    }
+
+    public void checkMarkers(Location location){
+        List<PointOfInterest> nearbyPois;
+        nearbyPois = new ArrayList<PointOfInterest>(
+                daoPoiInstance.getPOIsByPosition(location.getLatitude(), location.getLongitude(), 30));
+        Log.v("CheckMarkers","Counted nearby Markers: " + nearbyPois.size());
+        Log.v("CheckMarkers","Flag: " + nearbyPois.get(0).getFlag());
+
+        for(int i=0; i<markers.size();i++) {
+            markers.get(i).remove();
+        }
+        for(int i=0; i<nearbyPois.size();i++) {
+            Marker marker = mMap.addMarker(new MarkerOptions()
+                            .position(nearbyPois.get(i).getLatLng())
+                            .title("Nearby Marker")
+            );
+            markers.add(marker);
+        }
     }
 
     @Override
@@ -814,6 +866,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             crimeScenePois = new ArrayList<PointOfInterest>(
                     daoPoiInstance.getPOIsByPositionType(VIENNA.latitude, VIENNA.longitude, 300, Types.OTHER));
         }
+        //TODO: Wenn keine POIs in der Nähe -> crash
         PointOfInterest crimeScene = crimeScenePois.get(randomizer.nextInt(crimeScenePois.size()));
 
         List<PointOfInterest> suspectResidencePois =  new ArrayList<PointOfInterest>(
@@ -885,7 +938,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    public void populateGeofenceList() {
+    /*public void populateGeofenceList() {
         mGeofenceList.add(new Geofence.Builder()
                 .setRequestId("1")
                 .setCircularRegion(48.178454, 16.369699, 10)
@@ -917,7 +970,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
                         | GeofencingRequest.INITIAL_TRIGGER_EXIT)
                 .build());
-    }
+    }*/
 }
 
 

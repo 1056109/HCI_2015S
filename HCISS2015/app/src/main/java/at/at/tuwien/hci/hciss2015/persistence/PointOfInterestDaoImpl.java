@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.BaseColumns;
+import android.os.CancellationSignal;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -223,6 +223,7 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
     @Override
     public List<PointOfInterest> getPOIsByPosition(double latitude, double longitude, int radius) {
         List<PointOfInterest> poiList = new ArrayList<PointOfInterest>();
+        CancellationSignal canSignal = null;
         String sortOrder = TableEntry.ID + " ASC";
         double lngSouth = longitude - getLongitudeDistance(latitude, radius);
         double lngNorth = longitude + getLongitudeDistance(latitude, radius);
@@ -234,22 +235,26 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
                 + "("+TableEntry.LAT + " BETWEEN " + latWest + " AND " + latEast + ")";
 
         SQLiteDatabase db = myDbHelper.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, null, sortOrder);
+        try {
+            Cursor cursor = db.query(true, TABLE_NAME, null, selection, null, null, null, sortOrder, null, canSignal);
 
-        PointOfInterest poi = null;
-        while (cursor.moveToNext()) {
-            poi = new PointOfInterest();
-            poi.setId(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.ID)));
-            poi.setType(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.TYPE)));
-            poi.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(TableEntry.DESCRIPTION)));
-            poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
-            poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
-            poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
-            poi.setArea(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.AREA)));
-            poiList.add(poi);
+            PointOfInterest poi = null;
+            while (cursor.moveToNext()) {
+                poi = new PointOfInterest();
+                poi.setId(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.ID)));
+                poi.setType(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.TYPE)));
+                poi.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(TableEntry.DESCRIPTION)));
+                poi.setLat(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LAT)));
+                poi.setLng(cursor.getDouble(cursor.getColumnIndexOrThrow(TableEntry.LNG)));
+                poi.setFlag(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.FLAG)));
+                poi.setArea(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.AREA)));
+                poiList.add(poi);
+            }
+
+            cursor.close();
+        }catch(Exception e){
+            Log.v("POIDao","POIDao: Error DB-Query " + e);
         }
-
-        cursor.close();
         db.close();
 
         return poiList;

@@ -3,12 +3,10 @@ package at.at.tuwien.hci.hciss2015.util;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -73,7 +71,7 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
         bmpDescriptors = null;
     }
 
-    private void drawMarker(GoogleMap map, PointOfInterest poi) {
+    public void drawMarker(GoogleMap map, PointOfInterest poi) {
         map.addMarker(new MarkerOptions()
                         .title(poi.getDescription())
                         .position(poi.getLatLng())
