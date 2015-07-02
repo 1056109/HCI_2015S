@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import at.at.tuwien.hci.hciss2015.domain.Case;
@@ -388,6 +389,37 @@ public class MainActivity extends FragmentActivity implements
         weaponTxt.setText("1/1");
         featureTxt.setText("1/5");
 
+    }
+
+    public void selectFeature(View view) {
+
+        LinkedHashMap<String, String> crimeCommitterFeatures = new LinkedHashMap<>();
+        try {
+            if(features.containsKey("Hautfarbe") && features.get("Hautfarbe") != null) {
+                crimeCommitterFeatures.put("Hautfarbe", activeCase.getCrimeCommitter().getSkinColor());
+            }
+            if(features.containsKey("Haarfarbe") && features.get("Haarfarbe") != null) {
+                crimeCommitterFeatures.put("Haarfarbe", activeCase.getCrimeCommitter().getHairColor());
+            }
+            if(features.containsKey("Bart") && features.get("Bart") != null) {
+                crimeCommitterFeatures.put("Bart", activeCase.getCrimeCommitter().getBeard());
+            }
+            if(features.containsKey("Brille") && features.get("Brille") != null) {
+                crimeCommitterFeatures.put("Brille", activeCase.getCrimeCommitter().getGlasses());
+            }
+            if(features.containsKey("Narbe") && features.get("Narbe") != null) {
+                crimeCommitterFeatures.put("Narbe", activeCase.getCrimeCommitter().getScar());
+            }
+            if(!crimeCommitterFeatures.isEmpty()) {
+                Set<String> keySet = crimeCommitterFeatures.keySet();
+                String[] keyArray = keySet.toArray(new String[keySet.size()]);
+                String randomFeature = keyArray[randomizer.nextInt(keyArray.length)];
+                addFeature(randomFeature, crimeCommitterFeatures.get(randomFeature));
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     public void addFeature(String feature, String value) {       //method for adding features
