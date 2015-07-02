@@ -265,9 +265,7 @@ public class MainActivity extends FragmentActivity implements
 
         if (sharedPrefs.getCase() == null) {
             openDialog(R.layout.start_case_layout);
-        } /*else {
-            Log.i(TAG, sharedPrefs.getCase().toString());
-        }*/
+        }
 
         if (sharedPrefs.getCase()!=null)
             updateCaseProgress();
@@ -493,10 +491,13 @@ public class MainActivity extends FragmentActivity implements
             if (hasDestination)
                 showSuspects(layout);
 
-        }
-
-        else if (view == R.layout.statisticsdialog)
+        } else if (view == R.layout.statisticsdialog) {
             setStats(layout);
+        } else if (view == R.layout.start_case_layout) {
+            TextView headerValue = (TextView) layout.findViewById(R.id.start_case_text);
+            headerValue.setText(String.format(getResources().getString(R.string.welcome_msg_first_case),
+                    sharedPrefs.getUser().getName()));
+        }
 
         dialog.show();
     }

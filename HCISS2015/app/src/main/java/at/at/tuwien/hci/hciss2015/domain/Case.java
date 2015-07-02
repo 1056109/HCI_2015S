@@ -29,7 +29,7 @@ public class Case {
         this.suspectProgress = new Suspect();
         this.suspectResidenceFound = false;
         this.weaponLocationFound = false;
-        colleagueUsed=false;
+        this.colleagueUsed=false;
     }
 
     public PointOfInterest getCrimeScene() {

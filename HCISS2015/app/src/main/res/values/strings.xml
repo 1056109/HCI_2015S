@@ -10,12 +10,16 @@
 
     <string name="welcome_first_start">Willkommen bei Vienna Cop! Bitte Daten eingeben, auf Start drücken, schon geht deine
         Polizeikarriere in Wien los!</string>
+
+    <!--<string name="welcome_first_start">Willkommen bei Vienna Cop!</string>-->
 	
-	<string name="welcome_msg_first_case">Guten Tag, Police Officer XXXX. Willkommen im Dienst. Ich habe eine gute und eine schlechte Nachricht für Sie. 
+	<string name="welcome_msg_first_case">Guten Tag, Police Officer %1$s. Willkommen im Dienst. Ich habe eine gute und eine schlechte Nachricht für Sie.
 	Die gute: Ihnen wird es bei uns gefallen. Die schlechte: Sie müssen jetzt los, Ihre neue Kollegen erwarten Sie schon am Tatort. Ich wünsche Ihnen 
 	für Ihren 1. Fall und die weitere Laufbahn alles Gute!</string>
-	
-	<string name="welcomeback_msg">Willkommen zurück, Police Officer XXXX. Schön Sie wiederzusehen. Bereit den Fall wieder aufzunehmen? Viel Erfolg!</string>
+
+    <!--<string name="welcome_msg_first_case">Guten Tag, Police Officer %1$s.</string>-->
+
+	<string name="welcomeback_msg">Willkommen zurück, Police Officer %1$s. Schön Sie wiederzusehen. Bereit den Fall wieder aufzunehmen? Viel Erfolg!</string>
 
     <string name="crime_scene1">Hallo! Wir haben es hier mit einem Mordfall zu tun. Die Leiche weißt mehrere Einstiche auf, wir haben sie bereits ins Krankenhaus 
 	zur Autopsie gebracht. Ich würde Ihnen raten, zuerst die Obduktionsergebnisse zu untersuchen. Viel Erfolg bei dem Fall!</string>
