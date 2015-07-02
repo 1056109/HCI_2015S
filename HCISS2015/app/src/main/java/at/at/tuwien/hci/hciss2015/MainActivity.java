@@ -263,13 +263,7 @@ public class MainActivity extends FragmentActivity implements
 
         buildGoogleApiClient();
 
-        if (sharedPrefs.getCase() == null) {
-            openDialog(R.layout.start_case_layout);
-        }
-
-        if (sharedPrefs.getCase()!=null)
-            updateCaseProgress();
-
+        openDialog(R.layout.start_case_layout);
     }
 
     private void updateCaseProgress(){
@@ -494,9 +488,7 @@ public class MainActivity extends FragmentActivity implements
         } else if (view == R.layout.statisticsdialog) {
             setStats(layout);
         } else if (view == R.layout.start_case_layout) {
-            TextView headerValue = (TextView) layout.findViewById(R.id.start_case_text);
-            headerValue.setText(String.format(getResources().getString(R.string.welcome_msg_first_case),
-                    sharedPrefs.getUser().getName()));
+            setStart(layout);
         }
 
         dialog.show();
@@ -545,6 +537,21 @@ public class MainActivity extends FragmentActivity implements
             ratenumber = sharedPrefs.getStats().getSolved() /
                 (sharedPrefs.getStats().getSolved()+sharedPrefs.getStats().getMissed());
         rate.setText("" + ratenumber + " %");
+    }
+
+    private void setStart(View layout) {
+        TextView headerValue = (TextView) layout.findViewById(R.id.start_case_text);
+        if (sharedPrefs.getCase() == null) {
+            headerValue.setText(String.format(getResources().getString(R.string.welcome_msg_first_case),
+                    sharedPrefs.getUser().getName()));
+            layout.findViewById(R.id.start_case_btn).setVisibility(View.VISIBLE);
+            layout.findViewById(R.id.resume_case_btn).setVisibility(View.GONE);
+        } else {
+            headerValue.setText(String.format(getResources().getString(R.string.welcomeback_msg),
+                    sharedPrefs.getUser().getName()));
+            layout.findViewById(R.id.start_case_btn).setVisibility(View.GONE);
+            layout.findViewById(R.id.resume_case_btn).setVisibility(View.VISIBLE);
+        }
     }
 
     public void closeFeatures(View view) {
@@ -936,6 +943,12 @@ public class MainActivity extends FragmentActivity implements
 
         Case crimeCase = new Case(crimeScene, suspectResidence, weaponLocation, suspectList);
         sharedPrefs.putCase(crimeCase);
+        updateCaseProgress();
+        dialog.dismiss();
+    }
+
+    public void resumeCase(View view) {
+        vibrate();
         updateCaseProgress();
         dialog.dismiss();
     }
