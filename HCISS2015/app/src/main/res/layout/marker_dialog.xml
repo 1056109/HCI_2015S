@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/curve_shape_black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:id="@+id/new_hint_text"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/subway_investigation1"
+        android:singleLine="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:id="@+id/new_hint_explanation"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/new_hint_explanation"
+        android:singleLine="false"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_weapon"
+            android:onClick="addWeapon"
+            android:src="@drawable/btn_weapon"
+            android:focusableInTouchMode="false" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_map"
+            android:src="@drawable/btn_map"
+            android:layout_gravity="center_horizontal"
+            android:onClick="addMapdetail"
+            android:nestedScrollingEnabled="false" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_feature"
+            android:src="@drawable/btn_feature"
+            android:layout_gravity="center_horizontal"
+            android:onClick="selectFeature" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:onClick="closeDialog"
+            android:textColor="@color/violett"
+            android:background="@drawable/btn_android"
+            android:id="@+id/button4"
+            android:text="@string/close" />
+
+    </LinearLayout>
+</LinearLayout>

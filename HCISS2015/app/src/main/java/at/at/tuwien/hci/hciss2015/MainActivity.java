@@ -345,6 +345,15 @@ public class MainActivity extends FragmentActivity implements
                         if (colleagueState.equals(ColleagueState.READY)) {
                             openDialog(R.layout.colleguedialog);
                         }
+                        else if(marker.getTitle().contains("Hinweis")) // if marker source is clicked
+                        {
+                            //marker.showInfoWindow();
+                            //mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+                            //Toast.makeText(MainActivity.this, marker.getTitle(), Toast.LENGTH_SHORT).show();
+                            openDialog(R.layout.marker_dialog);
+                            marker.remove();
+                            return true;
+                        }
                         return false;
                     }
                 });
@@ -365,8 +374,17 @@ public class MainActivity extends FragmentActivity implements
             sharedPrefs.putCase(activeCase);
             myStats.setMap();
             sharedPrefs.putStats(myStats);
+            handleCustomToast(getResources().getString(R.string.new_hintMap));
+
+            vibrate();
+            dialog.dismiss();
+        }else{
+            handleCustomToast(getResources().getString(R.string.nonew_hintMap));
+
+            vibrate();
         }
-        drawMap();
+        //drawMap();
+
     }           //testing function
 
     public void standort(View view) {              //testing function
@@ -375,6 +393,7 @@ public class MainActivity extends FragmentActivity implements
         sharedPrefs.putCase(activeCase);
         myStats.setMap();
         sharedPrefs.putStats(myStats);
+
         openMerkmale(view);
     }
 
@@ -389,6 +408,10 @@ public class MainActivity extends FragmentActivity implements
         weaponTxt.setText("1/1");
         featureTxt.setText("1/5");
 
+        handleCustomToast(getResources().getString(R.string.hint_weapon));
+
+        vibrate();
+        dialog.dismiss();
     }
 
     public void selectFeature(View view) {
@@ -439,7 +462,11 @@ public class MainActivity extends FragmentActivity implements
         featureBtn.setImageResource(R.drawable.btn_feature_pressed);
         myStats.setFeatures();
         sharedPrefs.putStats(myStats);
-        openDialog(R.layout.feature_layout);
+        //openDialog(R.layout.feature_layout);
+        handleCustomToast(getResources().getString(R.string.new_featurehint));
+
+        vibrate();
+        dialog.dismiss();
     }
 
     private void drawMap() {
@@ -715,9 +742,11 @@ public class MainActivity extends FragmentActivity implements
         for(int i=0; i<nearbyPois.size();i++) {
             Marker marker = mMap.addMarker(new MarkerOptions()
                             .position(nearbyPois.get(i).getLatLng())
-                            .title(nearbyPois.get(i).getDescription())
+                            .title("Neuer Hinweis: " + nearbyPois.get(i).getDescription())
                             .icon(bmpDescriptorsLarge[nearbyPois.get(i).getType()])
             );
+            //marker.showInfoWindow();
+            //TODO: Disable Markers on same Position
             markers.add(marker);
         }
     }
