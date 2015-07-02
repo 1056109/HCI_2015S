@@ -73,6 +73,14 @@
         <item>@drawable/ic_murder</item>
         <item>@drawable/ic_weapon</item>
     </array>
+    <array name="my_marker_icons_large">
+        <item>@drawable/ic_police_large</item>
+        <item>@drawable/ic_hospital_large</item>
+        <item>@drawable/ic_subway_large</item>
+        <item>@drawable/ic_park_large</item>
+        <item>@drawable/ic_murder_large</item>
+        <item>@drawable/ic_weapon_large</item>
+    </array>
 
     <array name="feature_categories">
         <item>Geschlecht</item>

@@ -41,6 +41,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -176,6 +178,8 @@ public class MainActivity extends FragmentActivity implements
     private Random randomizer;
 
     private List<Marker> markers = new ArrayList<Marker>();
+    private TypedArray myMarkerIconsLarge;
+    private BitmapDescriptor[] bmpDescriptorsLarge = new BitmapDescriptor[5];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,6 +202,16 @@ public class MainActivity extends FragmentActivity implements
 
         myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         myDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        myMarkerIconsLarge = getResources().obtainTypedArray(R.array.my_marker_icons_large);
+
+        bmpDescriptorsLarge[0] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(0, -1));
+        bmpDescriptorsLarge[1] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(1, -1));
+        bmpDescriptorsLarge[2] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(2, -1));
+        bmpDescriptorsLarge[3] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(3, -1));
+        bmpDescriptorsLarge[4] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(4, -1));
+
+        myMarkerIconsLarge.recycle();
 
         navDrawerItems = new ArrayList<NavDrawerItem>();
 
@@ -372,7 +386,7 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void addWeapon(View view){ //TODO implementierung tatwaffen-logik
-        //Eintrgaege nur für testen, ersetzt durch random-auswahl
+        //Eintraege nur fuer testen, ersetzt durch random-auswahl
 
         activeCase.setWeaponLocationFound(true);
         merkmalProgress=3;
@@ -652,7 +666,8 @@ public class MainActivity extends FragmentActivity implements
         nearbyPois = new ArrayList<PointOfInterest>(
                 daoPoiInstance.getPOIsByPosition(location.getLatitude(), location.getLongitude(), 30));
         Log.v("CheckMarkers","Counted nearby Markers: " + nearbyPois.size());
-        Log.v("CheckMarkers","Flag: " + nearbyPois.get(0).getFlag());
+
+        //Log.v("CheckMarkers","Flag: " + nearbyPois.get(0).getFlag());
 
         for(int i=0; i<markers.size();i++) {
             markers.get(i).remove();
@@ -660,7 +675,8 @@ public class MainActivity extends FragmentActivity implements
         for(int i=0; i<nearbyPois.size();i++) {
             Marker marker = mMap.addMarker(new MarkerOptions()
                             .position(nearbyPois.get(i).getLatLng())
-                            .title("Nearby Marker")
+                            .title(nearbyPois.get(i).getDescription())
+                            .icon(bmpDescriptorsLarge[nearbyPois.get(i).getType()])
             );
             markers.add(marker);
         }
@@ -866,7 +882,7 @@ public class MainActivity extends FragmentActivity implements
             crimeScenePois = new ArrayList<PointOfInterest>(
                     daoPoiInstance.getPOIsByPositionType(VIENNA.latitude, VIENNA.longitude, 300, Types.OTHER));
         }
-        //TODO: Wenn keine POIs in der Nähe -> crash
+        //TODO: Wenn keine POIs in der Naehe -> crash
         PointOfInterest crimeScene = crimeScenePois.get(randomizer.nextInt(crimeScenePois.size()));
 
         List<PointOfInterest> suspectResidencePois =  new ArrayList<PointOfInterest>(
