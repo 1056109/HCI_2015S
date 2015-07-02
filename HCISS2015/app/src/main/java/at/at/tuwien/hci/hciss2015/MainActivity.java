@@ -343,6 +343,7 @@ public class MainActivity extends FragmentActivity implements
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         if (colleagueState.equals(ColleagueState.READY)) {
+                            marker.hideInfoWindow();
                             openDialog(R.layout.colleguedialog);
                         }
                         else if(marker.getTitle().contains("Hinweis")) // if marker source is clicked
