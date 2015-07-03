@@ -1,86 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@drawable/curve_shape_black"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/curve_shape_black"
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:textSize="20dp"
-        android:layout_margin="10dp"
-        android:padding="5dp"
         android:id="@+id/new_hint_text"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/subway_investigation1"
-        android:singleLine="false" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:textSize="20dp"
-        android:layout_margin="10dp"
-        android:padding="5dp"
-        android:id="@+id/new_hint_explanation"
         android:layout_gravity="center_horizontal"
-        android:text="@string/new_hint_explanation"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:padding="5dp"
         android:singleLine="false"
+        android:text="@string/subway_investigation1"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/new_hint_explanation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:singleLine="false"
+        android:text="@string/new_hint_explanation"
+        android:textColor="@color/white"
+        android:textSize="20dp"
         android:textStyle="bold" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
         <ImageButton
+            android:id="@+id/md_btn_weapon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_weapon"
-            android:onClick="addWeapon"
-            android:src="@drawable/btn_weapon"
-            android:focusableInTouchMode="false" />
+            android:focusableInTouchMode="false"
+            android:src="@drawable/btn_weapon" />
 
         <ImageButton
+            android:id="@+id/md_btn_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_map"
-            android:src="@drawable/btn_map"
             android:layout_gravity="center_horizontal"
-            android:onClick="addMapdetail"
-            android:nestedScrollingEnabled="false" />
+            android:nestedScrollingEnabled="false"
+            android:src="@drawable/btn_map" />
 
         <ImageButton
+            android:id="@+id/md_btn_feature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_feature"
-            android:src="@drawable/btn_feature"
             android:layout_gravity="center_horizontal"
-            android:onClick="selectFeature" />
+            android:src="@drawable/btn_feature" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_gravity="center_horizontal"
         android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/button4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:onClick="closeDialog"
-            android:textColor="@color/violett"
             android:background="@drawable/btn_android"
-            android:id="@+id/button4"
-            android:text="@string/close" />
+            android:onClick="closeDialog"
+            android:text="@string/close"
+            android:textColor="@color/violett" />
 
     </LinearLayout>
 </LinearLayout>

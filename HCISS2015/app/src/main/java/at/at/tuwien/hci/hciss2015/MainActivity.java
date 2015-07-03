@@ -12,9 +12,11 @@ import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -51,8 +53,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -178,9 +183,13 @@ public class MainActivity extends FragmentActivity implements
 
     private Random randomizer;
 
-    private List<Marker> markers = new ArrayList<Marker>();
+    //private SparseArray<Marker> currentMarkers = new SparseArray<Marker>();
+    private Map<Integer, Marker> nearbyMarkers = new HashMap<Integer, Marker>();
+
     private TypedArray myMarkerIconsLarge;
     private BitmapDescriptor[] bmpDescriptorsLarge = new BitmapDescriptor[5];
+
+    private LayoutInflater layoutInfl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,6 +271,8 @@ public class MainActivity extends FragmentActivity implements
 
         //populateGeofenceList();
 
+        layoutInfl = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         buildGoogleApiClient();
 
         openDialog(R.layout.start_case_layout);
@@ -341,18 +352,64 @@ public class MainActivity extends FragmentActivity implements
                 mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
-                    public boolean onMarkerClick(Marker marker) {
+                    public boolean onMarkerClick(final Marker marker) {
                         if (colleagueState.equals(ColleagueState.READY)) {
                             marker.hideInfoWindow();
                             openDialog(R.layout.colleguedialog);
-                        }
-                        else if(marker.getTitle().contains("Hinweis")) // if marker source is clicked
-                        {
+                        } else if(marker.getTitle().contains("Hinweis")) { // if marker source is clicked
+                            final String[] poiData = marker.getSnippet().split(";");
                             //marker.showInfoWindow();
                             //mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
                             //Toast.makeText(MainActivity.this, marker.getTitle(), Toast.LENGTH_SHORT).show();
-                            openDialog(R.layout.marker_dialog);
-                            marker.remove();
+                            //openDialog(R.layout.marker_dialog);
+                            //marker.remove();
+
+                            dialog = new Dialog(context);
+                            dialog.setCancelable(false);
+
+                            final View layout = layoutInfl.inflate(R.layout.marker_dialog, null, false);
+
+                            ImageButton btn1 = (ImageButton) layout.findViewById(R.id.md_btn_weapon);
+                            btn1.setOnClickListener(new OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    //addWeapon(layout);
+                                    marker.remove();
+                                    nearbyMarkers.remove(Integer.parseInt(poiData[0]));
+                                    MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
+                                    daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                    dialog.dismiss();
+                                }
+                            });
+                            ImageButton btn2 = (ImageButton) layout.findViewById(R.id.md_btn_map);
+                            btn2.setOnClickListener(new OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //addMapdetail(layout);
+                                    marker.remove();
+                                    nearbyMarkers.remove(Integer.parseInt(poiData[0]));
+                                    MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
+                                    daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                    dialog.dismiss();
+                                }
+                            });
+                            ImageButton btn3 = (ImageButton) layout.findViewById(R.id.md_btn_feature);
+                            btn3.setOnClickListener(new OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //selectFeature(layout);
+                                    marker.remove();
+                                    nearbyMarkers.remove(Integer.parseInt(poiData[0]));
+                                    MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
+                                    daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                    dialog.dismiss();
+                                }
+                            });
+                            dialog.setContentView(layout);
+                            Window window = dialog.getWindow();
+                            window.setBackgroundDrawableResource(android.R.color.transparent);
+                            dialog.show();
+
                             return true;
                         }
                         return false;
@@ -467,6 +524,15 @@ public class MainActivity extends FragmentActivity implements
         handleCustomToast(getResources().getString(R.string.new_featurehint));
 
         vibrate();
+        dialog.dismiss();
+    }
+
+    public void abortCase(View view) {
+        Log.e(TAG, "aborted, reset db!");
+        daoPoiInstance.updatePOIFlag(4432, 0);
+        daoPoiInstance.updatePOIFlag(4433, 0);
+        daoPoiInstance.updatePOIFlag(4434, 0);
+        daoPoiInstance.updatePOIFlag(4435, 0);
         dialog.dismiss();
     }
 
@@ -682,12 +748,6 @@ public class MainActivity extends FragmentActivity implements
     @Override
     protected void onStop() {
         super.onStop();
-
-        /*LocationServices.GeofencingApi.removeGeofences(
-            mGoogleApiClient,
-            getGeofencePendingIntent()
-        ).setResultCallback(this);*/
-
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
@@ -697,12 +757,6 @@ public class MainActivity extends FragmentActivity implements
     public void onConnected(Bundle bundle) {
         Log.i(TAG, "GoogleApiClient connected");
         Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-        /*LocationServices.GeofencingApi.addGeofences(
-            mGoogleApiClient,
-            getGeofencingRequest(),
-            getGeofencePendingIntent()
-        ).setResultCallback(this);*/
 
         LocationRequest locationRequest;
         // Create a LocationRequest object
@@ -723,32 +777,44 @@ public class MainActivity extends FragmentActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
-        // Log the output for debugging
         Log.v("myNewLocation", "Latitude: " + location.getLatitude() +
                 ", Longitude: " + location.getLongitude());
+
+        if(!nearbyMarkers.isEmpty()) {
+            for(int key : nearbyMarkers.keySet()) {
+                MyMarkerDrawer.getMarkers().get(key).setVisible(true);
+                nearbyMarkers.get(key).remove();
+            }
+        }
+        nearbyMarkers.clear();
+
         checkMarkers(location);
     }
 
     public void checkMarkers(Location location){
-        List<PointOfInterest> nearbyPois;
-        nearbyPois = new ArrayList<PointOfInterest>(
+
+        if(MyMarkerDrawer.getMarkers().isEmpty()) {
+            return;
+        }
+
+        List<PointOfInterest> nearbyPois = new ArrayList<PointOfInterest>(
                 daoPoiInstance.getPOIsByPosition(location.getLatitude(), location.getLongitude(), 30));
         Log.v("CheckMarkers","Counted nearby Markers: " + nearbyPois.size());
 
-        //Log.v("CheckMarkers","Flag: " + nearbyPois.get(0).getFlag());
+        Map<Integer, Marker> allMarkers = new HashMap<Integer, Marker>(MyMarkerDrawer.getMarkers());
 
-        for(int i=0; i<markers.size();i++) {
-            markers.get(i).remove();
-        }
-        for(int i=0; i<nearbyPois.size();i++) {
+        for(PointOfInterest poi : nearbyPois) {
             Marker marker = mMap.addMarker(new MarkerOptions()
-                            .position(nearbyPois.get(i).getLatLng())
-                            .title("Neuer Hinweis: " + nearbyPois.get(i).getDescription())
-                            .icon(bmpDescriptorsLarge[nearbyPois.get(i).getType()])
+                            .position(poi.getLatLng())
+                            .title("Neuer Hinweis: " + poi.getDescription())
+                            .snippet(String.valueOf(poi.getId()) + ";" + String.valueOf(poi.getType()))
+                            .icon(bmpDescriptorsLarge[poi.getType()])
             );
-            //marker.showInfoWindow();
-            //TODO: Disable Markers on same Position
-            markers.add(marker);
+
+            if(allMarkers.containsKey(poi.getId())) {
+                allMarkers.get(poi.getId()).setVisible(false);
+                nearbyMarkers.put(poi.getId(), marker);
+            }
         }
     }
 
@@ -858,7 +924,6 @@ public class MainActivity extends FragmentActivity implements
                         int seconds = (int) (startTime / 1000);
                         int minutes = seconds / 60;
                         seconds = seconds % 60;
-                        //Log.d(TAG, String.format("%d:%02d", minutes, seconds));
                         txtColleagueState.setText(String.format("%d:%02d", minutes, seconds));
                     }
                 });
@@ -896,21 +961,18 @@ public class MainActivity extends FragmentActivity implements
         vibrate();
         deselect();
         imgSuspect3.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
-
     }
 
     public void selectSuspect4(View view) {
         vibrate();
         deselect();
         imgSuspect4.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
-
     }
 
     public void selectSuspect5(View view) {
         vibrate();
         deselect();
         imgSuspect5.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
-
     }
 
     private void deselect() {
@@ -1015,54 +1077,6 @@ public class MainActivity extends FragmentActivity implements
         dialog.dismiss();
     }
 
-    private GeofencingRequest getGeofencingRequest() {
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
-        builder.addGeofences(mGeofenceList);
-        return builder.build();
-    }
-
-    private PendingIntent getGeofencePendingIntent() {
-        //if (mGeofencePendingIntent != null) {
-        //    return mGeofencePendingIntent;
-        //}
-        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    /*public void populateGeofenceList() {
-        mGeofenceList.add(new Geofence.Builder()
-                .setRequestId("1")
-                .setCircularRegion(48.178454, 16.369699, 10)
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                        | GeofencingRequest.INITIAL_TRIGGER_EXIT)
-                .build());
-
-        mGeofenceList.add(new Geofence.Builder()
-                .setRequestId("2")
-                .setCircularRegion(48.17755, 16.369114, 10)
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                        | GeofencingRequest.INITIAL_TRIGGER_EXIT)
-                .build());
-
-        mGeofenceList.add(new Geofence.Builder()
-                .setRequestId("Nina Wohnung")
-                .setCircularRegion(48.173957, 16.382527, 10)
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                        | GeofencingRequest.INITIAL_TRIGGER_EXIT)
-                .build());
-
-        mGeofenceList.add(new Geofence.Builder()
-                .setRequestId("Reumannplatz")
-                .setCircularRegion(48.175213, 16.377489, 10)
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                        | GeofencingRequest.INITIAL_TRIGGER_EXIT)
-                .build());
-    }*/
 }
 
 

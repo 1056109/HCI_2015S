@@ -3,14 +3,18 @@ package at.at.tuwien.hci.hciss2015.util;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
+import android.util.SparseArray;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import at.at.tuwien.hci.hciss2015.R;
 import at.at.tuwien.hci.hciss2015.domain.PointOfInterest;
@@ -30,6 +34,9 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
 
     private PointOfInterestDaoImpl daoInstance;
 
+    //private static SparseArray<Marker> markers;
+    private static Map<Integer, Marker> markers;
+
     public MyMarkerDrawer(Context context, GoogleMap map) {
         this.context = context;
         this.map = map;
@@ -38,6 +45,7 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
 
         PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(context));
         daoInstance = PointOfInterestDaoImpl.getInstance();
+        markers = new HashMap<Integer, Marker>();
     }
 
 
@@ -45,18 +53,10 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
     protected Boolean doInBackground(Void... params) {
         handleBitmapDescriptors();
 
-        //LatLng test = new LatLng(48.209272, 16.372801);
-        //Log.i(MyMarkerDrawer.class.getSimpleName(), test.latitude + " " + test.longitude);
-
         List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getAllUnvisitedPOIs());
-        //List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getVisitedPOIsByPosition(48.209272, 16.372801, 1000));
-        //List<PointOfInterest> pois = new ArrayList<PointOfInterest>(daoInstance.getVisitedPOIsByMinMaxPosition(48.209272, 16.372801, 1000, 3000));
         for(int i = 0; i < pois.size(); i++) {
             publishProgress(pois.get(i));
         }
-        //for (PointOfInterest poi : pois) {
-        //    publishProgress(poi);
-        //}
 
         return true;
     }
@@ -72,12 +72,13 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
     }
 
     public void drawMarker(GoogleMap map, PointOfInterest poi) {
-        map.addMarker(new MarkerOptions()
+        Marker marker = map.addMarker(new MarkerOptions()
                         .title(poi.getDescription())
                         .position(poi.getLatLng())
+                        .snippet("this is a test snippet")
                         .icon(bmpDescriptors[poi.getType()])
-                        .snippet(String.valueOf(poi.getType()))
         );
+        markers.put(poi.getId(), marker);
     }
 
     private void handleBitmapDescriptors() {
@@ -90,6 +91,10 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
         bmpDescriptors[4] = BitmapDescriptorFactory.fromResource(myMarkerIcons.getResourceId(4, -1));
 
         myMarkerIcons.recycle();
+    }
+
+    public static Map<Integer, Marker> getMarkers(){
+        return markers;
     }
 
 }

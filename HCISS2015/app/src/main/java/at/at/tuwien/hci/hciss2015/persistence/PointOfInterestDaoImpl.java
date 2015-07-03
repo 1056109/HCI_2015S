@@ -232,7 +232,7 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
 
         String selection = "("+TableEntry.AREA + ">" + MIN_AREA + " OR " + TableEntry.AREA + " IS NULL) AND "
                 + "("+TableEntry.LNG + " BETWEEN " + lngSouth + " AND " + lngNorth + ") AND "
-                + "("+TableEntry.LAT + " BETWEEN " + latWest + " AND " + latEast + ")";
+                + "("+TableEntry.LAT + " BETWEEN " + latWest + " AND " + latEast + ") AND " + TableEntry.FLAG + " = 0";
 
         SQLiteDatabase db = myDbHelper.getReadableDatabase();
         try {

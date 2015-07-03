@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 
+import at.at.tuwien.hci.hciss2015.persistence.MyDatabaseHelper;
+import at.at.tuwien.hci.hciss2015.persistence.PointOfInterestDaoImpl;
 import at.at.tuwien.hci.hciss2015.util.SharedPreferencesHandler;
 
 /**
