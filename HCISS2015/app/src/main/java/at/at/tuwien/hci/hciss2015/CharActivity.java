@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Vibrator;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,7 +52,7 @@ public class CharActivity extends Activity {
 
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        Log.i(TAG, "SOURCE ACTIVITY: " + getIntent().getStringExtra("activity"));
+        //Log.i(TAG, "SOURCE ACTIVITY: " + getIntent().getStringExtra("activity"));
 
         sharedPref = new SharedPreferencesHandler(this);
 
@@ -112,8 +113,7 @@ public class CharActivity extends Activity {
             Intent intent = new Intent(CharActivity.this, AnimationSampleActivity.class);
             startActivity(intent);
         }else {
-            Intent intent = new Intent(CharActivity.this, MainActivity.class);
-            startActivity(intent);
+            this.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
         }
         finish();
     }

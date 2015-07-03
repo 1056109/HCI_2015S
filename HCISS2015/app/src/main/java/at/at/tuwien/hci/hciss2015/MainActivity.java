@@ -737,11 +737,25 @@ public class MainActivity extends FragmentActivity implements
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+        myDrawerList.setItemChecked(0, true);
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        myDrawerList.setItemChecked(0, true);
+    }
+
+    //todo all: disconnect googleApiClient onStop or onDestroy !?
+    @Override
     protected void onStop() {
         super.onStop();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
@@ -887,8 +901,8 @@ public class MainActivity extends FragmentActivity implements
         private void selectItem(int position) {
             if (position == 1) {
                 Intent intent = new Intent(MainActivity.this, CharActivity.class);
+                intent.putExtra("activity", TAG);
                 startActivity(intent);
-                finish();
             }
             if (position == 2) {
                 //startDialog Fall verwerfen
@@ -901,6 +915,7 @@ public class MainActivity extends FragmentActivity implements
             if (position == 4) {
                 //startDialog Help
                 startActivity(new Intent(MainActivity.this, AnimationSampleActivity.class));
+                finish();
             }
             if (position == 5) {
                 //startDialog Info
