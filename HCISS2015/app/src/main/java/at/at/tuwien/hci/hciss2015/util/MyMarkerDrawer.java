@@ -75,7 +75,7 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
         Marker marker = map.addMarker(new MarkerOptions()
                         .title(poi.getDescription())
                         .position(poi.getLatLng())
-                        .snippet("this is a test snippet")
+                        .snippet(String.valueOf(poi.getId()) + ";" + String.valueOf(poi.getType()))
                         .icon(bmpDescriptors[poi.getType()])
         );
         markers.put(poi.getId(), marker);

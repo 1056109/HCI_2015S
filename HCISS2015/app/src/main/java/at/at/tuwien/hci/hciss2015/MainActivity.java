@@ -12,7 +12,6 @@ import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +34,6 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -54,7 +52,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +68,6 @@ import at.at.tuwien.hci.hciss2015.persistence.MyDatabaseHelper;
 import at.at.tuwien.hci.hciss2015.persistence.PointOfInterestDaoImpl;
 import at.at.tuwien.hci.hciss2015.persistence.SuspectDaoImpl;
 import at.at.tuwien.hci.hciss2015.persistence.Types;
-import at.at.tuwien.hci.hciss2015.util.GeofenceTransitionsIntentService;
 import at.at.tuwien.hci.hciss2015.util.MyDrawerAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyListAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyMarkerDrawer;
@@ -163,7 +159,6 @@ public class MainActivity extends FragmentActivity implements
     private Handler timerHandler;
     private Runnable runnable;
 
-
     private ImageView imgSuspect1;
     private ImageView imgSuspect2;
     private ImageView imgSuspect3;
@@ -177,13 +172,8 @@ public class MainActivity extends FragmentActivity implements
 
     protected GoogleApiClient mGoogleApiClient;
 
-    protected ArrayList<Geofence> mGeofenceList;
-
-    private PendingIntent mGeofencePendingIntent;
-
     private Random randomizer;
 
-    //private SparseArray<Marker> currentMarkers = new SparseArray<Marker>();
     private Map<Integer, Marker> nearbyMarkers = new HashMap<Integer, Marker>();
 
     private TypedArray myMarkerIconsLarge;
@@ -264,12 +254,6 @@ public class MainActivity extends FragmentActivity implements
         featureTxt = (TextView) findViewById(R.id.merkmalProgress);
 
         sharedPrefs = new SharedPreferencesHandler(this);
-
-        mGeofenceList = new ArrayList<Geofence>();
-
-        mGeofencePendingIntent = null;
-
-        //populateGeofenceList();
 
         layoutInfl = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -353,17 +337,11 @@ public class MainActivity extends FragmentActivity implements
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(final Marker marker) {
-                        if (colleagueState.equals(ColleagueState.READY)) {
-                            marker.hideInfoWindow();
+                        if (colleagueState == ColleagueState.READY) {
                             openDialog(R.layout.colleguedialog);
+                            return true;
                         } else if(marker.getTitle().contains("Hinweis")) { // if marker source is clicked
                             final String[] poiData = marker.getSnippet().split(";");
-                            //marker.showInfoWindow();
-                            //mMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-                            //Toast.makeText(MainActivity.this, marker.getTitle(), Toast.LENGTH_SHORT).show();
-                            //openDialog(R.layout.marker_dialog);
-                            //marker.remove();
-
                             dialog = new Dialog(context);
                             dialog.setCancelable(false);
 
@@ -529,10 +507,7 @@ public class MainActivity extends FragmentActivity implements
 
     public void abortCase(View view) {
         Log.e(TAG, "aborted, reset db!");
-        daoPoiInstance.updatePOIFlag(4432, 0);
-        daoPoiInstance.updatePOIFlag(4433, 0);
-        daoPoiInstance.updatePOIFlag(4434, 0);
-        daoPoiInstance.updatePOIFlag(4435, 0);
+        daoPoiInstance.resetAllFlags();
         dialog.dismiss();
     }
 
@@ -849,8 +824,31 @@ public class MainActivity extends FragmentActivity implements
 
         @Override
         public View getInfoWindow(Marker marker) {
+            String[] poiData = marker.getSnippet().split(";");
+
             TextView title = (TextView) myCustomInfoWindow.findViewById(R.id.txtTitle);
+            ImageView iw_img_weapon = (ImageView) myCustomInfoWindow.findViewById(R.id.iw_img_weapon);
+            ImageView iw_img_map = (ImageView) myCustomInfoWindow.findViewById(R.id.iw_img_map);
+            ImageView iw_img_feature = (ImageView) myCustomInfoWindow.findViewById(R.id.iw_img_feature);
+
             title.setText(marker.getTitle());
+            iw_img_weapon.setVisibility(View.VISIBLE);
+            iw_img_map.setVisibility(View.VISIBLE);
+            iw_img_feature.setVisibility(View.VISIBLE);
+
+            if(Integer.parseInt(poiData[1]) == 0) {
+                iw_img_weapon.setVisibility(View.GONE);
+            } else if(Integer.parseInt(poiData[1]) == 1) {
+                iw_img_map.setVisibility(View.GONE);
+                iw_img_feature.setVisibility(View.GONE);
+            } else if(Integer.parseInt(poiData[1]) == 2) {
+                iw_img_weapon.setVisibility(View.GONE);
+                iw_img_feature.setVisibility(View.GONE);
+            } else {
+                iw_img_weapon.setVisibility(View.GONE);
+                iw_img_map.setVisibility(View.GONE);
+            }
+
             return myCustomInfoWindow;
         }
 
