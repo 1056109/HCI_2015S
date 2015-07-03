@@ -347,8 +347,9 @@ public class MainActivity extends FragmentActivity implements
 
                             final View layout = layoutInfl.inflate(R.layout.marker_dialog, null, false);
 
-                            ImageButton btn1 = (ImageButton) layout.findViewById(R.id.md_btn_weapon);
-                            btn1.setOnClickListener(new OnClickListener() {
+                            ImageButton mdBtnWeapon  = (ImageButton) layout.findViewById(R.id.md_btn_weapon);
+                            mdBtnWeapon.setVisibility(View.VISIBLE);
+                            mdBtnWeapon.setOnClickListener(new OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     //addWeapon(layout);
@@ -359,8 +360,10 @@ public class MainActivity extends FragmentActivity implements
                                     dialog.dismiss();
                                 }
                             });
-                            ImageButton btn2 = (ImageButton) layout.findViewById(R.id.md_btn_map);
-                            btn2.setOnClickListener(new OnClickListener() {
+
+                            ImageButton mdBtnMap = (ImageButton) layout.findViewById(R.id.md_btn_map);
+                            mdBtnMap.setVisibility(View.VISIBLE);
+                            mdBtnMap.setOnClickListener(new OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     //addMapdetail(layout);
@@ -371,8 +374,10 @@ public class MainActivity extends FragmentActivity implements
                                     dialog.dismiss();
                                 }
                             });
-                            ImageButton btn3 = (ImageButton) layout.findViewById(R.id.md_btn_feature);
-                            btn3.setOnClickListener(new OnClickListener() {
+
+                            ImageButton mdBtnFeature = (ImageButton) layout.findViewById(R.id.md_btn_feature);
+                            mdBtnFeature.setVisibility(View.VISIBLE);
+                            mdBtnFeature.setOnClickListener(new OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     //selectFeature(layout);
@@ -383,6 +388,20 @@ public class MainActivity extends FragmentActivity implements
                                     dialog.dismiss();
                                 }
                             });
+
+                            if(Integer.parseInt(poiData[1]) == 0) {
+                                mdBtnWeapon.setVisibility(View.GONE);
+                            } else if(Integer.parseInt(poiData[1]) == 1) {
+                                mdBtnMap.setVisibility(View.GONE);
+                                mdBtnFeature.setVisibility(View.GONE);
+                            } else if(Integer.parseInt(poiData[1]) == 2) {
+                                mdBtnWeapon.setVisibility(View.GONE);
+                                mdBtnFeature.setVisibility(View.GONE);
+                            } else {
+                                mdBtnWeapon.setVisibility(View.GONE);
+                                mdBtnMap.setVisibility(View.GONE);
+                            }
+
                             dialog.setContentView(layout);
                             Window window = dialog.getWindow();
                             window.setBackgroundDrawableResource(android.R.color.transparent);
@@ -768,7 +787,7 @@ public class MainActivity extends FragmentActivity implements
 
     public void checkMarkers(Location location){
 
-        if(MyMarkerDrawer.getMarkers().isEmpty()) {
+        if( MyMarkerDrawer.getMarkers() == null || MyMarkerDrawer.getMarkers().isEmpty() ) {
             return;
         }
 
@@ -827,26 +846,26 @@ public class MainActivity extends FragmentActivity implements
             String[] poiData = marker.getSnippet().split(";");
 
             TextView title = (TextView) myCustomInfoWindow.findViewById(R.id.txtTitle);
-            ImageView iw_img_weapon = (ImageView) myCustomInfoWindow.findViewById(R.id.iw_img_weapon);
-            ImageView iw_img_map = (ImageView) myCustomInfoWindow.findViewById(R.id.iw_img_map);
-            ImageView iw_img_feature = (ImageView) myCustomInfoWindow.findViewById(R.id.iw_img_feature);
+            ImageView iwImgWeapon = (ImageView) myCustomInfoWindow.findViewById(R.id.iw_img_weapon);
+            ImageView iwImgMap = (ImageView) myCustomInfoWindow.findViewById(R.id.iw_img_map);
+            ImageView iwImgFeature = (ImageView) myCustomInfoWindow.findViewById(R.id.iw_img_feature);
 
             title.setText(marker.getTitle());
-            iw_img_weapon.setVisibility(View.VISIBLE);
-            iw_img_map.setVisibility(View.VISIBLE);
-            iw_img_feature.setVisibility(View.VISIBLE);
+            iwImgWeapon.setVisibility(View.VISIBLE);
+            iwImgMap.setVisibility(View.VISIBLE);
+            iwImgFeature.setVisibility(View.VISIBLE);
 
             if(Integer.parseInt(poiData[1]) == 0) {
-                iw_img_weapon.setVisibility(View.GONE);
+                iwImgWeapon.setVisibility(View.GONE);
             } else if(Integer.parseInt(poiData[1]) == 1) {
-                iw_img_map.setVisibility(View.GONE);
-                iw_img_feature.setVisibility(View.GONE);
+                iwImgMap.setVisibility(View.GONE);
+                iwImgFeature.setVisibility(View.GONE);
             } else if(Integer.parseInt(poiData[1]) == 2) {
-                iw_img_weapon.setVisibility(View.GONE);
-                iw_img_feature.setVisibility(View.GONE);
+                iwImgWeapon.setVisibility(View.GONE);
+                iwImgFeature.setVisibility(View.GONE);
             } else {
-                iw_img_weapon.setVisibility(View.GONE);
-                iw_img_map.setVisibility(View.GONE);
+                iwImgWeapon.setVisibility(View.GONE);
+                iwImgMap.setVisibility(View.GONE);
             }
 
             return myCustomInfoWindow;
