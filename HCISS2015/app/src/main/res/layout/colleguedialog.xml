@@ -76,9 +76,8 @@
             android:layout_margin="20dp"
             android:layout_weight="1"
             android:text="@string/send_collegue_yes"
-            android:onClick="send"
             android:textColor="@color/violett"
             android:background="@drawable/btn_android"
-            android:id="@+id/button4" />
+            android:id="@+id/cd_btn_send" />
     </LinearLayout>
 </LinearLayout>

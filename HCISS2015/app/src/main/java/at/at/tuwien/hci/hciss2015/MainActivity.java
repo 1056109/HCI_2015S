@@ -1,7 +1,6 @@
 package at.at.tuwien.hci.hciss2015;
 
 import android.app.Dialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -33,7 +32,6 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -167,7 +165,7 @@ public class MainActivity extends FragmentActivity implements
 
     private LinkedHashMap<String, String> features;
     //= new String[]{"Hautfarbe:", "Haarfarbe:", "Bart:",
-          //  "Brille:", "Narbe:"};           //array for labeling in featuredialog
+    //  "Brille:", "Narbe:"};           //array for labeling in featuredialog
 
 
     protected GoogleApiClient mGoogleApiClient;
@@ -246,7 +244,7 @@ public class MainActivity extends FragmentActivity implements
         txtColleagueState = (TextView) findViewById(R.id.colleagueState);
         send_colleague_desc = getResources().getString(R.string.send_colleague_desc);
         send_colleague_working_msg = getResources().getString(R.string.send_colleague_working_msg);
-        weaponTxt = (TextView)findViewById(R.id.weaponProgress);
+        weaponTxt = (TextView) findViewById(R.id.weaponProgress);
 
         mapBtn = (ImageButton) findViewById(R.id.btnMap);
         mapTxt = (TextView) findViewById(R.id.mapProgress);
@@ -254,6 +252,11 @@ public class MainActivity extends FragmentActivity implements
         featureTxt = (TextView) findViewById(R.id.merkmalProgress);
 
         sharedPrefs = new SharedPreferencesHandler(this);
+        activeCase = sharedPrefs.getCase();
+        if( activeCase != null && activeCase.isColleagueUsed() ) {
+            hideColleague();
+        }
+
 
         layoutInfl = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -262,12 +265,14 @@ public class MainActivity extends FragmentActivity implements
         openDialog(R.layout.start_case_layout);
     }
 
-    private void updateCaseProgress(){
-        activeCase = sharedPrefs.getCase();
+    private void updateCaseProgress() {
+        if(activeCase == null) {
+            activeCase = sharedPrefs.getCase();
+        }
         mapProgress = activeCase.getMapProgress();
         merkmalProgress = activeCase.getMerkmalProgress();
         hasDestination = activeCase.isSuspectResidenceFound();
-        colleagueUsed = activeCase.isColleagueUsed();
+        //colleagueUsed = activeCase.isColleagueUsed();
 
         features.put("Hautfarbe", activeCase.getSuspectProgress().getSkinColor());        //features of suspect
         features.put("Haarfarbe", activeCase.getSuspectProgress().getHairColor());
@@ -280,20 +285,20 @@ public class MainActivity extends FragmentActivity implements
         else
             weaponTxt.setText("0/1");
 
-        if (colleagueUsed)
-            hideColleague();
+        //if (colleagueUsed)
+        //    hideColleague();
 
-        mapTxt.setText(""+mapProgress+"/3");
-        featureTxt.setText(""+merkmalProgress+"/5");
+        mapTxt.setText("" + mapProgress + "/3");
+        featureTxt.setText("" + merkmalProgress + "/5");
 
         myStats = sharedPrefs.getStats();
-        if (myStats==null){
+        if (myStats == null) {
             myStats = new Stats();
             sharedPrefs.putStats(myStats);
         }
     }
 
-    private void hideColleague(){
+    private void hideColleague() {
         txtColleagueState.setVisibility(View.GONE);
         colleague.setVisibility(View.GONE);
     }
@@ -353,17 +358,25 @@ public class MainActivity extends FragmentActivity implements
                             ImageView cdImgWeapon = (ImageView) layout.findViewById(R.id.cd_img_weapon);
                             ImageView cdImgMap = (ImageView) layout.findViewById(R.id.cd_img_map);
                             ImageView cdImgFeature = (ImageView) layout.findViewById(R.id.cd_img_feature);
+                            final Button cdBtnSend = (Button) layout.findViewById(R.id.cd_btn_send);
+                            cdBtnSend.setOnClickListener(new OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    send( Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]) );
+                                    marker.remove();
+                                }
+                            });
 
                             cdImgWeapon.setVisibility(View.VISIBLE);
                             cdImgMap.setVisibility(View.VISIBLE);
                             cdImgFeature.setVisibility(View.VISIBLE);
 
-                            if(Integer.parseInt(poiData[1]) == 0) {
+                            if (Integer.parseInt(poiData[1]) == 0) {
                                 cdImgWeapon.setVisibility(View.GONE);
-                            } else if(Integer.parseInt(poiData[1]) == 1) {
+                            } else if (Integer.parseInt(poiData[1]) == 1) {
                                 cdImgMap.setVisibility(View.GONE);
                                 cdImgFeature.setVisibility(View.GONE);
-                            } else if(Integer.parseInt(poiData[1]) == 2) {
+                            } else if (Integer.parseInt(poiData[1]) == 2) {
                                 cdImgWeapon.setVisibility(View.GONE);
                                 cdImgFeature.setVisibility(View.GONE);
                             } else {
@@ -378,18 +391,18 @@ public class MainActivity extends FragmentActivity implements
 
                             return true;
 
-                        } else if(marker.getTitle().contains("Hinweis")) { // on marker in 30m range click
+                        } else if (marker.getTitle().contains("Hinweis")) { // on marker in 30m range click
                             dialog = new Dialog(context);
                             dialog.setCancelable(false);
 
                             final View layout = layoutInfl.inflate(R.layout.marker_dialog, null, false);
 
-                            ImageButton mdBtnWeapon  = (ImageButton) layout.findViewById(R.id.md_btn_weapon);
+                            final ImageButton mdBtnWeapon = (ImageButton) layout.findViewById(R.id.md_btn_weapon);
                             mdBtnWeapon.setVisibility(View.VISIBLE);
                             mdBtnWeapon.setOnClickListener(new OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    //addWeapon(layout);
+                                    addWeapon(view);
                                     marker.remove();
                                     nearbyMarkers.remove(Integer.parseInt(poiData[0]));
                                     MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
@@ -402,8 +415,8 @@ public class MainActivity extends FragmentActivity implements
                             mdBtnMap.setVisibility(View.VISIBLE);
                             mdBtnMap.setOnClickListener(new OnClickListener() {
                                 @Override
-                                public void onClick(View v) {
-                                    //addMapdetail(layout);
+                                public void onClick(View view) {
+                                    addMapdetail(view);
                                     marker.remove();
                                     nearbyMarkers.remove(Integer.parseInt(poiData[0]));
                                     MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
@@ -416,8 +429,8 @@ public class MainActivity extends FragmentActivity implements
                             mdBtnFeature.setVisibility(View.VISIBLE);
                             mdBtnFeature.setOnClickListener(new OnClickListener() {
                                 @Override
-                                public void onClick(View v) {
-                                    //selectFeature(layout);
+                                public void onClick(View view) {
+                                    selectFeature(view);
                                     marker.remove();
                                     nearbyMarkers.remove(Integer.parseInt(poiData[0]));
                                     MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
@@ -426,12 +439,12 @@ public class MainActivity extends FragmentActivity implements
                                 }
                             });
 
-                            if(Integer.parseInt(poiData[1]) == 0) {
+                            if (Integer.parseInt(poiData[1]) == 0) {
                                 mdBtnWeapon.setVisibility(View.GONE);
-                            } else if(Integer.parseInt(poiData[1]) == 1) {
+                            } else if (Integer.parseInt(poiData[1]) == 1) {
                                 mdBtnMap.setVisibility(View.GONE);
                                 mdBtnFeature.setVisibility(View.GONE);
-                            } else if(Integer.parseInt(poiData[1]) == 2) {
+                            } else if (Integer.parseInt(poiData[1]) == 2) {
                                 mdBtnWeapon.setVisibility(View.GONE);
                                 mdBtnFeature.setVisibility(View.GONE);
                             } else {
@@ -466,7 +479,7 @@ public class MainActivity extends FragmentActivity implements
 
 
     public void addMapdetail(View view) {            //testing function
-        if (mapProgress!=3){
+        if (mapProgress != 3) {
             mapProgress++;
             activeCase.setMapProgress(mapProgress);
             sharedPrefs.putCase(activeCase);
@@ -476,7 +489,7 @@ public class MainActivity extends FragmentActivity implements
 
             vibrate();
             dialog.dismiss();
-        }else{
+        } else {
             handleCustomToast(getResources().getString(R.string.nonew_hintMap));
 
             vibrate();
@@ -495,11 +508,11 @@ public class MainActivity extends FragmentActivity implements
         openMerkmale(view);
     }
 
-    public void addWeapon(View view){ //TODO implementierung tatwaffen-logik
+    public void addWeapon(View view) { //TODO implementierung tatwaffen-logik
         //Eintraege nur fuer testen, ersetzt durch random-auswahl
 
         activeCase.setWeaponLocationFound(true);
-        merkmalProgress=3;
+        merkmalProgress = 3;
         activeCase.setMerkmalProgress(merkmalProgress);
         sharedPrefs.putCase(activeCase);
 
@@ -516,22 +529,22 @@ public class MainActivity extends FragmentActivity implements
 
         LinkedHashMap<String, String> crimeCommitterFeatures = new LinkedHashMap<>();
         try {
-            if(features.containsKey("Hautfarbe") && features.get("Hautfarbe") != null) {
+            if (features.containsKey("Hautfarbe") && features.get("Hautfarbe") != null) {
                 crimeCommitterFeatures.put("Hautfarbe", activeCase.getCrimeCommitter().getSkinColor());
             }
-            if(features.containsKey("Haarfarbe") && features.get("Haarfarbe") != null) {
+            if (features.containsKey("Haarfarbe") && features.get("Haarfarbe") != null) {
                 crimeCommitterFeatures.put("Haarfarbe", activeCase.getCrimeCommitter().getHairColor());
             }
-            if(features.containsKey("Bart") && features.get("Bart") != null) {
+            if (features.containsKey("Bart") && features.get("Bart") != null) {
                 crimeCommitterFeatures.put("Bart", activeCase.getCrimeCommitter().getBeard());
             }
-            if(features.containsKey("Brille") && features.get("Brille") != null) {
+            if (features.containsKey("Brille") && features.get("Brille") != null) {
                 crimeCommitterFeatures.put("Brille", activeCase.getCrimeCommitter().getGlasses());
             }
-            if(features.containsKey("Narbe") && features.get("Narbe") != null) {
+            if (features.containsKey("Narbe") && features.get("Narbe") != null) {
                 crimeCommitterFeatures.put("Narbe", activeCase.getCrimeCommitter().getScar());
             }
-            if(!crimeCommitterFeatures.isEmpty()) {
+            if (!crimeCommitterFeatures.isEmpty()) {
                 Set<String> keySet = crimeCommitterFeatures.keySet();
                 String[] keyArray = keySet.toArray(new String[keySet.size()]);
                 String randomFeature = keyArray[randomizer.nextInt(keyArray.length)];
@@ -570,11 +583,16 @@ public class MainActivity extends FragmentActivity implements
     public void abortCase(View view) {
         Log.e(TAG, "aborted, reset db!");
         daoPoiInstance.resetAllFlags();
+        sharedPrefs.removeCase();
+        //todo wenn statistiken auch nur dem aktuellen fall gehören, sollen sie auch gelöscht werden!
         dialog.dismiss();
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     private void drawMap() {
-        int zoomLevel=15;
+        int zoomLevel = 15;
 
         if (circle != null)
             circle.remove();
@@ -611,16 +629,13 @@ public class MainActivity extends FragmentActivity implements
 
         if (mapProgress == 0) {
             handleCustomToast(getResources().getString(R.string.zeroMap));
-        }
-
-        else if (circle==null)
+        } else if (circle == null)
             drawMap();
         else {
             if (!showCircle) {
                 showCircle = true;
                 mapBtn.setImageResource(R.drawable.btn_map_pressed);
-            }
-            else {
+            } else {
                 showCircle = false;
                 mapBtn.setImageResource(R.drawable.btn_map);
             }
@@ -683,22 +698,22 @@ public class MainActivity extends FragmentActivity implements
         featureList.setAdapter(adapter);
     }
 
-    private void setStats(View layout){
-        TextView solved = (TextView)layout.findViewById(R.id.solvedRate);
-        solved.setText(""+sharedPrefs.getStats().getSolved());
-        TextView missed = (TextView)layout.findViewById(R.id.missedRate);
-        missed.setText(""+sharedPrefs.getStats().getMissed());
-        TextView mapSolved = (TextView)layout.findViewById(R.id.mapRate);
-        mapSolved.setText(""+sharedPrefs.getStats().getMap());
-        TextView featureSolved = (TextView)layout.findViewById(R.id.featureRate);
-        featureSolved.setText(""+sharedPrefs.getStats().getFeatures());
-        TextView rate = (TextView)layout.findViewById(R.id.statRate);
+    private void setStats(View layout) {
+        TextView solved = (TextView) layout.findViewById(R.id.solvedRate);
+        solved.setText("" + sharedPrefs.getStats().getSolved());
+        TextView missed = (TextView) layout.findViewById(R.id.missedRate);
+        missed.setText("" + sharedPrefs.getStats().getMissed());
+        TextView mapSolved = (TextView) layout.findViewById(R.id.mapRate);
+        mapSolved.setText("" + sharedPrefs.getStats().getMap());
+        TextView featureSolved = (TextView) layout.findViewById(R.id.featureRate);
+        featureSolved.setText("" + sharedPrefs.getStats().getFeatures());
+        TextView rate = (TextView) layout.findViewById(R.id.statRate);
         int ratenumber;
-        if (sharedPrefs.getStats().getSolved()==0 && sharedPrefs.getStats().getMissed()==0)
+        if (sharedPrefs.getStats().getSolved() == 0 && sharedPrefs.getStats().getMissed() == 0)
             ratenumber = 0;
         else
             ratenumber = sharedPrefs.getStats().getSolved() /
-                (sharedPrefs.getStats().getSolved()+sharedPrefs.getStats().getMissed());
+                    (sharedPrefs.getStats().getSolved() + sharedPrefs.getStats().getMissed());
         rate.setText("" + ratenumber + " %");
     }
 
@@ -749,11 +764,11 @@ public class MainActivity extends FragmentActivity implements
         }
     }
 
-    public void send(View view) {
+    public void send(int poiId, int poiType) {
         colleague.setImageResource(R.drawable.info_collegue);
         colleague.setClickable(false);
         handleCustomToast(send_colleague_working_msg);
-        executeTimerTask();
+        executeTimerTask(poiId, poiType);
         colleagueState = ColleagueState.WORKING;
         dialog.dismiss();
     }
@@ -830,8 +845,8 @@ public class MainActivity extends FragmentActivity implements
         Log.v("myNewLocation", "Latitude: " + location.getLatitude() +
                 ", Longitude: " + location.getLongitude());
 
-        if(!nearbyMarkers.isEmpty()) {
-            for(int key : nearbyMarkers.keySet()) {
+        if (!nearbyMarkers.isEmpty()) {
+            for (int key : nearbyMarkers.keySet()) {
                 MyMarkerDrawer.getMarkers().get(key).setVisible(true);
                 nearbyMarkers.get(key).remove();
             }
@@ -841,19 +856,19 @@ public class MainActivity extends FragmentActivity implements
         checkMarkers(location);
     }
 
-    public void checkMarkers(Location location){
+    public void checkMarkers(Location location) {
 
-        if( MyMarkerDrawer.getMarkers() == null || MyMarkerDrawer.getMarkers().isEmpty() ) {
+        if (MyMarkerDrawer.getMarkers() == null || MyMarkerDrawer.getMarkers().isEmpty()) {
             return;
         }
 
         List<PointOfInterest> nearbyPois = new ArrayList<PointOfInterest>(
                 daoPoiInstance.getPOIsByPosition(location.getLatitude(), location.getLongitude(), 30));
-        Log.v("CheckMarkers","Counted nearby Markers: " + nearbyPois.size());
+        Log.v("CheckMarkers", "Counted nearby Markers: " + nearbyPois.size());
 
         Map<Integer, Marker> allMarkers = new HashMap<Integer, Marker>(MyMarkerDrawer.getMarkers());
 
-        for(PointOfInterest poi : nearbyPois) {
+        for (PointOfInterest poi : nearbyPois) {
             Marker marker = mMap.addMarker(new MarkerOptions()
                             .position(poi.getLatLng())
                             .title("Neuer Hinweis: " + poi.getDescription())
@@ -861,7 +876,7 @@ public class MainActivity extends FragmentActivity implements
                             .icon(bmpDescriptorsLarge[poi.getType()])
             );
 
-            if(allMarkers.containsKey(poi.getId())) {
+            if (allMarkers.containsKey(poi.getId())) {
                 allMarkers.get(poi.getId()).setVisible(false);
                 nearbyMarkers.put(poi.getId(), marker);
             }
@@ -883,7 +898,7 @@ public class MainActivity extends FragmentActivity implements
     public void onResult(Status status) {
         if (status.isSuccess()) {
 
-            Toast.makeText(this, "geofence transition - enter",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "geofence transition - enter", Toast.LENGTH_SHORT).show();
         } else {
             Log.e(TAG, "something is wrong");
         }
@@ -911,12 +926,12 @@ public class MainActivity extends FragmentActivity implements
             iwImgMap.setVisibility(View.VISIBLE);
             iwImgFeature.setVisibility(View.VISIBLE);
 
-            if(Integer.parseInt(poiData[1]) == 0) {
+            if (Integer.parseInt(poiData[1]) == 0) {
                 iwImgWeapon.setVisibility(View.GONE);
-            } else if(Integer.parseInt(poiData[1]) == 1) {
+            } else if (Integer.parseInt(poiData[1]) == 1) {
                 iwImgMap.setVisibility(View.GONE);
                 iwImgFeature.setVisibility(View.GONE);
-            } else if(Integer.parseInt(poiData[1]) == 2) {
+            } else if (Integer.parseInt(poiData[1]) == 2) {
                 iwImgWeapon.setVisibility(View.GONE);
                 iwImgFeature.setVisibility(View.GONE);
             } else {
@@ -983,7 +998,7 @@ public class MainActivity extends FragmentActivity implements
         finish();
     }
 
-    private void executeTimerTask() {
+    private void executeTimerTask(final int poiId, final int poiType) {
         //startTime = 900000; //15 Min
         startTime = 10000;
         timerHandler = new Handler();
@@ -1007,9 +1022,11 @@ public class MainActivity extends FragmentActivity implements
                     timerHandler.postDelayed(this, 1000);
                 } else { //TODO colleague-logic comes here
                     activeCase.setColleagueUsed(true);
-                    colleagueUsed=true;
+                    colleagueUsed = true;
                     sharedPrefs.putCase(activeCase);
                     hideColleague();
+                    MyMarkerDrawer.getMarkers().remove(poiId);
+                    daoPoiInstance.updatePOIFlag(poiId, 1);
                     timerHandler.removeCallbacks(runnable);
                     //fire info dialog
                 }
@@ -1091,11 +1108,11 @@ public class MainActivity extends FragmentActivity implements
         //TODO: Wenn keine POIs in der Naehe -> crash
         PointOfInterest crimeScene = crimeScenePois.get(randomizer.nextInt(crimeScenePois.size()));
 
-        List<PointOfInterest> suspectResidencePois =  new ArrayList<PointOfInterest>(
+        List<PointOfInterest> suspectResidencePois = new ArrayList<PointOfInterest>(
                 daoPoiInstance.getPOIsByMinMaxPositionType(crimeScene.getLat(), crimeScene.getLng(), 500, 2000, Types.OTHER));
         PointOfInterest suspectResidence = suspectResidencePois.get(randomizer.nextInt(suspectResidencePois.size()));
 
-        List<PointOfInterest> weaponLocationPois =  new ArrayList<PointOfInterest>(
+        List<PointOfInterest> weaponLocationPois = new ArrayList<PointOfInterest>(
                 daoPoiInstance.getPOIsByMinMaxPositionType(crimeScene.getLat(), crimeScene.getLng(), 300, 1000, Types.OTHER));
         PointOfInterest weaponLocation = weaponLocationPois.get(randomizer.nextInt(weaponLocationPois.size()));
 
@@ -1108,7 +1125,7 @@ public class MainActivity extends FragmentActivity implements
         usedIds.add(crimeCommitter.getSuspectId());
 
         suspectListHelper = new ArrayList<Suspect>(daoSuspectInstance.getSuspectsByCharacterisitcs(
-                crimeCommitter.getScar(),crimeCommitter.getGlasses(), crimeCommitter.getSkinColor(),
+                crimeCommitter.getScar(), crimeCommitter.getGlasses(), crimeCommitter.getSkinColor(),
                 crimeCommitter.getHairColor(), null, usedIds));
         Suspect suspect = suspectListHelper.get(randomizer.nextInt(suspectListHelper.size()));
         suspect.setCrimeCommitter(false);
@@ -1116,7 +1133,7 @@ public class MainActivity extends FragmentActivity implements
         usedIds.add(suspect.getSuspectId());
 
         suspectListHelper = new ArrayList<Suspect>(daoSuspectInstance.getSuspectsByCharacterisitcs(
-                crimeCommitter.getScar(),crimeCommitter.getGlasses(), crimeCommitter.getSkinColor(),
+                crimeCommitter.getScar(), crimeCommitter.getGlasses(), crimeCommitter.getSkinColor(),
                 null, null, usedIds));
         suspect = suspectListHelper.get(randomizer.nextInt(suspectListHelper.size()));
         suspect.setCrimeCommitter(false);
@@ -1124,7 +1141,7 @@ public class MainActivity extends FragmentActivity implements
         usedIds.add(suspect.getSuspectId());
 
         suspectListHelper = new ArrayList<Suspect>(daoSuspectInstance.getSuspectsByCharacterisitcs(
-                crimeCommitter.getScar(),crimeCommitter.getGlasses(), null,
+                crimeCommitter.getScar(), crimeCommitter.getGlasses(), null,
                 null, null, usedIds));
         suspect = suspectListHelper.get(randomizer.nextInt(suspectListHelper.size()));
         suspect.setCrimeCommitter(false);
@@ -1132,7 +1149,7 @@ public class MainActivity extends FragmentActivity implements
         usedIds.add(suspect.getSuspectId());
 
         suspectListHelper = new ArrayList<Suspect>(daoSuspectInstance.getSuspectsByCharacterisitcs(
-                crimeCommitter.getScar(),null, null,
+                crimeCommitter.getScar(), null, null,
                 null, null, usedIds));
         suspect = suspectListHelper.get(randomizer.nextInt(suspectListHelper.size()));
         suspect.setCrimeCommitter(false);
