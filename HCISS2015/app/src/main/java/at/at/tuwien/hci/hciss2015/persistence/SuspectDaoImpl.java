@@ -55,7 +55,7 @@ public class SuspectDaoImpl implements ISuspectDao {
         Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, sortOrder);
 
         Suspect suspect = null;
-        if(cursor.moveToNext()) {
+        while(cursor.moveToNext()) {
             suspect = new Suspect();
             suspect.setSuspectId(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.ID)));
             suspect.setScar(cursor.getString(cursor.getColumnIndexOrThrow(TableEntry.SCAR)));
@@ -79,7 +79,7 @@ public class SuspectDaoImpl implements ISuspectDao {
         Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, null);
 
         Suspect suspect = null;
-        if(cursor.moveToNext()) {
+        while(cursor.moveToNext()) {
             suspect = new Suspect();
             suspect.setSuspectId(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.ID)));
             suspect.setScar(cursor.getString(cursor.getColumnIndexOrThrow(TableEntry.SCAR)));
@@ -129,7 +129,7 @@ public class SuspectDaoImpl implements ISuspectDao {
         Cursor cursor = db.query(TABLE_NAME, null, selection, null, null, null, sortOrder);
 
         Suspect suspect = null;
-        if(cursor.moveToNext()) {
+        while(cursor.moveToNext()) {
             suspect = new Suspect();
             suspect.setSuspectId(cursor.getInt(cursor.getColumnIndexOrThrow(TableEntry.ID)));
             suspect.setScar(cursor.getString(cursor.getColumnIndexOrThrow(TableEntry.SCAR)));
