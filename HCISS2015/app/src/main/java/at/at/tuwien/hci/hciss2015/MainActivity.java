@@ -335,13 +335,50 @@ public class MainActivity extends FragmentActivity implements
                 mMap.setMyLocationEnabled(true);
                 mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
                     @Override
                     public boolean onMarkerClick(final Marker marker) {
-                        if (colleagueState == ColleagueState.READY) {
-                            openDialog(R.layout.colleguedialog);
+
+                        /*
+                        *  Marker click handling
+                        * */
+                        final String[] poiData = marker.getSnippet().split(";");
+
+                        if (colleagueState == ColleagueState.READY) { // send colleague case
+                            dialog = new Dialog(context);
+                            dialog.setCancelable(false);
+
+                            final View layout = layoutInfl.inflate(R.layout.colleguedialog, null, false);
+
+                            ImageView cdImgWeapon = (ImageView) layout.findViewById(R.id.cd_img_weapon);
+                            ImageView cdImgMap = (ImageView) layout.findViewById(R.id.cd_img_map);
+                            ImageView cdImgFeature = (ImageView) layout.findViewById(R.id.cd_img_feature);
+
+                            cdImgWeapon.setVisibility(View.VISIBLE);
+                            cdImgMap.setVisibility(View.VISIBLE);
+                            cdImgFeature.setVisibility(View.VISIBLE);
+
+                            if(Integer.parseInt(poiData[1]) == 0) {
+                                cdImgWeapon.setVisibility(View.GONE);
+                            } else if(Integer.parseInt(poiData[1]) == 1) {
+                                cdImgMap.setVisibility(View.GONE);
+                                cdImgFeature.setVisibility(View.GONE);
+                            } else if(Integer.parseInt(poiData[1]) == 2) {
+                                cdImgWeapon.setVisibility(View.GONE);
+                                cdImgFeature.setVisibility(View.GONE);
+                            } else {
+                                cdImgWeapon.setVisibility(View.GONE);
+                                cdImgMap.setVisibility(View.GONE);
+                            }
+
+                            dialog.setContentView(layout);
+                            Window window = dialog.getWindow();
+                            window.setBackgroundDrawableResource(android.R.color.transparent);
+                            dialog.show();
+
                             return true;
-                        } else if(marker.getTitle().contains("Hinweis")) { // if marker source is clicked
-                            final String[] poiData = marker.getSnippet().split(";");
+
+                        } else if(marker.getTitle().contains("Hinweis")) { // on marker in 30m range click
                             dialog = new Dialog(context);
                             dialog.setCancelable(false);
 
@@ -409,7 +446,13 @@ public class MainActivity extends FragmentActivity implements
 
                             return true;
                         }
-                        return false;
+
+                        return false; //Every other case, show InfoWindow
+
+                        /*
+                        *  End marker click handling
+                        * */
+
                     }
                 });
             }
@@ -688,7 +731,6 @@ public class MainActivity extends FragmentActivity implements
 
     public void openDrawer(View view) {
         vibrate();
-
         myDrawerLayout.openDrawer(myDrawerList);
     }
 
@@ -1110,46 +1152,6 @@ public class MainActivity extends FragmentActivity implements
     }
 
 }
-
-
-
-//ArrayList<LatLng> hospitals = new ArrayList<>();
-
-
-/**
- * Location Listener, maybee needed or not, so the code is provided here to be sure
- * <p/>
- * Tile Overlay von Amer
- */
-        /*
-
-        // Acquire a reference to the system Location Manager
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-// Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                // Called when a new location is found by the network location provider.
-                LatLng pos = new LatLng(location.getLatitude(), location.getLongitude());
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 12));
-                mMap.addMarker(new MarkerOptions()
-                                .position(pos)
-                                .title("Hospital 1")
-                );-
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-        };
-
-// Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        */
-
 
 /**
  * Tile Overlay von Amer
