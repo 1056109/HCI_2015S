@@ -41,7 +41,7 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
         this.context = context;
         this.map = map;
 
-        bmpDescriptors = new BitmapDescriptor[5];
+        bmpDescriptors = new BitmapDescriptor[6];
 
         PointOfInterestDaoImpl.initializeInstance(new MyDatabaseHelper(context));
         daoInstance = PointOfInterestDaoImpl.getInstance();
@@ -89,6 +89,7 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
         bmpDescriptors[2] = BitmapDescriptorFactory.fromResource(myMarkerIcons.getResourceId(2, -1));
         bmpDescriptors[3] = BitmapDescriptorFactory.fromResource(myMarkerIcons.getResourceId(3, -1));
         bmpDescriptors[4] = BitmapDescriptorFactory.fromResource(myMarkerIcons.getResourceId(4, -1));
+        bmpDescriptors[5] = BitmapDescriptorFactory.fromResource(myMarkerIcons.getResourceId(5, -1));
 
         myMarkerIcons.recycle();
     }

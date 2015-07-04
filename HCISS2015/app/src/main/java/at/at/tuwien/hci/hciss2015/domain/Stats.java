@@ -21,7 +21,7 @@ public class Stats {
     }
 
     public void setFeatures() {
-        features+=1;
+        features++;
     }
 
     public int getMap() {
@@ -37,7 +37,7 @@ public class Stats {
     }
 
     public void setSolved() {
-        solved+=1;
+        solved++;
     }
 
     public int getMissed() {
@@ -45,6 +45,6 @@ public class Stats {
     }
 
     public void setNotSolved() {
-        missed+=1;
+        missed++;
     }
 }

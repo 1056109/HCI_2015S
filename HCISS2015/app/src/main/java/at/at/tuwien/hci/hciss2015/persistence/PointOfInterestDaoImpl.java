@@ -587,6 +587,7 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
 
         ContentValues values = new ContentValues();
         values.put(TableEntry.FLAG, poi.getFlag());
+        values.put(TableEntry.TYPE, poi.getType());
 
         String selection = TableEntry.ID + " LIKE ?";
         String[] selectionArgs = { String.valueOf(poi.getId()) };
@@ -608,10 +609,27 @@ public class PointOfInterestDaoImpl implements IPointOfInterestDao {
         ContentValues values = new ContentValues();
         values.put(TableEntry.FLAG, 0);
 
-        //String selection = TableEntry.FLAG + " LIKE ?";
-        //String[] selectionArgs = { "1" };
         String selection = TableEntry.TYPE + " = 0 OR " + TableEntry.TYPE + " = 1 OR " +
                            TableEntry.TYPE + " = 2 OR " + TableEntry.TYPE + " = 3 ";
+
+        int count = db.update(
+                TABLE_NAME,
+                values,
+                selection,
+                null);
+
+        db.close();
+        return count;
+    }
+
+    public int resetOtherTypes() {
+        SQLiteDatabase db = myDbHelper.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TableEntry.FLAG, 1);
+        values.put(TableEntry.TYPE, Types.OTHER);
+
+        String selection = TableEntry.TYPE + " > 3";
 
         int count = db.update(
                 TABLE_NAME,

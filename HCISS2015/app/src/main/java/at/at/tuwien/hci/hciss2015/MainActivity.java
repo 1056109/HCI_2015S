@@ -93,6 +93,9 @@ public class MainActivity extends FragmentActivity implements
 
     private static final String TILE_SERVER_URL = "http://tile.openstreetmap.org/";
 
+    private static final int WEAPON_HINT_NUMBER = 3;
+    private static final int MAX_FEATURES = 5;
+    private static final int MAX_MAPHINTS = 3;
 
     private static final int IMG_DEFAULT_BACKGROUND_COLOR = 0xFFFFFF;
 
@@ -175,7 +178,7 @@ public class MainActivity extends FragmentActivity implements
     private Map<Integer, Marker> nearbyMarkers = new HashMap<Integer, Marker>();
 
     private TypedArray myMarkerIconsLarge;
-    private BitmapDescriptor[] bmpDescriptorsLarge = new BitmapDescriptor[5];
+    private BitmapDescriptor[] bmpDescriptorsLarge = new BitmapDescriptor[6];
 
     private LayoutInflater layoutInfl;
 
@@ -208,6 +211,7 @@ public class MainActivity extends FragmentActivity implements
         bmpDescriptorsLarge[2] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(2, -1));
         bmpDescriptorsLarge[3] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(3, -1));
         bmpDescriptorsLarge[4] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(4, -1));
+        bmpDescriptorsLarge[5] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(5, -1));
 
         myMarkerIconsLarge.recycle();
 
@@ -288,8 +292,8 @@ public class MainActivity extends FragmentActivity implements
         //if (colleagueUsed)
         //    hideColleague();
 
-        mapTxt.setText("" + mapProgress + "/3");
-        featureTxt.setText("" + merkmalProgress + "/5");
+        mapTxt.setText("" + mapProgress + "/" + MAX_MAPHINTS);
+        featureTxt.setText("" + merkmalProgress + "/" + MAX_FEATURES);
 
         myStats = sharedPrefs.getStats();
         if (myStats == null) {
@@ -335,6 +339,7 @@ public class MainActivity extends FragmentActivity implements
                 MyMarkerDrawer markerDrawer = new MyMarkerDrawer(context, mMap);
                 markerDrawer.execute();
 
+                mMap.getUiSettings().setMyLocationButtonEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
                 mMap.getUiSettings().setMapToolbarEnabled(false);
                 mMap.setMyLocationEnabled(true);
@@ -447,7 +452,7 @@ public class MainActivity extends FragmentActivity implements
                             } else if (Integer.parseInt(poiData[1]) == 2) {
                                 mdBtnWeapon.setVisibility(View.GONE);
                                 mdBtnFeature.setVisibility(View.GONE);
-                            } else {
+                            } else if (Integer.parseInt(poiData[1]) == 3){
                                 mdBtnWeapon.setVisibility(View.GONE);
                                 mdBtnMap.setVisibility(View.GONE);
                             }
@@ -479,7 +484,7 @@ public class MainActivity extends FragmentActivity implements
 
 
     public void addMapdetail(View view) {            //testing function
-        if (mapProgress != 3) {
+        if (mapProgress < MAX_MAPHINTS) {
             mapProgress++;
             activeCase.setMapProgress(mapProgress);
             sharedPrefs.putCase(activeCase);
@@ -508,16 +513,35 @@ public class MainActivity extends FragmentActivity implements
         openMerkmale(view);
     }
 
-    public void addWeapon(View view) { //TODO implementierung tatwaffen-logik
-        //Eintraege nur fuer testen, ersetzt durch random-auswahl
+    public void addWeapon(View view) { //TODO
+        for(int i = 0;i < WEAPON_HINT_NUMBER;i++) {
+            if(randomizer.nextBoolean()) {
+                if(merkmalProgress < MAX_FEATURES) {
+                    selectFeature(view);
+                    merkmalProgress++;
+                } else if (mapProgress < MAX_MAPHINTS) {
+                    addMapdetail(view);
+                    mapProgress++;
+                }
+            } else {
+                if(mapProgress < MAX_MAPHINTS) {
+                    addMapdetail(view);
+                    mapProgress++;
+                } else if (merkmalProgress < MAX_FEATURES){
+                    selectFeature(view);
+                    merkmalProgress++;
+                }
+            }
+        }
 
         activeCase.setWeaponLocationFound(true);
-        merkmalProgress = 3;
         activeCase.setMerkmalProgress(merkmalProgress);
+        activeCase.setMapProgress(mapProgress);
         sharedPrefs.putCase(activeCase);
 
         weaponTxt.setText("1/1");
-        featureTxt.setText("1/5");
+        featureTxt.setText(merkmalProgress + "/"+ MAX_FEATURES);
+        mapTxt.setText(mapProgress + "/"+ MAX_MAPHINTS);
 
         handleCustomToast(getResources().getString(R.string.hint_weapon));
 
@@ -578,17 +602,6 @@ public class MainActivity extends FragmentActivity implements
 
         vibrate();
         dialog.dismiss();
-    }
-
-    public void abortCase(View view) {
-        Log.e(TAG, "aborted, reset db!");
-        daoPoiInstance.resetAllFlags();
-        sharedPrefs.removeCase();
-        //todo wenn statistiken auch nur dem aktuellen fall gehören, sollen sie auch gelöscht werden!
-        dialog.dismiss();
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
     }
 
     private void drawMap() {
@@ -1081,10 +1094,30 @@ public class MainActivity extends FragmentActivity implements
         openDialog(R.layout.end_case_layout);
     }
 
+    public void abortCase(View view) {
+        vibrate();
+        myStats.setNotSolved();
+        sharedPrefs.putStats(myStats);
+        daoPoiInstance.resetAllFlags();
+        daoPoiInstance.resetOtherTypes();
+        sharedPrefs.removeCase();
+        dialog.dismiss();
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
     public void endCase(View view) {
         vibrate();
+        myStats.setSolved();
+        sharedPrefs.putStats(myStats);
+        daoPoiInstance.resetAllFlags();
+        daoPoiInstance.resetOtherTypes();
+        sharedPrefs.removeCase();
         dialog.dismiss();
-        startCase(view);
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     public void startCase(View view) {
@@ -1098,15 +1131,30 @@ public class MainActivity extends FragmentActivity implements
         Location myLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         List<PointOfInterest> crimeScenePois;
-        if (myLocation != null) {
-            crimeScenePois = new ArrayList<PointOfInterest>(
-                    daoPoiInstance.getPOIsByPositionType(myLocation.getLatitude(), myLocation.getLongitude(), 300, Types.OTHER));
-        } else {
-            crimeScenePois = new ArrayList<PointOfInterest>(
-                    daoPoiInstance.getPOIsByPositionType(VIENNA.latitude, VIENNA.longitude, 300, Types.OTHER));
+        int searchRange = 300;
+        do {
+            if (myLocation != null) {
+                crimeScenePois = new ArrayList<PointOfInterest>(
+                        daoPoiInstance.getPOIsByPositionType(myLocation.getLatitude(), myLocation.getLongitude(), searchRange, Types.OTHER));
+            } else {
+                crimeScenePois = new ArrayList<PointOfInterest>(
+                        daoPoiInstance.getPOIsByPositionType(VIENNA.latitude, VIENNA.longitude, searchRange, Types.OTHER));
+            }
+            searchRange += 100;
+        } while (crimeScenePois.isEmpty() && searchRange < 1500);
+
+        if(crimeScenePois.isEmpty()) {
+            Log.e(TAG, "Crime scene could not be found");
         }
-        //TODO: Wenn keine POIs in der Naehe -> crash
+
         PointOfInterest crimeScene = crimeScenePois.get(randomizer.nextInt(crimeScenePois.size()));
+        Marker marker = mMap.addMarker(new MarkerOptions()
+                        .title(crimeScene.getDescription())
+                        .position(crimeScene.getLatLng())
+                        .snippet(String.valueOf(crimeScene.getId()) + ";" + String.valueOf(crimeScene.getType()))
+                        .icon(BitmapDescriptorFactory.fromResource(context.getResources().obtainTypedArray(R.array.my_marker_icons).getResourceId(4, -1))));
+        MyMarkerDrawer.getMarkers().put(crimeScene.getId(),marker);
+        daoPoiInstance.updatePOIFlag(crimeScene.getId(), 0);
 
         List<PointOfInterest> suspectResidencePois = new ArrayList<PointOfInterest>(
                 daoPoiInstance.getPOIsByMinMaxPositionType(crimeScene.getLat(), crimeScene.getLng(), 500, 2000, Types.OTHER));
@@ -1159,6 +1207,8 @@ public class MainActivity extends FragmentActivity implements
         Case crimeCase = new Case(crimeScene, suspectResidence, weaponLocation, suspectList);
         sharedPrefs.putCase(crimeCase);
         updateCaseProgress();
+
+
         dialog.dismiss();
     }
 
