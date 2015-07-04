@@ -26,14 +26,14 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/merkmalProgress"
+                android:id="@+id/featureProgress"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="-8dp"
                 android:background="@drawable/curve_shape_black"
                 android:gravity="center"
-                android:text="@string/merkmalProgress"
+                android:text="@string/featureProgress"
                 android:textColor="@color/white" />
 
             <ImageButton

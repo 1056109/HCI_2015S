@@ -11,7 +11,7 @@ public class Case {
     private PointOfInterest weaponLocation;
     private List<Suspect> suspectList;
     private int mapProgress;
-    private int merkmalProgress;
+    private int featureProgress;
     private Suspect suspectProgress;
     private boolean suspectResidenceFound;
     private boolean weaponLocationFound;
@@ -25,7 +25,7 @@ public class Case {
         this.weaponLocation = weaponLocation;
         this.suspectList = suspectList;
         this.mapProgress = 0;
-        this.merkmalProgress = 0;
+        this.featureProgress = 0;
         this.suspectProgress = new Suspect();
         this.suspectResidenceFound = false;
         this.weaponLocationFound = false;
@@ -72,12 +72,12 @@ public class Case {
         this.mapProgress = mapProgress;
     }
 
-    public int getMerkmalProgress(){
-        return merkmalProgress;
+    public int getFeatureProgress(){
+        return featureProgress;
     }
 
-    public void setMerkmalProgress(int merkmalProgress){
-        this.merkmalProgress = merkmalProgress;
+    public void setFeatureProgress(int featureProgress){
+        this.featureProgress = featureProgress;
     }
 
     public Suspect getSuspectProgress() {

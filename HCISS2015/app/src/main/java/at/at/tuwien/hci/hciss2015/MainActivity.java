@@ -253,7 +253,7 @@ public class MainActivity extends FragmentActivity implements
         mapBtn = (ImageButton) findViewById(R.id.btnMap);
         mapTxt = (TextView) findViewById(R.id.mapProgress);
         featureBtn = (ImageButton) findViewById(R.id.btnFeature);
-        featureTxt = (TextView) findViewById(R.id.merkmalProgress);
+        featureTxt = (TextView) findViewById(R.id.featureProgress);
 
         sharedPrefs = new SharedPreferencesHandler(this);
         activeCase = sharedPrefs.getCase();
@@ -274,7 +274,7 @@ public class MainActivity extends FragmentActivity implements
             activeCase = sharedPrefs.getCase();
         }
         mapProgress = activeCase.getMapProgress();
-        merkmalProgress = activeCase.getMerkmalProgress();
+        merkmalProgress = activeCase.getFeatureProgress();
         hasDestination = activeCase.isSuspectResidenceFound();
         //colleagueUsed = activeCase.isColleagueUsed();
 
@@ -491,7 +491,7 @@ public class MainActivity extends FragmentActivity implements
             myStats.setMap();
             sharedPrefs.putStats(myStats);
             handleCustomToast(getResources().getString(R.string.new_hintMap));
-
+            mapTxt.setText(mapProgress + "/"+ MAX_MAPHINTS);
             vibrate();
             dialog.dismiss();
         } else {
@@ -535,7 +535,7 @@ public class MainActivity extends FragmentActivity implements
         }
 
         activeCase.setWeaponLocationFound(true);
-        activeCase.setMerkmalProgress(merkmalProgress);
+        activeCase.setFeatureProgress(merkmalProgress);
         activeCase.setMapProgress(mapProgress);
         sharedPrefs.putCase(activeCase);
 
@@ -581,27 +581,29 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void addFeature(String feature, String value) {       //method for adding features
-        features.put(feature, value);
-        if (feature.equals("Hautfarbe"))
-            activeCase.getSuspectProgress().setSkinColor(value);
-        else if (feature.equals("Haarfarbe"))
-            activeCase.getSuspectProgress().setHairColor(value);
-        else if (feature.equals("Bart"))
-            activeCase.getSuspectProgress().setBeard(value);
-        else if (feature.equals("Brille"))
-            activeCase.getSuspectProgress().setGlasses(value);
-        else
-            activeCase.getSuspectProgress().setScar(value);
-
-        sharedPrefs.putCase(activeCase);
-        featureBtn.setImageResource(R.drawable.btn_feature_pressed);
-        myStats.setFeatures();
-        sharedPrefs.putStats(myStats);
-        //openDialog(R.layout.feature_layout);
-        handleCustomToast(getResources().getString(R.string.new_featurehint));
-
-        vibrate();
-        dialog.dismiss();
+        if(merkmalProgress < MAX_FEATURES) {
+            features.put(feature, value);
+            if (feature.equals("Hautfarbe")) {
+                activeCase.getSuspectProgress().setSkinColor(value);
+            } else if (feature.equals("Haarfarbe")) {
+                activeCase.getSuspectProgress().setHairColor(value);
+            } else if (feature.equals("Bart")) {
+                activeCase.getSuspectProgress().setBeard(value);
+            } else if (feature.equals("Brille")) {
+                activeCase.getSuspectProgress().setGlasses(value);
+            } else {
+                activeCase.getSuspectProgress().setScar(value);
+            }
+            activeCase.setFeatureProgress(merkmalProgress++);
+            featureTxt.setText(merkmalProgress + "/" + MAX_FEATURES);
+            sharedPrefs.putCase(activeCase);
+            featureBtn.setImageResource(R.drawable.btn_feature_pressed);
+            myStats.setFeatures();
+            sharedPrefs.putStats(myStats);
+            handleCustomToast(getResources().getString(R.string.new_featurehint));
+            vibrate();
+            dialog.dismiss();
+        }
     }
 
     private void drawMap() {
@@ -628,7 +630,7 @@ public class MainActivity extends FragmentActivity implements
             circle.setRadius(circleRad3);
             zoomLevel = 17;
         }
-        mapTxt.setText("" + mapProgress + "/3");
+        mapTxt.setText("" + mapProgress + "/" + MAX_MAPHINTS);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(activeCase.getSuspectResidence().getLatLng(), zoomLevel));
         mapBtn.setImageResource(R.drawable.btn_map_pressed);

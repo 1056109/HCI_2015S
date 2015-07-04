@@ -17,8 +17,6 @@
 	Die gute: Ihnen wird es bei uns gefallen. Die schlechte: Sie müssen jetzt los, Ihre neue Kollegen erwarten Sie schon am Tatort. Ich wünsche Ihnen 
 	für Ihren 1. Fall und die weitere Laufbahn alles Gute!</string>
 
-    <!--<string name="welcome_msg_first_case">Guten Tag, Police Officer %1$s.</string>-->
-
 	<string name="welcomeback_msg">Willkommen zurück, Police Officer %1$s. Schön Sie wiederzusehen. Bereit den Fall wieder aufzunehmen? Viel Erfolg!</string>
 
     <string name="crime_scene1">Hallo! Wir haben es hier mit einem Mordfall zu tun. Die Leiche weißt mehrere Einstiche auf, wir haben sie bereits ins Krankenhaus 
@@ -102,7 +100,7 @@
     <string name="first_start">firstStart</string>
 
     <string name="mapProgress">0/3</string>
-    <string name="merkmalProgress">0/5</string>
+    <string name="featureProgress">0/5</string>
     <string name="weaponProgress">0/1</string>
 
     <string name="send_collegue_start">READY</string>
