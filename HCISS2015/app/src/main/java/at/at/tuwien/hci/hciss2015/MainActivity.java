@@ -634,19 +634,19 @@ public class MainActivity extends FragmentActivity implements
 
         LinkedHashMap<String, String> crimeCommitterFeatures = new LinkedHashMap<>();
         try {
-            if (features.containsKey("Hautfarbe") && features.get("Hautfarbe") != null) {
+            if (features.containsKey("Hautfarbe") && "".equals(features.get("Hautfarbe"))) {
                 crimeCommitterFeatures.put("Hautfarbe", activeCase.getCrimeCommitter().getSkinColor());
             }
-            if (features.containsKey("Haarfarbe") && features.get("Haarfarbe") != null) {
+            if (features.containsKey("Haarfarbe") && "".equals(features.get("Haarfarbe"))) {
                 crimeCommitterFeatures.put("Haarfarbe", activeCase.getCrimeCommitter().getHairColor());
             }
-            if (features.containsKey("Bart") && features.get("Bart") != null) {
+            if (features.containsKey("Bart") && "".equals(features.get("Bart"))) {
                 crimeCommitterFeatures.put("Bart", activeCase.getCrimeCommitter().getBeard());
             }
-            if (features.containsKey("Brille") && features.get("Brille") != null) {
+            if (features.containsKey("Brille") && "".equals(features.get("Brille"))) {
                 crimeCommitterFeatures.put("Brille", activeCase.getCrimeCommitter().getGlasses());
             }
-            if (features.containsKey("Narbe") && features.get("Narbe") != null) {
+            if (features.containsKey("Narbe") && "".equals(features.get("Narbe"))) {
                 crimeCommitterFeatures.put("Narbe", activeCase.getCrimeCommitter().getScar());
             }
             if (!crimeCommitterFeatures.isEmpty()) {
