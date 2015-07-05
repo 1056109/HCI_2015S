@@ -76,36 +76,31 @@
                     android:id="@+id/suspect1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="selectSuspect1"
-                    android:src="@drawable/char1" />
+                    android:onClick="selectSuspect1" />
 
                 <ImageView
                     android:id="@+id/suspect2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="selectSuspect2"
-                    android:src="@drawable/char5" />
+                    android:onClick="selectSuspect2" />
 
                 <ImageView
                     android:id="@+id/suspect3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="selectSuspect3"
-                    android:src="@drawable/char9" />
+                    android:onClick="selectSuspect3" />
 
                 <ImageView
                     android:id="@+id/suspect4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="selectSuspect4"
-                    android:src="@drawable/char13" />
+                    android:onClick="selectSuspect4" />
 
                 <ImageView
                     android:id="@+id/suspect5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="selectSuspect5"
-                    android:src="@drawable/char7" />
+                    android:onClick="selectSuspect5" />
             </LinearLayout>
         </HorizontalScrollView>
 

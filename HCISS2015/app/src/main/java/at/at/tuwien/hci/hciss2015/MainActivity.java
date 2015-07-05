@@ -49,6 +49,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -831,6 +832,41 @@ public class MainActivity extends FragmentActivity implements
         imgSuspect3 = (ImageView) layout.findViewById(R.id.suspect3);
         imgSuspect4 = (ImageView) layout.findViewById(R.id.suspect4);
         imgSuspect5 = (ImageView) layout.findViewById(R.id.suspect5);
+
+        int id = 0;
+        int[] idArray = new int[5];
+        List<Suspect> suspectList = activeCase.getSuspectList();
+        Collections.shuffle(suspectList);
+
+        for(Suspect suspect : suspectList) {
+            idArray[id] = context.getResources().getIdentifier("char"+suspect.getSuspectId(), "drawable", context.getPackageName());
+            id++;
+        }
+        imgSuspect1.setImageResource(idArray[0]);
+        imgSuspect2.setImageResource(idArray[1]);
+        imgSuspect3.setImageResource(idArray[2]);
+        imgSuspect4.setImageResource(idArray[3]);
+        imgSuspect5.setImageResource(idArray[4]);
+
+/*        Suspect suspect1 = suspectList.get(0);
+        id = context.getResources().getIdentifier("char"+suspect1.getSuspectId(), "drawable", context.getPackageName());
+        imgSuspect1.setImageResource(id);
+
+        Suspect suspect2 = suspectList.get(1);
+        id = context.getResources().getIdentifier("char"+suspect2.getSuspectId(), "drawable", context.getPackageName());
+        imgSuspect2.setImageResource(id);
+
+        Suspect suspect3 = suspectList.get(2);
+        id = context.getResources().getIdentifier("char"+suspect3.getSuspectId(), "drawable", context.getPackageName());
+        imgSuspect3.setImageResource(id);
+
+        Suspect suspect4 = suspectList.get(3);
+        id = context.getResources().getIdentifier("char"+suspect4.getSuspectId(), "drawable", context.getPackageName());
+        imgSuspect4.setImageResource(id);
+
+        Suspect suspect5 = suspectList.get(4);
+        id = context.getResources().getIdentifier("char"+suspect5.getSuspectId(), "drawable", context.getPackageName());
+        imgSuspect5.setImageResource(id);*/
 
         featureHeader = (TextView) layout.findViewById(R.id.feature_txt);
         merkmalText = (TextView) layout.findViewById(R.id.merkmale);
