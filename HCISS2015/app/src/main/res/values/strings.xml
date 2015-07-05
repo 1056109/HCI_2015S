@@ -53,7 +53,7 @@
 	<string name="hint_feature2">Durch die intensive Untersuchung war es dir möglich, folgendes Aussehensmerkmal des Täters herauszufinden:</string>
 	<string name="hint_weapon">Die Obduktionsergebnisse haben ergeben dass es sich um eine ganz bestimmte Tatwaffe handeln muss. Mit den Hinweisen die bereits
 	gesammelt wurden konnte die Tatwaffe lokalisiert werden!</string>
-	<string name="hint_map">Die Untersuchung der Überwachungsbändern hat egeben dass sich der Täter in folgendem Bereich aufhält</string>
+	<string name="hint_map">Die Untersuchung der Überwachungsbändern hat ergeben dass sich der Täter in folgendem Bereich aufhält</string>
 
     <array name="nav_drawer_items">
         <item>Karte</item>
@@ -119,9 +119,9 @@
     <string name="zeroMap">Es wurden noch keine Hinweise zum Aufenhaltsort des Taeters gefunden!</string>
     <string name="hintMap">Der Aufenthaltort des Taeters konnte dank der gefundenen Hinweise auf diesen Bereich eingeschraenkt werden.</string>
     <string name="new_hintMap">Der Aufenthaltort des Taeters konnte dank der gefundenen Hinweise weiter eingeschraenkt werden.</string>
-    <string name="title_activity_char">charActivity</string>
     <string name="nonew_hintMap">Sie haben bereits sämtliche Hinweise zum Aufenthaltsort gefunden. Wählen Sie einen anderen Hinweis aus.</string>
 
+    <string name="title_activity_char">charActivity</string>
 
     <string name="benutzerdaten">In diesem Menü kannst du deine Spielerdaten aktualisieren</string>
 
@@ -141,6 +141,7 @@
         den/die TaeterIn. Bist du dir unsicher, dann suche weitere Hinweise und komm spaeter wieder</string>
 
     <string name="new_featurehint">Das Aussehen des Täters konnte weiter ausgeforscht werden.</string>
+    <string name="nonew_featurehint">Sie haben bereits sämtliche Hinweise zum Aussehen des Täters gefdunden. Wählen Sie einen anderen Hinweis aus.</string>
 
     <string name="end_case_positive">Glueckwunsch! Du hast den richtigen Verdaechtigen gewaehlt, er hat die Tat gestanden.
     Weiter so!</string>

@@ -128,14 +128,13 @@ public class MainActivity extends FragmentActivity implements
     private TextView txtColleagueState;
 
     private static int mapProgress = 0;     //static variables for case progress
-    private static int merkmalProgress = 0;
+    private static int featureProgress = 0;
     private static boolean colleagueUsed = false;
 
     private Circle circle;
-    private int circleRad1 = 2000;          //radius for suspectresidence-circle
-    private int circleRad2 = 600;
-    private int circleRad3 = 100;
+    private int[] circleRads = {2000, 600, 100};
     private boolean showCircle = false;
+    private int circleZoom = 17;
     private TextView merkmalText;           //textviews in selectsuspect-dialog
     private TextView verdaechtigeText;
 
@@ -274,7 +273,7 @@ public class MainActivity extends FragmentActivity implements
             activeCase = sharedPrefs.getCase();
         }
         mapProgress = activeCase.getMapProgress();
-        merkmalProgress = activeCase.getFeatureProgress();
+        featureProgress = activeCase.getFeatureProgress();
         hasDestination = activeCase.isSuspectResidenceFound();
         //colleagueUsed = activeCase.isColleagueUsed();
 
@@ -293,7 +292,7 @@ public class MainActivity extends FragmentActivity implements
         //    hideColleague();
 
         mapTxt.setText("" + mapProgress + "/" + MAX_MAPHINTS);
-        featureTxt.setText("" + merkmalProgress + "/" + MAX_FEATURES);
+        featureTxt.setText("" + featureProgress + "/" + MAX_FEATURES);
 
         myStats = sharedPrefs.getStats();
         if (myStats == null) {
@@ -367,24 +366,24 @@ public class MainActivity extends FragmentActivity implements
                             cdBtnSend.setOnClickListener(new OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    send( Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]) );
+                                    send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]));
                                     marker.remove();
                                 }
                             });
 
-                            if(activeCase.isWeaponLocationFound()) {
+                            if (activeCase.isWeaponLocationFound()) {
                                 cdImgWeapon.setEnabled(false);
                             } else {
                                 cdImgWeapon.setEnabled(true);
                             }
 
-                            if(activeCase.getMapProgress() >= MAX_MAPHINTS) {
+                            if (mapProgress >= MAX_MAPHINTS) {
                                 cdImgMap.setEnabled(false);
                             } else {
                                 cdImgMap.setEnabled(true);
                             }
 
-                            if(activeCase.getFeatureProgress() >= MAX_FEATURES) {
+                            if (featureProgress >= MAX_FEATURES) {
                                 cdImgFeature.setEnabled(false);
                             } else {
                                 cdImgFeature.setEnabled(true);
@@ -397,7 +396,7 @@ public class MainActivity extends FragmentActivity implements
                             Button cdBtnClose = (Button) layout.findViewById(R.id.cd_btn_close);
                             TextView headerValue = (TextView) layout.findViewById(R.id.cd_txt_desc);
 
-                            if(!activeCase.isCrimeSceneFound()) {
+                            if (!activeCase.isCrimeSceneFound()) {
                                 cdImgWeapon.setVisibility(View.GONE);
                                 cdImgMap.setVisibility(View.GONE);
                                 cdImgFeature.setVisibility(View.GONE);
@@ -411,25 +410,25 @@ public class MainActivity extends FragmentActivity implements
                                 headerValue.setText(getResources().getString(R.string.send_collegue_really));
                                 if (Integer.parseInt(poiData[1]) == Types.POLICESTATION) {
                                     cdImgWeapon.setVisibility(View.GONE);
-                                    if(activeCase.getMapProgress() >= MAX_MAPHINTS && activeCase.getFeatureProgress() >= MAX_FEATURES) {
+                                    if (mapProgress >= MAX_MAPHINTS && featureProgress >= MAX_FEATURES) {
                                         cdBtnSend.setEnabled(false);
                                     }
                                 } else if (Integer.parseInt(poiData[1]) == Types.HOSPITAL) {
                                     cdImgMap.setVisibility(View.GONE);
                                     cdImgFeature.setVisibility(View.GONE);
-                                    if(activeCase.isWeaponLocationFound()) {
+                                    if (activeCase.isWeaponLocationFound()) {
                                         cdBtnSend.setEnabled(false);
                                     }
                                 } else if (Integer.parseInt(poiData[1]) == Types.SUBWAY) {
                                     cdImgWeapon.setVisibility(View.GONE);
                                     cdImgFeature.setVisibility(View.GONE);
-                                    if(activeCase.getMapProgress() >= MAX_MAPHINTS) {
+                                    if (mapProgress >= MAX_MAPHINTS) {
                                         cdBtnSend.setEnabled(false);
                                     }
                                 } else if (Integer.parseInt(poiData[1]) == Types.PARK) {
                                     cdImgWeapon.setVisibility(View.GONE);
                                     cdImgMap.setVisibility(View.GONE);
-                                    if(activeCase.getFeatureProgress() >= MAX_FEATURES) {
+                                    if (featureProgress >= MAX_FEATURES) {
                                         cdBtnSend.setEnabled(false);
                                     }
                                 }
@@ -443,7 +442,7 @@ public class MainActivity extends FragmentActivity implements
                             return true;
 
                         } else if (marker.getTitle().contains("Hinweis")) { // on marker in 30m range click
-                            if(Integer.parseInt(poiData[1]) < Types.OTHER) {
+                            if (Integer.parseInt(poiData[1]) < Types.OTHER) {
 
                                 dialog = new Dialog(context);
                                 dialog.setCancelable(false);
@@ -451,7 +450,7 @@ public class MainActivity extends FragmentActivity implements
                                 final View layout = layoutInfl.inflate(R.layout.marker_dialog, null, false);
 
                                 final ImageButton mdBtnWeapon = (ImageButton) layout.findViewById(R.id.md_btn_weapon);
-                                if(activeCase.isWeaponLocationFound()) {
+                                if (activeCase.isWeaponLocationFound()) {
                                     mdBtnWeapon.setEnabled(false);
                                 } else {
                                     mdBtnWeapon.setEnabled(true);
@@ -470,7 +469,7 @@ public class MainActivity extends FragmentActivity implements
                                 });
 
                                 ImageButton mdBtnMap = (ImageButton) layout.findViewById(R.id.md_btn_map);
-                                if(activeCase.getMapProgress() >= MAX_MAPHINTS) {
+                                if (mapProgress >= MAX_MAPHINTS) {
                                     mdBtnMap.setEnabled(false);
                                 } else {
                                     mdBtnMap.setEnabled(true);
@@ -479,7 +478,7 @@ public class MainActivity extends FragmentActivity implements
                                 mdBtnMap.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        addMapdetail(view);
+                                        addMapDetail(view);
                                         marker.remove();
                                         nearbyMarkers.remove(Integer.parseInt(poiData[0]));
                                         MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
@@ -489,7 +488,7 @@ public class MainActivity extends FragmentActivity implements
                                 });
 
                                 ImageButton mdBtnFeature = (ImageButton) layout.findViewById(R.id.md_btn_feature);
-                                if(activeCase.getFeatureProgress() >= MAX_FEATURES) {
+                                if (featureProgress >= MAX_FEATURES) {
                                     mdBtnFeature.setEnabled(false);
                                 } else {
                                     mdBtnFeature.setEnabled(true);
@@ -507,7 +506,7 @@ public class MainActivity extends FragmentActivity implements
                                     }
                                 });
 
-                                if(!activeCase.isCrimeSceneFound()) {
+                                if (!activeCase.isCrimeSceneFound()) {
                                     mdBtnWeapon.setVisibility(View.GONE);
                                     mdBtnMap.setVisibility(View.GONE);
                                     mdBtnFeature.setVisibility(View.GONE);
@@ -519,48 +518,60 @@ public class MainActivity extends FragmentActivity implements
                                     if (Integer.parseInt(poiData[1]) == Types.POLICESTATION) {
                                         mdBtnWeapon.setVisibility(View.GONE);
                                         TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
-                                        switch(randomizer.nextInt(2)) {
-                                            case 0: headerValue.setText(getResources().getString(R.string.police_investigation1));
+                                        switch (randomizer.nextInt(2)) {
+                                            case 0:
+                                                headerValue.setText(getResources().getString(R.string.police_investigation1));
                                                 break;
-                                            case 1: headerValue.setText(getResources().getString(R.string.police_investigation2));
+                                            case 1:
+                                                headerValue.setText(getResources().getString(R.string.police_investigation2));
                                                 break;
-                                            default: headerValue.setText(getResources().getString(R.string.police_investigation1));
+                                            default:
+                                                headerValue.setText(getResources().getString(R.string.police_investigation1));
                                                 break;
                                         }
                                     } else if (Integer.parseInt(poiData[1]) == Types.HOSPITAL) {
                                         mdBtnMap.setVisibility(View.GONE);
                                         mdBtnFeature.setVisibility(View.GONE);
                                         TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
-                                        switch(randomizer.nextInt(2)) {
-                                            case 0: headerValue.setText(getResources().getString(R.string.hospital_investigation1));
+                                        switch (randomizer.nextInt(2)) {
+                                            case 0:
+                                                headerValue.setText(getResources().getString(R.string.hospital_investigation1));
                                                 break;
-                                            case 1: headerValue.setText(getResources().getString(R.string.hospital_investigation2));
+                                            case 1:
+                                                headerValue.setText(getResources().getString(R.string.hospital_investigation2));
                                                 break;
-                                            default: headerValue.setText(getResources().getString(R.string.hospital_investigation1));
+                                            default:
+                                                headerValue.setText(getResources().getString(R.string.hospital_investigation1));
                                                 break;
                                         }
                                     } else if (Integer.parseInt(poiData[1]) == Types.SUBWAY) {
                                         mdBtnWeapon.setVisibility(View.GONE);
                                         mdBtnFeature.setVisibility(View.GONE);
                                         TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
-                                        switch(randomizer.nextInt(2)) {
-                                            case 0: headerValue.setText(getResources().getString(R.string.subway_investigation1));
+                                        switch (randomizer.nextInt(2)) {
+                                            case 0:
+                                                headerValue.setText(getResources().getString(R.string.subway_investigation1));
                                                 break;
-                                            case 1: headerValue.setText(getResources().getString(R.string.subway_investigation2));
+                                            case 1:
+                                                headerValue.setText(getResources().getString(R.string.subway_investigation2));
                                                 break;
-                                            default: headerValue.setText(getResources().getString(R.string.subway_investigation1));
+                                            default:
+                                                headerValue.setText(getResources().getString(R.string.subway_investigation1));
                                                 break;
                                         }
                                     } else if (Integer.parseInt(poiData[1]) == Types.PARK) {
                                         mdBtnWeapon.setVisibility(View.GONE);
                                         mdBtnMap.setVisibility(View.GONE);
                                         TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
-                                        switch(randomizer.nextInt(2)) {
-                                            case 0: headerValue.setText(getResources().getString(R.string.park_investigation1));
+                                        switch (randomizer.nextInt(2)) {
+                                            case 0:
+                                                headerValue.setText(getResources().getString(R.string.park_investigation1));
                                                 break;
-                                            case 1: headerValue.setText(getResources().getString(R.string.park_investigation2));
+                                            case 1:
+                                                headerValue.setText(getResources().getString(R.string.park_investigation2));
                                                 break;
-                                            default: headerValue.setText(getResources().getString(R.string.park_investigation1));
+                                            default:
+                                                headerValue.setText(getResources().getString(R.string.park_investigation1));
                                                 break;
                                         }
                                     }
@@ -579,12 +590,15 @@ public class MainActivity extends FragmentActivity implements
                                 final View layout = layoutInfl.inflate(R.layout.crimescene_layout, null, false);
 
                                 TextView headerValue = (TextView) layout.findViewById(R.id.crimescene_text);
-                                switch(activeCase.getCrimeSceneType()) {
-                                    case 0: headerValue.setText(getResources().getString(R.string.crime_scene1));
+                                switch (activeCase.getCrimeSceneType()) {
+                                    case 0:
+                                        headerValue.setText(getResources().getString(R.string.crime_scene1));
                                         break;
-                                    case 1: headerValue.setText(getResources().getString(R.string.crime_scene2));
+                                    case 1:
+                                        headerValue.setText(getResources().getString(R.string.crime_scene2));
                                         break;
-                                    default: headerValue.setText(getResources().getString(R.string.crime_scene1));
+                                    default:
+                                        headerValue.setText(getResources().getString(R.string.crime_scene1));
                                         break;
                                 }
 
@@ -609,26 +623,6 @@ public class MainActivity extends FragmentActivity implements
         });
     }
 
-
-    public void addMapdetail(View view) {            //testing function
-        if (mapProgress < MAX_MAPHINTS) {
-            mapProgress++;
-            activeCase.setMapProgress(mapProgress);
-            sharedPrefs.putCase(activeCase);
-            myStats.setMap();
-            sharedPrefs.putStats(myStats);
-            handleCustomToast(getResources().getString(R.string.new_hintMap));
-            mapTxt.setText(mapProgress + "/"+ MAX_MAPHINTS);
-            vibrate();
-            dialog.dismiss();
-        } else {
-            handleCustomToast(getResources().getString(R.string.nonew_hintMap));
-            vibrate();
-        }
-        //drawMap();
-
-    }           //testing function
-
     public void standort(View view) {              //testing function
         hasDestination = true;
         activeCase.setSuspectResidenceFound(true);
@@ -642,32 +636,32 @@ public class MainActivity extends FragmentActivity implements
     public void addWeapon(View view) { //TODO
         for(int i = 0;i < WEAPON_HINT_NUMBER;i++) {
             if(randomizer.nextBoolean()) {
-                if(merkmalProgress < MAX_FEATURES) {
+                if(featureProgress < MAX_FEATURES) {
                     selectFeature(view);
-                    merkmalProgress++;
+                    featureProgress++;
                 } else if (mapProgress < MAX_MAPHINTS) {
-                    addMapdetail(view);
+                    addMapDetail(view);
                     mapProgress++;
                 }
             } else {
                 if(mapProgress < MAX_MAPHINTS) {
-                    addMapdetail(view);
+                    addMapDetail(view);
                     mapProgress++;
-                } else if (merkmalProgress < MAX_FEATURES){
+                } else if (featureProgress < MAX_FEATURES){
                     selectFeature(view);
-                    merkmalProgress++;
+                    featureProgress++;
                 }
             }
         }
 
         activeCase.setWeaponLocationFound(true);
-        activeCase.setFeatureProgress(merkmalProgress);
+        activeCase.setFeatureProgress(featureProgress);
         activeCase.setMapProgress(mapProgress);
         sharedPrefs.putCase(activeCase);
 
         weaponTxt.setText("1/1");
-        featureTxt.setText(merkmalProgress + "/"+ MAX_FEATURES);
-        mapTxt.setText(mapProgress + "/"+ MAX_MAPHINTS);
+        featureTxt.setText(featureProgress + "/" + MAX_FEATURES);
+        mapTxt.setText(mapProgress + "/" + MAX_MAPHINTS);
 
         handleCustomToast(getResources().getString(R.string.hint_weapon));
 
@@ -676,7 +670,6 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void selectFeature(View view) {
-
         LinkedHashMap<String, String> crimeCommitterFeatures = new LinkedHashMap<>();
         try {
             if (features.containsKey("Hautfarbe") && "".equals(features.get("Hautfarbe"))) {
@@ -699,7 +692,12 @@ public class MainActivity extends FragmentActivity implements
                 String[] keyArray = keySet.toArray(new String[keySet.size()]);
                 String randomFeature = keyArray[randomizer.nextInt(keyArray.length)];
                 addFeature(randomFeature, crimeCommitterFeatures.get(randomFeature));
+                handleCustomToast(getResources().getString(R.string.new_featurehint));
+            } else {
+                handleCustomToast(getResources().getString(R.string.nonew_featurehint));
             }
+            vibrate();
+            dialog.dismiss();
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
@@ -707,7 +705,7 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void addFeature(String feature, String value) {       //method for adding features
-        if(merkmalProgress < MAX_FEATURES) {
+        if(featureProgress < MAX_FEATURES) {
             features.put(feature, value);
             if (feature.equals("Hautfarbe")) {
                 activeCase.getSuspectProgress().setSkinColor(value);
@@ -720,48 +718,64 @@ public class MainActivity extends FragmentActivity implements
             } else {
                 activeCase.getSuspectProgress().setScar(value);
             }
-            activeCase.setFeatureProgress(merkmalProgress++);
-            featureTxt.setText(merkmalProgress + "/" + MAX_FEATURES);
+            featureProgress++;
+            activeCase.setFeatureProgress(featureProgress);
+            featureTxt.setText(featureProgress + "/" + MAX_FEATURES);
             sharedPrefs.putCase(activeCase);
             featureBtn.setImageResource(R.drawable.btn_feature_pressed);
             myStats.setFeatures();
             sharedPrefs.putStats(myStats);
-            handleCustomToast(getResources().getString(R.string.new_featurehint));
-            vibrate();
-            dialog.dismiss();
         }
     }
 
+    public void addMapDetail(View view) {
+        if (mapProgress < MAX_MAPHINTS) {
+            mapProgress++;
+            activeCase.setMapProgress(mapProgress);
+            sharedPrefs.putCase(activeCase);
+            myStats.setMap();
+            sharedPrefs.putStats(myStats);
+            handleCustomToast(getResources().getString(R.string.new_hintMap));
+            mapTxt.setText(mapProgress + "/" + MAX_MAPHINTS);
+            mapBtn.setImageResource(R.drawable.btn_map_pressed);
+            drawMap();
+        } else {
+            handleCustomToast(getResources().getString(R.string.nonew_hintMap));
+        }
+        vibrate();
+        dialog.dismiss();
+    }
+
     private void drawMap() {
-        int zoomLevel = 15;
+        int radius = circleRads[0];
 
-        if (circle != null)
+        if (circle != null) {
             circle.remove();
+        }
 
-        handleCustomToast(getResources().getString(R.string.hintMap));
+        switch(mapProgress) {
+            case 1: radius = circleRads[0]; circleZoom = 13; break;
+            case 2: radius = circleRads[1]; circleZoom = 15; break;
+            case 3: radius = circleRads[2]; circleZoom = 17; break;
+            default: radius = circleRads[0]; circleZoom = 13; break;
+        }
 
-        //TODO choose random point in radius of suspect residance
+        List<PointOfInterest> suspectResidencePois;
+        int searchRange = radius / 2;
+        do {
+            suspectResidencePois = new ArrayList<PointOfInterest>(
+                    daoPoiInstance.getPOIsByPositionType(
+                            activeCase.getSuspectResidence().getLat(), activeCase.getSuspectResidence().getLng(), searchRange / 2, Types.OTHER));
+            radius += 50;
+        } while (suspectResidencePois.isEmpty() && radius < 2500);
+
         circle = mMap.addCircle(new CircleOptions()
-                .center(activeCase.getSuspectResidence().getLatLng())
+                .center(suspectResidencePois.get(randomizer.nextInt(suspectResidencePois.size())).getLatLng())
                 .fillColor(0x5064B5F6)
                 .strokeWidth(4));
-
-        if (mapProgress == 1) {
-            circle.setRadius(circleRad1);
-            zoomLevel = 13;
-        } else if (mapProgress == 2) {
-            circle.setRadius(circleRad2);
-            zoomLevel = 15;
-        } else if (mapProgress == 3) {
-            circle.setRadius(circleRad3);
-            zoomLevel = 17;
-        }
-        mapTxt.setText("" + mapProgress + "/" + MAX_MAPHINTS);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(activeCase.getSuspectResidence().getLatLng(), zoomLevel));
-        mapBtn.setImageResource(R.drawable.btn_map_pressed);
-
-        showCircle = true;
+        circle.setRadius(radius);
+        showCircle = false;
+        circle.setVisible(showCircle);
     }
 
 
@@ -770,20 +784,18 @@ public class MainActivity extends FragmentActivity implements
 
         if (mapProgress == 0) {
             handleCustomToast(getResources().getString(R.string.zeroMap));
-        } else if (circle == null)
-            drawMap();
-        else {
+        } else
             if (!showCircle) {
                 showCircle = true;
                 mapBtn.setImageResource(R.drawable.btn_map_pressed);
+                handleCustomToast(getResources().getString(R.string.hintMap));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(circle.getCenter(), circleZoom));
             } else {
                 showCircle = false;
                 mapBtn.setImageResource(R.drawable.btn_map);
             }
             circle.setVisible(showCircle);
-        }
     }
-
 
     public void openMerkmale(View view) {
         vibrate();
