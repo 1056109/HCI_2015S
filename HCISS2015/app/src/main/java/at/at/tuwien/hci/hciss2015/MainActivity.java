@@ -170,12 +170,14 @@ public class MainActivity extends FragmentActivity implements
     //= new String[]{"Hautfarbe:", "Haarfarbe:", "Bart:",
     //  "Brille:", "Narbe:"};           //array for labeling in featuredialog
 
-
     protected GoogleApiClient mGoogleApiClient;
 
     private Random randomizer;
 
     private Map<Integer, Marker> nearbyMarkers = new HashMap<Integer, Marker>();
+
+    private Map<Integer, Boolean> suspects = new HashMap<Integer, Boolean>();
+    private int[] suspectIds = new int[5];
 
     private TypedArray myMarkerIconsLarge;
     private BitmapDescriptor[] bmpDescriptorsLarge = new BitmapDescriptor[6];
@@ -628,7 +630,7 @@ public class MainActivity extends FragmentActivity implements
                                         break;
                                 }
 
-                                if(activeCase.isWeaponLocationVisited()) {
+                                if (activeCase.isWeaponLocationVisited()) {
                                     headerValue.setText(getResources().getString(R.string.weapon_location_visited));
                                     Button btnHints = (Button) layout.findViewById(R.id.wp_hints);
                                     btnHints.setVisibility(View.GONE);
@@ -866,6 +868,8 @@ public class MainActivity extends FragmentActivity implements
             setStats(layout);
         } else if (view == R.layout.start_case_layout) {
             setStart(layout);
+        } else if (view == R.layout.end_case_layout) {
+            setEnd(layout);
         }
 
         dialog.show();
@@ -884,7 +888,9 @@ public class MainActivity extends FragmentActivity implements
         Collections.shuffle(suspectList);
 
         for(Suspect suspect : suspectList) {
-            idArray[id] = context.getResources().getIdentifier("char"+suspect.getSuspectId(), "drawable", context.getPackageName());
+            idArray[id] = context.getResources().getIdentifier("char" + suspect.getSuspectId(), "drawable", context.getPackageName());
+            suspectIds[id] = suspect.getSuspectId();
+            suspects.put(suspect.getSuspectId(),false);
             id++;
         }
         imgSuspect1.setImageResource(idArray[0]);
@@ -892,26 +898,6 @@ public class MainActivity extends FragmentActivity implements
         imgSuspect3.setImageResource(idArray[2]);
         imgSuspect4.setImageResource(idArray[3]);
         imgSuspect5.setImageResource(idArray[4]);
-
-/*        Suspect suspect1 = suspectList.get(0);
-        id = context.getResources().getIdentifier("char"+suspect1.getSuspectId(), "drawable", context.getPackageName());
-        imgSuspect1.setImageResource(id);
-
-        Suspect suspect2 = suspectList.get(1);
-        id = context.getResources().getIdentifier("char"+suspect2.getSuspectId(), "drawable", context.getPackageName());
-        imgSuspect2.setImageResource(id);
-
-        Suspect suspect3 = suspectList.get(2);
-        id = context.getResources().getIdentifier("char"+suspect3.getSuspectId(), "drawable", context.getPackageName());
-        imgSuspect3.setImageResource(id);
-
-        Suspect suspect4 = suspectList.get(3);
-        id = context.getResources().getIdentifier("char"+suspect4.getSuspectId(), "drawable", context.getPackageName());
-        imgSuspect4.setImageResource(id);
-
-        Suspect suspect5 = suspectList.get(4);
-        id = context.getResources().getIdentifier("char"+suspect5.getSuspectId(), "drawable", context.getPackageName());
-        imgSuspect5.setImageResource(id);*/
 
         featureHeader = (TextView) layout.findViewById(R.id.feature_txt);
         merkmalText = (TextView) layout.findViewById(R.id.merkmale);
@@ -946,8 +932,8 @@ public class MainActivity extends FragmentActivity implements
         if (sharedPrefs.getStats().getSolved() == 0 && sharedPrefs.getStats().getMissed() == 0)
             ratenumber = 0;
         else
-            ratenumber = sharedPrefs.getStats().getSolved() /
-                    (sharedPrefs.getStats().getSolved() + sharedPrefs.getStats().getMissed());
+            ratenumber = (sharedPrefs.getStats().getSolved() /
+                    (sharedPrefs.getStats().getSolved() + sharedPrefs.getStats().getMissed())) * 100;
         rate.setText("" + ratenumber + " %");
     }
 
@@ -973,6 +959,26 @@ public class MainActivity extends FragmentActivity implements
             }
             layout.findViewById(R.id.start_case_btn).setVisibility(View.GONE);
             layout.findViewById(R.id.resume_case_btn).setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setEnd(View layout) {
+        try {
+            TextView headerValue = (TextView) layout.findViewById(R.id.end_case_text);
+            if(suspects.get(activeCase.getCrimeCommitter().getSuspectId())) {
+                headerValue.setText(getResources().getString(R.string.end_case_positive));
+                myStats.setSolved();
+            } else {
+                headerValue.setText(getResources().getString(R.string.end_case_negative));
+                myStats.setNotSolved();
+            }
+            sharedPrefs.putStats(myStats);
+            ImageView comitter = (ImageView) layout.findViewById(R.id.crime_comitter);
+            comitter.setImageResource(context.getResources().getIdentifier(
+                    "char" + activeCase.getCrimeCommitter().getSuspectId(), "drawable", context.getPackageName()));
+
+        } catch (Exception e) {
+            Log.e(TAG,e.getMessage());
         }
     }
 
@@ -1288,30 +1294,35 @@ public class MainActivity extends FragmentActivity implements
     public void selectSuspect1(View view) {
         vibrate();
         deselect();
+        suspects.put(suspectIds[0], true);
         imgSuspect1.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectSuspect2(View view) {
         vibrate();
         deselect();
+        suspects.put(suspectIds[1], true);
         imgSuspect2.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectSuspect3(View view) {
         vibrate();
         deselect();
+        suspects.put(suspectIds[2], true);
         imgSuspect3.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectSuspect4(View view) {
         vibrate();
         deselect();
+        suspects.put(suspectIds[3], true);
         imgSuspect4.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectSuspect5(View view) {
         vibrate();
         deselect();
+        suspects.put(suspectIds[4], true);
         imgSuspect5.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
@@ -1321,11 +1332,15 @@ public class MainActivity extends FragmentActivity implements
         imgSuspect3.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
         imgSuspect4.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
         imgSuspect5.setBackgroundColor(IMG_DEFAULT_BACKGROUND_COLOR);
+        suspects.put(suspectIds[0], false);
+        suspects.put(suspectIds[1], false);
+        suspects.put(suspectIds[2], false);
+        suspects.put(suspectIds[3], false);
+        suspects.put(suspectIds[4], false);
     }
 
     public void chooseSuspect(View view) {
-        //todo abfrage ob suspect id gleich ausgewaehlter id
-        //wenn ja erfolgsmeldung, sonst negativmeldung
+        vibrate();
         dialog.dismiss();
         openDialog(R.layout.end_case_layout);
     }
