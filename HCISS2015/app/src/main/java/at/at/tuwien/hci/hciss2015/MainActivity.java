@@ -354,7 +354,7 @@ public class MainActivity extends FragmentActivity implements
                         * */
                         final String[] poiData = marker.getSnippet().split(";");
 
-                        if (colleagueState == ColleagueState.READY) { // send colleague case
+                        if (colleagueState == ColleagueState.READY && Integer.parseInt(poiData[1]) < Types.OTHER) { // send colleague case
                             dialog = new Dialog(context);
                             dialog.setCancelable(false);
 
@@ -391,15 +391,15 @@ public class MainActivity extends FragmentActivity implements
                             } else {
                                 cdBtnClose.setVisibility(View.GONE);
                                 headerValue.setText(getResources().getString(R.string.send_collegue_really));
-                                if (Integer.parseInt(poiData[1]) == 0) {
+                                if (Integer.parseInt(poiData[1]) == Types.POLICESTATION) {
                                     cdImgWeapon.setVisibility(View.GONE);
-                                } else if (Integer.parseInt(poiData[1]) == 1) {
+                                } else if (Integer.parseInt(poiData[1]) == Types.HOSPITAL) {
                                     cdImgMap.setVisibility(View.GONE);
                                     cdImgFeature.setVisibility(View.GONE);
-                                } else if (Integer.parseInt(poiData[1]) == 2) {
+                                } else if (Integer.parseInt(poiData[1]) == Types.SUBWAY) {
                                     cdImgWeapon.setVisibility(View.GONE);
                                     cdImgFeature.setVisibility(View.GONE);
-                                } else {
+                                } else if (Integer.parseInt(poiData[1]) == Types.PARK) {
                                     cdImgWeapon.setVisibility(View.GONE);
                                     cdImgMap.setVisibility(View.GONE);
                                 }
@@ -475,9 +475,9 @@ public class MainActivity extends FragmentActivity implements
                                         mdBtnWeapon.setVisibility(View.GONE);
                                         TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
                                         switch(randomizer.nextInt(2)) {
-                                            case 1: headerValue.setText(getResources().getString(R.string.police_investigation1));
+                                            case 0: headerValue.setText(getResources().getString(R.string.police_investigation1));
                                                 break;
-                                            case 2: headerValue.setText(getResources().getString(R.string.police_investigation2));
+                                            case 1: headerValue.setText(getResources().getString(R.string.police_investigation2));
                                                 break;
                                             default: headerValue.setText(getResources().getString(R.string.police_investigation1));
                                                 break;
@@ -487,9 +487,9 @@ public class MainActivity extends FragmentActivity implements
                                         mdBtnFeature.setVisibility(View.GONE);
                                         TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
                                         switch(randomizer.nextInt(2)) {
-                                            case 1: headerValue.setText(getResources().getString(R.string.hospital_investigation1));
+                                            case 0: headerValue.setText(getResources().getString(R.string.hospital_investigation1));
                                                 break;
-                                            case 2: headerValue.setText(getResources().getString(R.string.hospital_investigation2));
+                                            case 1: headerValue.setText(getResources().getString(R.string.hospital_investigation2));
                                                 break;
                                             default: headerValue.setText(getResources().getString(R.string.hospital_investigation1));
                                                 break;
@@ -499,21 +499,21 @@ public class MainActivity extends FragmentActivity implements
                                         mdBtnFeature.setVisibility(View.GONE);
                                         TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
                                         switch(randomizer.nextInt(2)) {
-                                            case 1: headerValue.setText(getResources().getString(R.string.subway_investigation1));
+                                            case 0: headerValue.setText(getResources().getString(R.string.subway_investigation1));
                                                 break;
-                                            case 2: headerValue.setText(getResources().getString(R.string.subway_investigation2));
+                                            case 1: headerValue.setText(getResources().getString(R.string.subway_investigation2));
                                                 break;
                                             default: headerValue.setText(getResources().getString(R.string.subway_investigation1));
                                                 break;
                                         }
-                                    } else if (Integer.parseInt(poiData[1]) == 3) {
+                                    } else if (Integer.parseInt(poiData[1]) == Types.PARK) {
                                         mdBtnWeapon.setVisibility(View.GONE);
                                         mdBtnMap.setVisibility(View.GONE);
                                         TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
                                         switch(randomizer.nextInt(2)) {
-                                            case 1: headerValue.setText(getResources().getString(R.string.park_investigation1));
+                                            case 0: headerValue.setText(getResources().getString(R.string.park_investigation1));
                                                 break;
-                                            case 2: headerValue.setText(getResources().getString(R.string.park_investigation2));
+                                            case 1: headerValue.setText(getResources().getString(R.string.park_investigation2));
                                                 break;
                                             default: headerValue.setText(getResources().getString(R.string.park_investigation1));
                                                 break;
@@ -535,9 +535,9 @@ public class MainActivity extends FragmentActivity implements
 
                                 TextView headerValue = (TextView) layout.findViewById(R.id.crimescene_text);
                                 switch(activeCase.getCrimeSceneType()) {
-                                    case 1: headerValue.setText(getResources().getString(R.string.crime_scene1));
+                                    case 0: headerValue.setText(getResources().getString(R.string.crime_scene1));
                                         break;
-                                    case 2: headerValue.setText(getResources().getString(R.string.crime_scene2));
+                                    case 1: headerValue.setText(getResources().getString(R.string.crime_scene2));
                                         break;
                                     default: headerValue.setText(getResources().getString(R.string.crime_scene1));
                                         break;
@@ -551,13 +551,8 @@ public class MainActivity extends FragmentActivity implements
                                 return true;
                             }
                         }
-
                         return false; //Every other case, show InfoWindow
-
-                        /*
-                        *  End marker click handling
-                        * */
-
+                        // End marker click handling
                     }
                 });
             }
@@ -583,7 +578,6 @@ public class MainActivity extends FragmentActivity implements
             dialog.dismiss();
         } else {
             handleCustomToast(getResources().getString(R.string.nonew_hintMap));
-
             vibrate();
         }
         //drawMap();
@@ -1039,15 +1033,19 @@ public class MainActivity extends FragmentActivity implements
             iwImgMap.setVisibility(View.VISIBLE);
             iwImgFeature.setVisibility(View.VISIBLE);
 
-            if (Integer.parseInt(poiData[1]) == 0) {
+            if (Integer.parseInt(poiData[1]) == Types.POLICESTATION) {
                 iwImgWeapon.setVisibility(View.GONE);
-            } else if (Integer.parseInt(poiData[1]) == 1) {
+            } else if (Integer.parseInt(poiData[1]) == Types.HOSPITAL) {
                 iwImgMap.setVisibility(View.GONE);
                 iwImgFeature.setVisibility(View.GONE);
-            } else if (Integer.parseInt(poiData[1]) == 2) {
+            } else if (Integer.parseInt(poiData[1]) == Types.SUBWAY) {
                 iwImgWeapon.setVisibility(View.GONE);
                 iwImgFeature.setVisibility(View.GONE);
+            } else if (Integer.parseInt(poiData[1]) == Types.PARK) {
+                iwImgWeapon.setVisibility(View.GONE);
+                iwImgMap.setVisibility(View.GONE);
             } else {
+                iwImgFeature.setVisibility(View.GONE);
                 iwImgWeapon.setVisibility(View.GONE);
                 iwImgMap.setVisibility(View.GONE);
             }
