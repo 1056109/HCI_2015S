@@ -9,13 +9,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/send_collegue_really"
         android:textColor="@color/white"
         android:gravity="center"
         android:textSize="20dp"
         android:layout_margin="10dp"
         android:padding="5dp"
-        android:id="@+id/textView2"
+        android:id="@+id/cd_txt_desc"
         android:layout_gravity="center_horizontal" />
 
     <LinearLayout
@@ -66,7 +65,7 @@
             android:textColor="@color/violett"
             android:onClick="sendNot"
             android:background="@drawable/btn_android"
-            android:id="@+id/button3" />
+            android:id="@+id/cd_btn_abort" />
 
 
         <Button
@@ -79,5 +78,24 @@
             android:textColor="@color/violett"
             android:background="@drawable/btn_android"
             android:id="@+id/cd_btn_send" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cd_btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/btn_android"
+            android:onClick="closeDialog"
+            android:text="@string/close"
+            android:textColor="@color/violett" />
+
     </LinearLayout>
 </LinearLayout>

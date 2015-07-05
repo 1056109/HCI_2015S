@@ -42,6 +42,7 @@
 	nun die Möglichkeit, diese Leute zu befragen und herauszufinden, wie der Täter in etwa aussieht.</string>
 	<string name="park_investigation2">Guten Tag. Sie kommen wegen der Befragung der Zeugen? Mehrere Personen haben Täter aus der Nähe gesehen, Sie werden also mit 
 	Sicherheit Hinweise auf das Aussehen des Täters herausfinden können.</string>
+    <string name="no_investigation">Willkommen. Wir können Ihnen ohne Untersuchung des Tatorts leider nicht behilflich sein.</string>
 
     <string name="new_hint_explanation">Wählen Sie den Hinweis aus</string>
 	
@@ -108,6 +109,7 @@
 
     <string name="send_collegue_start">READY</string>
     <string name="send_colleague_desc">Ort wählen, an dem Kollege nach Hinweisen suchen soll.</string>
+    <string name="send_colleague_impossible">Ihr Kollege kann erst nach der Untersuchung des Tatorts Hinweise beschaffen.</string>
     <string name="send_collegue_really">Moechtest du deinen Kollegen nach einem der folgenden Hinweise suchen lassen?</string>
     <string name="send_colleague_working_msg">Dein Kollege wird an dieser Stelle seine Untersuchung beginnen!</string>
     <string name="send_collegue_yes">Ja, Kollege losschicken</string>

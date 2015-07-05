@@ -14,7 +14,6 @@
         android:gravity="center"
         android:padding="5dp"
         android:singleLine="false"
-        android:text="@string/subway_investigation1"
         android:textColor="@color/white"
         android:textSize="20dp" />
 

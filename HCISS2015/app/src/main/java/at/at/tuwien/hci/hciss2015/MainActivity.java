@@ -376,17 +376,33 @@ public class MainActivity extends FragmentActivity implements
                             cdImgMap.setVisibility(View.VISIBLE);
                             cdImgFeature.setVisibility(View.VISIBLE);
 
-                            if (Integer.parseInt(poiData[1]) == 0) {
+                            Button cdBtnClose = (Button) layout.findViewById(R.id.cd_btn_close);
+                            TextView headerValue = (TextView) layout.findViewById(R.id.cd_txt_desc);
+
+                            if(!activeCase.isCrimeSceneFound()) {
                                 cdImgWeapon.setVisibility(View.GONE);
-                            } else if (Integer.parseInt(poiData[1]) == 1) {
                                 cdImgMap.setVisibility(View.GONE);
                                 cdImgFeature.setVisibility(View.GONE);
-                            } else if (Integer.parseInt(poiData[1]) == 2) {
-                                cdImgWeapon.setVisibility(View.GONE);
-                                cdImgFeature.setVisibility(View.GONE);
+                                cdBtnSend.setVisibility(View.GONE);
+                                Button cdBtnAbort = (Button) layout.findViewById(R.id.cd_btn_abort);
+                                cdBtnAbort.setVisibility(View.GONE);
+                                cdBtnClose.setVisibility(View.VISIBLE);
+                                headerValue.setText(getResources().getString(R.string.send_colleague_impossible));
                             } else {
-                                cdImgWeapon.setVisibility(View.GONE);
-                                cdImgMap.setVisibility(View.GONE);
+                                cdBtnClose.setVisibility(View.GONE);
+                                headerValue.setText(getResources().getString(R.string.send_collegue_really));
+                                if (Integer.parseInt(poiData[1]) == 0) {
+                                    cdImgWeapon.setVisibility(View.GONE);
+                                } else if (Integer.parseInt(poiData[1]) == 1) {
+                                    cdImgMap.setVisibility(View.GONE);
+                                    cdImgFeature.setVisibility(View.GONE);
+                                } else if (Integer.parseInt(poiData[1]) == 2) {
+                                    cdImgWeapon.setVisibility(View.GONE);
+                                    cdImgFeature.setVisibility(View.GONE);
+                                } else {
+                                    cdImgWeapon.setVisibility(View.GONE);
+                                    cdImgMap.setVisibility(View.GONE);
+                                }
                             }
 
                             dialog.setContentView(layout);
@@ -446,17 +462,63 @@ public class MainActivity extends FragmentActivity implements
                                     }
                                 });
 
-                                if (Integer.parseInt(poiData[1]) == 0) {
-                                    mdBtnWeapon.setVisibility(View.GONE);
-                                } else if (Integer.parseInt(poiData[1]) == 1) {
-                                    mdBtnMap.setVisibility(View.GONE);
-                                    mdBtnFeature.setVisibility(View.GONE);
-                                } else if (Integer.parseInt(poiData[1]) == 2) {
-                                    mdBtnWeapon.setVisibility(View.GONE);
-                                    mdBtnFeature.setVisibility(View.GONE);
-                                } else if (Integer.parseInt(poiData[1]) == 3) {
+                                if(!activeCase.isCrimeSceneFound()) {
                                     mdBtnWeapon.setVisibility(View.GONE);
                                     mdBtnMap.setVisibility(View.GONE);
+                                    mdBtnFeature.setVisibility(View.GONE);
+                                    TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
+                                    headerValue.setText(getResources().getString(R.string.no_investigation));
+                                    TextView explanation = (TextView) layout.findViewById(R.id.new_hint_explanation);
+                                    explanation.setVisibility(View.GONE);
+                                } else {
+                                    if (Integer.parseInt(poiData[1]) == Types.POLICESTATION) {
+                                        mdBtnWeapon.setVisibility(View.GONE);
+                                        TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
+                                        switch(randomizer.nextInt(2)) {
+                                            case 1: headerValue.setText(getResources().getString(R.string.police_investigation1));
+                                                break;
+                                            case 2: headerValue.setText(getResources().getString(R.string.police_investigation2));
+                                                break;
+                                            default: headerValue.setText(getResources().getString(R.string.police_investigation1));
+                                                break;
+                                        }
+                                    } else if (Integer.parseInt(poiData[1]) == Types.HOSPITAL) {
+                                        mdBtnMap.setVisibility(View.GONE);
+                                        mdBtnFeature.setVisibility(View.GONE);
+                                        TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
+                                        switch(randomizer.nextInt(2)) {
+                                            case 1: headerValue.setText(getResources().getString(R.string.hospital_investigation1));
+                                                break;
+                                            case 2: headerValue.setText(getResources().getString(R.string.hospital_investigation2));
+                                                break;
+                                            default: headerValue.setText(getResources().getString(R.string.hospital_investigation1));
+                                                break;
+                                        }
+                                    } else if (Integer.parseInt(poiData[1]) == Types.SUBWAY) {
+                                        mdBtnWeapon.setVisibility(View.GONE);
+                                        mdBtnFeature.setVisibility(View.GONE);
+                                        TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
+                                        switch(randomizer.nextInt(2)) {
+                                            case 1: headerValue.setText(getResources().getString(R.string.subway_investigation1));
+                                                break;
+                                            case 2: headerValue.setText(getResources().getString(R.string.subway_investigation2));
+                                                break;
+                                            default: headerValue.setText(getResources().getString(R.string.subway_investigation1));
+                                                break;
+                                        }
+                                    } else if (Integer.parseInt(poiData[1]) == 3) {
+                                        mdBtnWeapon.setVisibility(View.GONE);
+                                        mdBtnMap.setVisibility(View.GONE);
+                                        TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
+                                        switch(randomizer.nextInt(2)) {
+                                            case 1: headerValue.setText(getResources().getString(R.string.park_investigation1));
+                                                break;
+                                            case 2: headerValue.setText(getResources().getString(R.string.park_investigation2));
+                                                break;
+                                            default: headerValue.setText(getResources().getString(R.string.park_investigation1));
+                                                break;
+                                        }
+                                    }
                                 }
 
                                 dialog.setContentView(layout);
@@ -912,16 +974,8 @@ public class MainActivity extends FragmentActivity implements
             return;
         }
 
-        List<PointOfInterest> nearbyPois;
-
-        if (activeCase != null && !activeCase.isCrimeSceneFound()) {
-            nearbyPois = new ArrayList<PointOfInterest>(
-                    daoPoiInstance.getPOIsByPositionType(location.getLatitude(), location.getLongitude(), 30, Types.OTHER));
-        } else{
-                nearbyPois = new ArrayList<PointOfInterest>(
+        List<PointOfInterest> nearbyPois = new ArrayList<PointOfInterest>(
                         daoPoiInstance.getPOIsByPosition(location.getLatitude(), location.getLongitude(), 30));
-            }
-
 
         Log.v("CheckMarkers", "Counted nearby Markers: " + nearbyPois.size());
 
