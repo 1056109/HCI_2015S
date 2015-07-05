@@ -13,13 +13,15 @@ public class Case {
     private int mapProgress;
     private int featureProgress;
     private Suspect suspectProgress;
+    private boolean crimeSceneFound;
     private boolean suspectResidenceFound;
     private boolean weaponLocationFound;
     private boolean colleagueUsed;
+    private int crimeSceneType;
 
     public Case() { }
 
-    public Case(PointOfInterest crimeScene, PointOfInterest suspectResidence, PointOfInterest weaponLocation, List<Suspect> suspectList) {
+    public Case(PointOfInterest crimeScene, PointOfInterest suspectResidence, PointOfInterest weaponLocation, List<Suspect> suspectList, int crimeSceneType) {
         this.crimeScene = crimeScene;
         this.suspectResidence = suspectResidence;
         this.weaponLocation = weaponLocation;
@@ -27,9 +29,11 @@ public class Case {
         this.mapProgress = 0;
         this.featureProgress = 0;
         this.suspectProgress = new Suspect();
+        this.crimeSceneFound = false;
         this.suspectResidenceFound = false;
         this.weaponLocationFound = false;
         this.colleagueUsed=false;
+        this.crimeSceneType = crimeSceneType;
     }
 
     public PointOfInterest getCrimeScene() {
@@ -119,6 +123,22 @@ public class Case {
 
     public boolean isColleagueUsed() {
         return colleagueUsed;
+    }
+
+    public boolean isCrimeSceneFound() {
+        return crimeSceneFound;
+    }
+
+    public void setCrimeSceneFound(boolean crimeSceneFound) {
+        this.crimeSceneFound = crimeSceneFound;
+    }
+
+    public int getCrimeSceneType() {
+        return crimeSceneType;
+    }
+
+    public void setCrimeSceneType(int crimeSceneType) {
+        this.crimeSceneType = crimeSceneType;
     }
 
     public String toString() {

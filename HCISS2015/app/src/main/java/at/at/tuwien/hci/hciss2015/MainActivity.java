@@ -397,72 +397,97 @@ public class MainActivity extends FragmentActivity implements
                             return true;
 
                         } else if (marker.getTitle().contains("Hinweis")) { // on marker in 30m range click
-                            dialog = new Dialog(context);
-                            dialog.setCancelable(false);
+                            if(Integer.parseInt(poiData[1]) < Types.OTHER) {
 
-                            final View layout = layoutInfl.inflate(R.layout.marker_dialog, null, false);
+                                dialog = new Dialog(context);
+                                dialog.setCancelable(false);
 
-                            final ImageButton mdBtnWeapon = (ImageButton) layout.findViewById(R.id.md_btn_weapon);
-                            mdBtnWeapon.setVisibility(View.VISIBLE);
-                            mdBtnWeapon.setOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    addWeapon(view);
-                                    marker.remove();
-                                    nearbyMarkers.remove(Integer.parseInt(poiData[0]));
-                                    MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
-                                    daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
-                                    dialog.dismiss();
+                                final View layout = layoutInfl.inflate(R.layout.marker_dialog, null, false);
+
+                                final ImageButton mdBtnWeapon = (ImageButton) layout.findViewById(R.id.md_btn_weapon);
+                                mdBtnWeapon.setVisibility(View.VISIBLE);
+                                mdBtnWeapon.setOnClickListener(new OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        addWeapon(view);
+                                        marker.remove();
+                                        nearbyMarkers.remove(Integer.parseInt(poiData[0]));
+                                        MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
+                                        daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                                ImageButton mdBtnMap = (ImageButton) layout.findViewById(R.id.md_btn_map);
+                                mdBtnMap.setVisibility(View.VISIBLE);
+                                mdBtnMap.setOnClickListener(new OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        addMapdetail(view);
+                                        marker.remove();
+                                        nearbyMarkers.remove(Integer.parseInt(poiData[0]));
+                                        MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
+                                        daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                                ImageButton mdBtnFeature = (ImageButton) layout.findViewById(R.id.md_btn_feature);
+                                mdBtnFeature.setVisibility(View.VISIBLE);
+                                mdBtnFeature.setOnClickListener(new OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        selectFeature(view);
+                                        marker.remove();
+                                        nearbyMarkers.remove(Integer.parseInt(poiData[0]));
+                                        MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
+                                        daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                                if (Integer.parseInt(poiData[1]) == 0) {
+                                    mdBtnWeapon.setVisibility(View.GONE);
+                                } else if (Integer.parseInt(poiData[1]) == 1) {
+                                    mdBtnMap.setVisibility(View.GONE);
+                                    mdBtnFeature.setVisibility(View.GONE);
+                                } else if (Integer.parseInt(poiData[1]) == 2) {
+                                    mdBtnWeapon.setVisibility(View.GONE);
+                                    mdBtnFeature.setVisibility(View.GONE);
+                                } else if (Integer.parseInt(poiData[1]) == 3) {
+                                    mdBtnWeapon.setVisibility(View.GONE);
+                                    mdBtnMap.setVisibility(View.GONE);
                                 }
-                            });
 
-                            ImageButton mdBtnMap = (ImageButton) layout.findViewById(R.id.md_btn_map);
-                            mdBtnMap.setVisibility(View.VISIBLE);
-                            mdBtnMap.setOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    addMapdetail(view);
-                                    marker.remove();
-                                    nearbyMarkers.remove(Integer.parseInt(poiData[0]));
-                                    MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
-                                    daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
-                                    dialog.dismiss();
+                                dialog.setContentView(layout);
+                                Window window = dialog.getWindow();
+                                window.setBackgroundDrawableResource(android.R.color.transparent);
+                                dialog.show();
+
+                                return true;
+                            } else {
+                                dialog = new Dialog(context);
+                                dialog.setCancelable(false);
+
+                                final View layout = layoutInfl.inflate(R.layout.crimescene_layout, null, false);
+
+                                TextView headerValue = (TextView) layout.findViewById(R.id.crimescene_text);
+                                switch(activeCase.getCrimeSceneType()) {
+                                    case 1: headerValue.setText(getResources().getString(R.string.crime_scene1));
+                                        break;
+                                    case 2: headerValue.setText(getResources().getString(R.string.crime_scene2));
+                                        break;
+                                    default: headerValue.setText(getResources().getString(R.string.crime_scene1));
+                                        break;
                                 }
-                            });
 
-                            ImageButton mdBtnFeature = (ImageButton) layout.findViewById(R.id.md_btn_feature);
-                            mdBtnFeature.setVisibility(View.VISIBLE);
-                            mdBtnFeature.setOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    selectFeature(view);
-                                    marker.remove();
-                                    nearbyMarkers.remove(Integer.parseInt(poiData[0]));
-                                    MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
-                                    daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
-                                    dialog.dismiss();
-                                }
-                            });
+                                dialog.setContentView(layout);
+                                Window window = dialog.getWindow();
+                                window.setBackgroundDrawableResource(android.R.color.transparent);
+                                dialog.show();
 
-                            if (Integer.parseInt(poiData[1]) == 0) {
-                                mdBtnWeapon.setVisibility(View.GONE);
-                            } else if (Integer.parseInt(poiData[1]) == 1) {
-                                mdBtnMap.setVisibility(View.GONE);
-                                mdBtnFeature.setVisibility(View.GONE);
-                            } else if (Integer.parseInt(poiData[1]) == 2) {
-                                mdBtnWeapon.setVisibility(View.GONE);
-                                mdBtnFeature.setVisibility(View.GONE);
-                            } else if (Integer.parseInt(poiData[1]) == 3){
-                                mdBtnWeapon.setVisibility(View.GONE);
-                                mdBtnMap.setVisibility(View.GONE);
+                                return true;
                             }
-
-                            dialog.setContentView(layout);
-                            Window window = dialog.getWindow();
-                            window.setBackgroundDrawableResource(android.R.color.transparent);
-                            dialog.show();
-
-                            return true;
                         }
 
                         return false; //Every other case, show InfoWindow
@@ -877,8 +902,17 @@ public class MainActivity extends FragmentActivity implements
             return;
         }
 
-        List<PointOfInterest> nearbyPois = new ArrayList<PointOfInterest>(
-                daoPoiInstance.getPOIsByPosition(location.getLatitude(), location.getLongitude(), 30));
+        List<PointOfInterest> nearbyPois;
+
+        if (activeCase != null && !activeCase.isCrimeSceneFound()) {
+            nearbyPois = new ArrayList<PointOfInterest>(
+                    daoPoiInstance.getPOIsByPositionType(location.getLatitude(), location.getLongitude(), 30, Types.OTHER));
+        } else{
+                nearbyPois = new ArrayList<PointOfInterest>(
+                        daoPoiInstance.getPOIsByPosition(location.getLatitude(), location.getLongitude(), 30));
+            }
+
+
         Log.v("CheckMarkers", "Counted nearby Markers: " + nearbyPois.size());
 
         Map<Integer, Marker> allMarkers = new HashMap<Integer, Marker>(MyMarkerDrawer.getMarkers());
@@ -1206,10 +1240,11 @@ public class MainActivity extends FragmentActivity implements
         suspectList.add(suspect);
         usedIds.add(suspect.getSuspectId());
 
-        Case crimeCase = new Case(crimeScene, suspectResidence, weaponLocation, suspectList);
+        int crimeSceneType = randomizer.nextInt(2);
+
+        Case crimeCase = new Case(crimeScene, suspectResidence, weaponLocation, suspectList, crimeSceneType);
         sharedPrefs.putCase(crimeCase);
         updateCaseProgress();
-
 
         dialog.dismiss();
     }
@@ -1217,6 +1252,13 @@ public class MainActivity extends FragmentActivity implements
     public void resumeCase(View view) {
         vibrate();
         updateCaseProgress();
+        dialog.dismiss();
+    }
+
+    public void afterCrimeScene(View view) {
+        vibrate();
+        activeCase.setCrimeSceneFound(true);
+        sharedPrefs.putCase(activeCase);
         dialog.dismiss();
     }
 
