@@ -26,7 +26,11 @@
 	zur Autopsie gebracht. Ich würde Ihnen raten, zuerst die Obduktionsergebnisse zu untersuchen. Viel Erfolg bei dem Fall!</string>
 	<string name="crime_scene2">Hallo! Hier wo Sie stehen gab es vor Kurzem eine Schießerei mit mehreren Toten. Mehrere Täter sind durch den angrenzenden Park 
 	geflohen, deswegen würde ich vorschlagen, dass Sie dort mit Ihren Untersuchungen beginnen!</string>
-	
+
+    <string name="weapon_location1">Guten Tag! Wir haben hier die Tatwaffe für Sie. Wollen Sie diese nun untersuchen und weitere Hinweise erhalten?</string>
+    <string name="weapon_location2">Hallo. Die Tatwaffe wurde noch nicht untersucht. Möchten Sie eine Untersuchung veranlassen und Hinweise zum Aufenthaltsort bzw. zum Aussehen des Täters erhalten?</string>
+    <string name="weapon_location_visited">Willkommen zurück. Es konnten leider keine weiteren Hinweise ermittelt werden.</string>
+
 	<string name="police_investigation1">Willkommen Kollege/Kollegin. Ich schätze Sie wollen die Überwachungsbänder des aktuellen Falles untersuchen? 
 	Ich empfehle Ihnen, sich entweder auf den Täter oder den Fluchtweg zu konzentrieren! Was wollen Sie tun?</string>
 	<string name="police_investigation2">Hallo. Wir wurden bereits informiert dass Sie kommen und haben die Überwachungsbänder vorbereitet. Es wäre sinnvoll, 
@@ -122,6 +126,9 @@
     <string name="nonew_hintMap">Sie haben bereits sämtliche Hinweise zum Aufenthaltsort gefunden. Wählen Sie einen anderen Hinweis aus.</string>
 
     <string name="title_activity_char">charActivity</string>
+
+    <string name="nohint_weapon">Die Tatwaffe konnte bereits gefunden werden. Wählen Sie einen anderen Hinweis aus.</string>
+    <string name="nohint_weaponlocation">Die Tatwaffe wurde bereits untersucht. Finden Sie andere Hinweise.</string>
 
     <string name="benutzerdaten">In diesem Menü kannst du deine Spielerdaten aktualisieren</string>
 

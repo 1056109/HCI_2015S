@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/startCaseView"
+        android:id="@+id/weaponLocationView"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:background="@drawable/curve_shape_black"
@@ -19,7 +19,7 @@
             android:textSize="20dp"
             android:layout_margin="10dp"
             android:padding="5dp"
-            android:id="@+id/start_case_text"
+            android:id="@+id/weaponlocation_text"
             android:layout_gravity="center_horizontal" />
 
         <LinearLayout
@@ -41,39 +41,37 @@
 
         <LinearLayout
             android:layout_gravity="center_horizontal"
-            android:id="@+id/start_case_btn"
+            android:id="@+id/crimescene_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/wp_abort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="Fall aufnehmen"
-                android:onClick="startCase"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:text="Abbrechen"
                 android:textColor="@color/violett"
                 android:background="@drawable/btn_android"
-                android:id="@+id/button4" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/resume_case_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                android:onClick="closeDialog"
+                android:nestedScrollingEnabled="false" />
 
             <Button
+                android:id="@+id/wp_hints"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="Fall fortsetzen"
-                android:onClick="resumeCase"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:text="Hinweise erhalten"
+                android:onClick="weaponHints"
                 android:textColor="@color/violett"
                 android:background="@drawable/btn_android"
-                android:id="@+id/button5" />
+                android:nestedScrollingEnabled="false" />
+
 
         </LinearLayout>
     </LinearLayout>

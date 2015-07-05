@@ -35,7 +35,7 @@
                 android:layout_margin="5dp"
                 android:id="@+id/police_officer"
                 android:layout_weight="1"
-                android:src="@drawable/police1" />
+                android:src="@drawable/police3" />
 
         </LinearLayout>
 

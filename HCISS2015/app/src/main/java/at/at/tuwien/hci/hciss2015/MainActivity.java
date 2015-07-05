@@ -584,7 +584,7 @@ public class MainActivity extends FragmentActivity implements
                                 dialog.show();
 
                                 return true;
-                            } else {
+                            } else if (Integer.parseInt(poiData[1]) == Types.OTHER) {
                                 dialog = new Dialog(context);
                                 dialog.setCancelable(false);
 
@@ -601,6 +601,37 @@ public class MainActivity extends FragmentActivity implements
                                     default:
                                         headerValue.setText(getResources().getString(R.string.crime_scene1));
                                         break;
+                                }
+
+                                dialog.setContentView(layout);
+                                Window window = dialog.getWindow();
+                                window.setBackgroundDrawableResource(android.R.color.transparent);
+                                dialog.show();
+
+                                return true;
+                            } else {
+                                dialog = new Dialog(context);
+                                dialog.setCancelable(false);
+
+                                final View layout = layoutInfl.inflate(R.layout.weaponlocation_layout, null, false);
+
+                                TextView headerValue = (TextView) layout.findViewById(R.id.weaponlocation_text);
+                                switch (randomizer.nextInt(2)) {
+                                    case 0:
+                                        headerValue.setText(getResources().getString(R.string.weapon_location1));
+                                        break;
+                                    case 1:
+                                        headerValue.setText(getResources().getString(R.string.weapon_location2));
+                                        break;
+                                    default:
+                                        headerValue.setText(getResources().getString(R.string.weapon_location1));
+                                        break;
+                                }
+
+                                if(activeCase.isWeaponLocationVisited()) {
+                                    headerValue.setText(getResources().getString(R.string.weapon_location_visited));
+                                    Button btnHints = (Button) layout.findViewById(R.id.wp_hints);
+                                    btnHints.setVisibility(View.GONE);
                                 }
 
                                 dialog.setContentView(layout);
@@ -634,38 +665,52 @@ public class MainActivity extends FragmentActivity implements
         openMerkmale(view);
     }
 
-    public void addWeapon(View view) { //TODO
-        for(int i = 0;i < WEAPON_HINT_NUMBER;i++) {
-            if(randomizer.nextBoolean()) {
-                if(featureProgress < MAX_FEATURES) {
-                    selectFeature(view);
-                    featureProgress++;
-                } else if (mapProgress < MAX_MAPHINTS) {
-                    addMapDetail(view);
-                    mapProgress++;
-                }
-            } else {
-                if(mapProgress < MAX_MAPHINTS) {
-                    addMapDetail(view);
-                    mapProgress++;
-                } else if (featureProgress < MAX_FEATURES){
-                    selectFeature(view);
-                    featureProgress++;
+    public void addWeapon(View view) {
+        if(!activeCase.isWeaponLocationFound()) {
+            PointOfInterest weaponLocation = activeCase.getWeaponLocation();
+            weaponLocation.setType(5);
+            weaponLocation.setFlag(0);
+            Marker marker = mMap.addMarker(new MarkerOptions()
+                    .title(weaponLocation.getDescription())
+                    .position(weaponLocation.getLatLng())
+                    .snippet(String.valueOf(weaponLocation.getId()) + ";" + String.valueOf(weaponLocation.getType()))
+                    .icon(BitmapDescriptorFactory.fromResource(context.getResources().obtainTypedArray(R.array.my_marker_icons).getResourceId(5, -1))));
+            MyMarkerDrawer.getMarkers().put(weaponLocation.getId(), marker);
+            daoPoiInstance.updatePOI(weaponLocation);
+
+            activeCase.setWeaponLocationFound(true);
+            sharedPrefs.putCase(activeCase);
+            weaponTxt.setText("1/1");
+            handleCustomToast(getResources().getString(R.string.hint_weapon));
+        } else {
+            handleCustomToast(getResources().getString(R.string.nohint_weapon));
+        }
+        vibrate();
+        dialog.dismiss();
+    }
+
+    public void weaponHints(View view) {
+        if(!activeCase.isWeaponLocationVisited()) {
+            for (int i = 0; i < WEAPON_HINT_NUMBER; i++) {
+                if (randomizer.nextBoolean()) {
+                    if (featureProgress < MAX_FEATURES) {
+                        selectFeature(view);
+                    } else if (mapProgress < MAX_MAPHINTS) {
+                        addMapDetail(view);
+                    }
+                } else {
+                    if (mapProgress < MAX_MAPHINTS) {
+                        addMapDetail(view);
+                    } else if (featureProgress < MAX_FEATURES) {
+                        selectFeature(view);
+                    }
                 }
             }
+            activeCase.setWeaponLocationVisited(true);
+            sharedPrefs.putCase(activeCase);
+        } else {
+            handleCustomToast(getResources().getString(R.string.nohint_weaponlocation));
         }
-
-        activeCase.setWeaponLocationFound(true);
-        activeCase.setFeatureProgress(featureProgress);
-        activeCase.setMapProgress(mapProgress);
-        sharedPrefs.putCase(activeCase);
-
-        weaponTxt.setText("1/1");
-        featureTxt.setText(featureProgress + "/" + MAX_FEATURES);
-        mapTxt.setText(mapProgress + "/" + MAX_MAPHINTS);
-
-        handleCustomToast(getResources().getString(R.string.hint_weapon));
-
         vibrate();
         dialog.dismiss();
     }

@@ -16,6 +16,7 @@ public class Case {
     private boolean crimeSceneFound;
     private boolean suspectResidenceFound;
     private boolean weaponLocationFound;
+    private boolean weaponLocationVisited;
     private boolean colleagueUsed;
     private int crimeSceneType;
 
@@ -32,6 +33,7 @@ public class Case {
         this.crimeSceneFound = false;
         this.suspectResidenceFound = false;
         this.weaponLocationFound = false;
+        this.weaponLocationVisited = false;
         this.colleagueUsed=false;
         this.crimeSceneType = crimeSceneType;
     }
@@ -139,6 +141,14 @@ public class Case {
 
     public void setCrimeSceneType(int crimeSceneType) {
         this.crimeSceneType = crimeSceneType;
+    }
+
+    public boolean isWeaponLocationVisited() {
+        return weaponLocationVisited;
+    }
+
+    public void setWeaponLocationVisited(boolean weaponLocationVisited) {
+        this.weaponLocationVisited = weaponLocationVisited;
     }
 
     public String toString() {
