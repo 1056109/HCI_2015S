@@ -16,8 +16,11 @@
 	<string name="welcome_msg_first_case">Guten Tag, Police Officer %1$s. Willkommen im Dienst. Ich habe eine gute und eine schlechte Nachricht für Sie.
 	Die gute: Ihnen wird es bei uns gefallen. Die schlechte: Sie müssen jetzt los, Ihre neue Kollegen erwarten Sie schon am Tatort. Ich wünsche Ihnen 
 	für Ihren 1. Fall und die weitere Laufbahn alles Gute!</string>
+    <string name="welcome_msg_next_case">Hallo, Police Officer %1$s. Wir haben einen neuen Fall für Sie. Die Kollegen warten bereits am Tatort. Viel Erfolg!</string>
+	<string name="welcomeback_msg">Willkommen zurück, Police Officer %1$s. Schön Sie wiederzusehen. %2$s. Bereit den Fall wieder aufzunehmen? Viel Erfolg!</string>
 
-	<string name="welcomeback_msg">Willkommen zurück, Police Officer %1$s. Schön Sie wiederzusehen. Bereit den Fall wieder aufzunehmen? Viel Erfolg!</string>
+    <string name="action_tatort">Ihre Kollegen erwarten Sie am Tatort mit neuen Informationen</string>
+    <string name="action_hints">Ein Täter konnte anhand der ermittelten Hinweise bislang noch nicht ausgeforscht werden</string>
 
     <string name="crime_scene1">Hallo! Wir haben es hier mit einem Mordfall zu tun. Die Leiche weißt mehrere Einstiche auf, wir haben sie bereits ins Krankenhaus 
 	zur Autopsie gebracht. Ich würde Ihnen raten, zuerst die Obduktionsergebnisse zu untersuchen. Viel Erfolg bei dem Fall!</string>
@@ -43,7 +46,7 @@
     <string name="new_hint_explanation">Wählen Sie den Hinweis aus</string>
 	
 	<string name="suspect_selection">Werter Kollege, wir haben hier die Verdächtigen gesammelt. Ich hoffe Sie haben genug Hinweise gesammelt um den Täter 
-	eindeutig identifizieren zu können. 	Falls nicht wäre es sinnvoll, wenn Sie noch etwas weiterforschen. Ansonsten sagen Sie uns bitte, wer der Täter ist.</string>
+	eindeutig identifizieren zu können. Falls nicht wäre es sinnvoll, wenn Sie noch etwas weiterforschen. Ansonsten sagen Sie uns bitte, wer der Täter ist.</string>
 	
 	<string name="hint_feature1">Durch deine Nachforschungen konntest du folgendes Merkmal des Täters in Erfahrung bringen:</string>
 	<string name="hint_feature2">Durch die intensive Untersuchung war es dir möglich, folgendes Aussehensmerkmal des Täters herauszufinden:</string>

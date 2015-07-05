@@ -760,13 +760,23 @@ public class MainActivity extends FragmentActivity implements
     private void setStart(View layout) {
         TextView headerValue = (TextView) layout.findViewById(R.id.start_case_text);
         if (sharedPrefs.getCase() == null) {
-            headerValue.setText(String.format(getResources().getString(R.string.welcome_msg_first_case),
-                    sharedPrefs.getUser().getName()));
+            if(sharedPrefs.getStats() == null) {
+                headerValue.setText(String.format(getResources().getString(R.string.welcome_msg_first_case),
+                        sharedPrefs.getUser().getName()));
+            } else {
+                headerValue.setText(String.format(getResources().getString(R.string.welcome_msg_next_case),
+                        sharedPrefs.getUser().getName()));
+            }
             layout.findViewById(R.id.start_case_btn).setVisibility(View.VISIBLE);
             layout.findViewById(R.id.resume_case_btn).setVisibility(View.GONE);
         } else {
-            headerValue.setText(String.format(getResources().getString(R.string.welcomeback_msg),
-                    sharedPrefs.getUser().getName()));
+            if(activeCase.isCrimeSceneFound()) {
+                headerValue.setText(String.format(getResources().getString(R.string.welcomeback_msg),
+                        sharedPrefs.getUser().getName(), getResources().getString(R.string.action_hints)));
+            } else {
+                headerValue.setText(String.format(getResources().getString(R.string.welcomeback_msg),
+                        sharedPrefs.getUser().getName(), getResources().getString(R.string.action_tatort)));
+            }
             layout.findViewById(R.id.start_case_btn).setVisibility(View.GONE);
             layout.findViewById(R.id.resume_case_btn).setVisibility(View.VISIBLE);
         }
