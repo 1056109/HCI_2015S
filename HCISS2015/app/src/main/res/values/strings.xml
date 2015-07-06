@@ -23,9 +23,9 @@
     <string name="action_hints">Ein Täter konnte anhand der ermittelten Hinweise bislang noch nicht ausgeforscht werden</string>
 
     <string name="crime_scene1">Hallo! Wir haben es hier mit einem Mordfall zu tun. Die Leiche weißt mehrere Einstiche auf, wir haben sie bereits ins Krankenhaus 
-	zur Autopsie gebracht. Ich würde Ihnen raten, zuerst die Obduktionsergebnisse zu untersuchen. Viel Erfolg bei dem Fall!</string>
-	<string name="crime_scene2">Hallo! Hier wo Sie stehen gab es vor Kurzem eine Schießerei mit mehreren Toten. Mehrere Täter sind durch den angrenzenden Park 
-	geflohen, deswegen würde ich vorschlagen, dass Sie dort mit Ihren Untersuchungen beginnen!</string>
+	zur Autopsie gebracht. Wir konnten bereits etwas in Erfahrung bringen. Ich würde Ihnen als nächstes raten, die Obduktionsergebnisse zu untersuchen. Viel Erfolg bei dem Fall!</string>
+	<string name="crime_scene2">Hallo! Hier wo Sie stehen gab es vor Kurzem eine Schießerei mit mehreren Toten. Mehrere Täter sind durch den angrenzenden Park
+	geflohen, deswegen würde ich vorschlagen, dass Sie dort mit Ihren Untersuchungen beginnen! Eine erste heiße Spur haben wir bereits.</string>
 
     <string name="weapon_location1">Guten Tag! Wir haben hier die Tatwaffe für Sie. Wollen Sie diese nun untersuchen und weitere Hinweise erhalten?</string>
     <string name="weapon_location2">Hallo. Die Tatwaffe wurde noch nicht untersucht. Möchten Sie eine Untersuchung veranlassen und Hinweise zum Aufenthaltsort bzw. zum Aussehen des Täters erhalten?</string>

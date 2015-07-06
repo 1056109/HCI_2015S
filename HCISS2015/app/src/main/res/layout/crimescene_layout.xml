@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="nach Hinweisen suchen"
+                android:text="weitere Hinweise suchen"
                 android:onClick="afterCrimeScene"
                 android:textColor="@color/violett"
                 android:background="@drawable/btn_android"

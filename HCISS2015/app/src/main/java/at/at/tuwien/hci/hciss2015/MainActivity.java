@@ -1508,6 +1508,21 @@ public class MainActivity extends FragmentActivity implements
 
     public void afterCrimeScene(View view) {
         vibrate();
+        if(!activeCase.isCrimeSceneFound()) {
+            if (randomizer.nextBoolean()) {
+                if (featureProgress < MAX_FEATURES) {
+                    selectFeature(view);
+                } else if (mapProgress < MAX_MAPHINTS) {
+                    addMapDetail(view);
+                }
+            } else {
+                if (mapProgress < MAX_MAPHINTS) {
+                    addMapDetail(view);
+                } else if (featureProgress < MAX_FEATURES) {
+                    selectFeature(view);
+                }
+            }
+        }
         activeCase.setCrimeSceneFound(true);
         sharedPrefs.putCase(activeCase);
         dialog.dismiss();
