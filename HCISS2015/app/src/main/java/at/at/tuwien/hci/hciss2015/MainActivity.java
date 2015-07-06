@@ -180,7 +180,7 @@ public class MainActivity extends FragmentActivity implements
     private int[] suspectIds = new int[5];
 
     private TypedArray myMarkerIconsLarge;
-    private BitmapDescriptor[] bmpDescriptorsLarge = new BitmapDescriptor[6];
+    private BitmapDescriptor[] bmpDescriptorsLarge = new BitmapDescriptor[7];
 
     private LayoutInflater layoutInfl;
 
@@ -214,6 +214,7 @@ public class MainActivity extends FragmentActivity implements
         bmpDescriptorsLarge[3] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(3, -1));
         bmpDescriptorsLarge[4] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(4, -1));
         bmpDescriptorsLarge[5] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(5, -1));
+        bmpDescriptorsLarge[6] = BitmapDescriptorFactory.fromResource(myMarkerIconsLarge.getResourceId(6, -1));
 
         myMarkerIconsLarge.recycle();
 
@@ -602,7 +603,7 @@ public class MainActivity extends FragmentActivity implements
                                 dialog.show();
 
                                 return true;
-                            } else {
+                            } else if (Integer.parseInt(poiData[1]) == Types.WEAPON) {
                                 dialog = new Dialog(context);
                                 dialog.setCancelable(false);
 
@@ -633,6 +634,17 @@ public class MainActivity extends FragmentActivity implements
                                 dialog.show();
 
                                 return true;
+                            } else {
+
+                                hasDestination = true;
+                                activeCase.setSuspectResidenceFound(true);
+                                sharedPrefs.putCase(activeCase);
+                                myStats.setMap();
+                                sharedPrefs.putStats(myStats);
+
+                                openMerkmale(null);
+
+                                return true;
                             }
                         }
                         return false; //Every other case, show InfoWindow
@@ -661,7 +673,7 @@ public class MainActivity extends FragmentActivity implements
     public void addWeapon(View view) {
         if(!activeCase.isWeaponLocationFound()) {
             PointOfInterest weaponLocation = activeCase.getWeaponLocation();
-            weaponLocation.setType(5);
+            weaponLocation.setType(Types.WEAPON);
             weaponLocation.setFlag(0);
             Marker marker = mMap.addMarker(new MarkerOptions()
                     .title(weaponLocation.getDescription())
@@ -800,11 +812,10 @@ public class MainActivity extends FragmentActivity implements
         }
 
         List<PointOfInterest> suspectResidencePois;
-        int searchRange = radius / 2;
         do {
             suspectResidencePois = new ArrayList<PointOfInterest>(
                     daoPoiInstance.getPOIsByPositionType(
-                            activeCase.getSuspectResidence().getLat(), activeCase.getSuspectResidence().getLng(), searchRange / 2, Types.OTHER));
+                            activeCase.getSuspectResidence().getLat(), activeCase.getSuspectResidence().getLng(), radius, Types.OTHER));
             radius += 50;
         } while (suspectResidencePois.isEmpty() && radius < 2500);
 
@@ -824,6 +835,9 @@ public class MainActivity extends FragmentActivity implements
         if (mapProgress == 0) {
             handleCustomToast(getResources().getString(R.string.zeroMap));
         } else {
+            if(circle == null) {
+                drawMap();
+            }
             if (!showCircle) {
                 showCircle = true;
                 mapBtn.setImageResource(R.drawable.btn_map_pressed);
@@ -1411,17 +1425,27 @@ public class MainActivity extends FragmentActivity implements
         }
 
         PointOfInterest crimeScene = crimeScenePois.get(randomizer.nextInt(crimeScenePois.size()));
-        Marker marker = mMap.addMarker(new MarkerOptions()
-                        .title(crimeScene.getDescription())
-                        .position(crimeScene.getLatLng())
-                        .snippet(String.valueOf(crimeScene.getId()) + ";" + String.valueOf(crimeScene.getType()))
-                        .icon(BitmapDescriptorFactory.fromResource(context.getResources().obtainTypedArray(R.array.my_marker_icons).getResourceId(4, -1))));
-        MyMarkerDrawer.getMarkers().put(crimeScene.getId(),marker);
+        Marker csMarker = mMap.addMarker(new MarkerOptions()
+                .title(crimeScene.getDescription())
+                .position(crimeScene.getLatLng())
+                .snippet(String.valueOf(crimeScene.getId()) + ";" + String.valueOf(crimeScene.getType()))
+                .icon(BitmapDescriptorFactory.fromResource(context.getResources().obtainTypedArray(R.array.my_marker_icons).getResourceId(4, -1))));
+        MyMarkerDrawer.getMarkers().put(crimeScene.getId(),csMarker);
         daoPoiInstance.updatePOIFlag(crimeScene.getId(), 0);
 
         List<PointOfInterest> suspectResidencePois = new ArrayList<PointOfInterest>(
                 daoPoiInstance.getPOIsByMinMaxPositionType(crimeScene.getLat(), crimeScene.getLng(), 500, 2000, Types.OTHER));
         PointOfInterest suspectResidence = suspectResidencePois.get(randomizer.nextInt(suspectResidencePois.size()));
+        suspectResidence.setType(Types.SUSPECT);
+        suspectResidence.setFlag(0);
+        Marker srMarker = mMap.addMarker(new MarkerOptions()
+                .title(suspectResidence.getDescription())
+                .position(suspectResidence.getLatLng())
+                .snippet(String.valueOf(suspectResidence.getId()) + ";" + String.valueOf(suspectResidence.getType()))
+                .visible(false)
+                .icon(BitmapDescriptorFactory.fromResource(context.getResources().obtainTypedArray(R.array.my_marker_icons).getResourceId(6, -1))));
+        MyMarkerDrawer.getMarkers().put(suspectResidence.getId(),srMarker);
+        daoPoiInstance.updatePOI(suspectResidence);
 
         List<PointOfInterest> weaponLocationPois = new ArrayList<PointOfInterest>(
                 daoPoiInstance.getPOIsByMinMaxPositionType(crimeScene.getLat(), crimeScene.getLng(), 300, 1000, Types.OTHER));

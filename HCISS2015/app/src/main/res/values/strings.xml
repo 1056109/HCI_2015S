@@ -84,6 +84,7 @@
         <item>@drawable/ic_park</item>
         <item>@drawable/ic_murder</item>
         <item>@drawable/ic_weapon</item>
+        <item>@drawable/ic_suspect</item>
     </array>
     <array name="my_marker_icons_large">
         <item>@drawable/ic_police_large</item>
@@ -92,6 +93,7 @@
         <item>@drawable/ic_park_large</item>
         <item>@drawable/ic_murder_large</item>
         <item>@drawable/ic_weapon_large</item>
+        <item>@drawable/ic_suspect_large</item>
     </array>
 
     <array name="feature_categories">

@@ -10,6 +10,8 @@ public abstract class Types {
     public static final int SUBWAY = 2;
     public static final int PARK = 3;
     public static final int OTHER = 4;
+    public static final int WEAPON = 5;
+    public static final int SUSPECT = 6;
 
-    public static final int[] types = { 0, 1, 2, 3, 4 };
+    public static final int[] types = { 0, 1, 2, 3, 4, 5, 6 };
 }
