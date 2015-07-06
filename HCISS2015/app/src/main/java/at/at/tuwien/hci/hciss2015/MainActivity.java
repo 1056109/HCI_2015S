@@ -263,12 +263,13 @@ public class MainActivity extends FragmentActivity implements
             hideColleague();
         }
 
-
         layoutInfl = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         buildGoogleApiClient();
 
         openDialog(R.layout.start_case_layout);
+
+        //activeCase.setCrimeSceneFound(true);
     }
 
     private void updateCaseProgress() {
@@ -362,77 +363,64 @@ public class MainActivity extends FragmentActivity implements
 
                             final View layout = layoutInfl.inflate(R.layout.colleguedialog, null, false);
 
-                            ImageView cdImgWeapon = (ImageView) layout.findViewById(R.id.cd_img_weapon);
-                            ImageView cdImgMap = (ImageView) layout.findViewById(R.id.cd_img_map);
-                            ImageView cdImgFeature = (ImageView) layout.findViewById(R.id.cd_img_feature);
-                            final Button cdBtnSend = (Button) layout.findViewById(R.id.cd_btn_send);
-                            cdBtnSend.setOnClickListener(new OnClickListener() {
+                            ImageButton cdBtnWeapon = (ImageButton) layout.findViewById(R.id.cd_btn_weapon);
+                            cdBtnWeapon.setOnClickListener(new OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]));
+                                    send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]), view);
+                                    marker.remove();
+                                }
+                            });
+                            ImageButton cdBtnMap = (ImageButton) layout.findViewById(R.id.cd_btn_map);
+                            cdBtnMap.setOnClickListener(new OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]), view);
+                                    marker.remove();
+                                }
+                            });
+                            ImageButton cdBtnFeature = (ImageButton) layout.findViewById(R.id.cd_btn_feature);
+                            cdBtnFeature.setOnClickListener(new OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]), view);
                                     marker.remove();
                                 }
                             });
 
-                            if (activeCase.isWeaponLocationFound()) {
-                                cdImgWeapon.setEnabled(false);
-                            } else {
-                                cdImgWeapon.setEnabled(true);
-                            }
-
-                            if (mapProgress >= MAX_MAPHINTS) {
-                                cdImgMap.setEnabled(false);
-                            } else {
-                                cdImgMap.setEnabled(true);
-                            }
-
-                            if (featureProgress >= MAX_FEATURES) {
-                                cdImgFeature.setEnabled(false);
-                            } else {
-                                cdImgFeature.setEnabled(true);
-                            }
-
-                            cdImgWeapon.setVisibility(View.VISIBLE);
-                            cdImgMap.setVisibility(View.VISIBLE);
-                            cdImgFeature.setVisibility(View.VISIBLE);
-
-                            Button cdBtnClose = (Button) layout.findViewById(R.id.cd_btn_close);
-                            TextView headerValue = (TextView) layout.findViewById(R.id.cd_txt_desc);
+                            cdBtnWeapon.setVisibility(View.VISIBLE);
+                            cdBtnMap.setVisibility(View.VISIBLE);
+                            cdBtnFeature.setVisibility(View.VISIBLE);
 
                             if (!activeCase.isCrimeSceneFound()) {
-                                cdImgWeapon.setVisibility(View.GONE);
-                                cdImgMap.setVisibility(View.GONE);
-                                cdImgFeature.setVisibility(View.GONE);
-                                cdBtnSend.setVisibility(View.GONE);
-                                Button cdBtnAbort = (Button) layout.findViewById(R.id.cd_btn_abort);
-                                cdBtnAbort.setVisibility(View.GONE);
-                                cdBtnClose.setVisibility(View.VISIBLE);
-                                headerValue.setText(getResources().getString(R.string.send_colleague_impossible));
+                                handleCustomToast(getResources().getString(R.string.send_colleague_impossible));
+                                return true;
                             } else {
-                                cdBtnClose.setVisibility(View.GONE);
-                                headerValue.setText(getResources().getString(R.string.send_collegue_really));
                                 if (Integer.parseInt(poiData[1]) == Types.POLICESTATION) {
-                                    cdImgWeapon.setVisibility(View.GONE);
-                                    if (mapProgress >= MAX_MAPHINTS && featureProgress >= MAX_FEATURES) {
-                                        cdBtnSend.setEnabled(false);
+                                    cdBtnWeapon.setVisibility(View.GONE);
+                                    if (mapProgress >= MAX_MAPHINTS) {
+                                        cdBtnMap.setEnabled(false);
+                                    }
+                                    if (featureProgress >= MAX_FEATURES) {
+                                        cdBtnFeature.setEnabled(false);
                                     }
                                 } else if (Integer.parseInt(poiData[1]) == Types.HOSPITAL) {
-                                    cdImgMap.setVisibility(View.GONE);
-                                    cdImgFeature.setVisibility(View.GONE);
+                                    cdBtnMap.setVisibility(View.GONE);
+                                    cdBtnFeature.setVisibility(View.GONE);
                                     if (activeCase.isWeaponLocationFound()) {
-                                        cdBtnSend.setEnabled(false);
+                                        cdBtnWeapon.setEnabled(false);
                                     }
                                 } else if (Integer.parseInt(poiData[1]) == Types.SUBWAY) {
-                                    cdImgWeapon.setVisibility(View.GONE);
-                                    cdImgFeature.setVisibility(View.GONE);
+                                    cdBtnWeapon.setVisibility(View.GONE);
+                                    cdBtnFeature.setVisibility(View.GONE);
                                     if (mapProgress >= MAX_MAPHINTS) {
-                                        cdBtnSend.setEnabled(false);
+                                        cdBtnMap.setEnabled(false);
                                     }
                                 } else if (Integer.parseInt(poiData[1]) == Types.PARK) {
-                                    cdImgWeapon.setVisibility(View.GONE);
-                                    cdImgMap.setVisibility(View.GONE);
+                                    cdBtnWeapon.setVisibility(View.GONE);
+                                    cdBtnMap.setVisibility(View.GONE);
                                     if (featureProgress >= MAX_FEATURES) {
-                                        cdBtnSend.setEnabled(false);
+                                        cdBtnFeature.setEnabled(false);
                                     }
                                 }
                             }
@@ -441,7 +429,6 @@ public class MainActivity extends FragmentActivity implements
                             Window window = dialog.getWindow();
                             window.setBackgroundDrawableResource(android.R.color.transparent);
                             dialog.show();
-
                             return true;
 
                         } else if (marker.getTitle().contains("Hinweis")) { // on marker in 30m range click
@@ -510,6 +497,9 @@ public class MainActivity extends FragmentActivity implements
                                 });
 
                                 if (!activeCase.isCrimeSceneFound()) {
+                                    handleCustomToast(getResources().getString(R.string.no_investigation));
+                                    return true;
+                                    /*
                                     mdBtnWeapon.setVisibility(View.GONE);
                                     mdBtnMap.setVisibility(View.GONE);
                                     mdBtnFeature.setVisibility(View.GONE);
@@ -517,6 +507,7 @@ public class MainActivity extends FragmentActivity implements
                                     headerValue.setText(getResources().getString(R.string.no_investigation));
                                     TextView explanation = (TextView) layout.findViewById(R.id.new_hint_explanation);
                                     explanation.setVisibility(View.GONE);
+                                    */
                                 } else {
                                     if (Integer.parseInt(poiData[1]) == Types.POLICESTATION) {
                                         mdBtnWeapon.setVisibility(View.GONE);
@@ -994,6 +985,11 @@ public class MainActivity extends FragmentActivity implements
         myDrawerList.setItemChecked(0, true);
     }
 
+    public void closeApp(View view) {
+        dialog.dismiss();
+        finish();
+    }
+
     public void openDrawer(View view) {
         vibrate();
         myDrawerLayout.openDrawer(myDrawerList);
@@ -1014,11 +1010,11 @@ public class MainActivity extends FragmentActivity implements
         }
     }
 
-    public void send(int poiId, int poiType) {
+    public void send(int poiId, int poiType, View btnClicked) {
         colleague.setImageResource(R.drawable.info_collegue);
         colleague.setClickable(false);
         handleCustomToast(send_colleague_working_msg);
-        executeTimerTask(poiId, poiType);
+        executeTimerTask(poiId, poiType, btnClicked);
         colleagueState = ColleagueState.WORKING;
         dialog.dismiss();
     }
@@ -1253,7 +1249,7 @@ public class MainActivity extends FragmentActivity implements
         finish();
     }
 
-    private void executeTimerTask(final int poiId, final int poiType) {
+    private void executeTimerTask(final int poiId, final int poiType, final View btnClicked) {
         //startTime = 900000; //15 Min
         startTime = 10000;
         timerHandler = new Handler();
@@ -1280,6 +1276,21 @@ public class MainActivity extends FragmentActivity implements
                     colleagueUsed = true;
                     sharedPrefs.putCase(activeCase);
                     hideColleague();
+
+                    if(poiType == Types.POLICESTATION) {
+                        if(btnClicked.getId() == R.id.cd_btn_map) {
+                            addMapDetail(btnClicked);
+                        } else if(btnClicked.getId() == R.id.cd_btn_feature) {
+                            selectFeature(btnClicked);
+                        }
+                    } else if(poiType == Types.HOSPITAL) {
+                        addWeapon(btnClicked);
+                    } else if(poiType == Types.SUBWAY) {
+                        addMapDetail(btnClicked);
+                    } else if(poiType == Types.PARK) {
+                        selectFeature(btnClicked);
+                    }
+
                     MyMarkerDrawer.getMarkers().remove(poiId);
                     daoPoiInstance.updatePOIFlag(poiId, 1);
                     timerHandler.removeCallbacks(runnable);

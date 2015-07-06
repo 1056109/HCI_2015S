@@ -7,16 +7,18 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/cd_txt_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:textSize="20dp"
+        android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
+        android:gravity="center"
         android:padding="5dp"
-        android:id="@+id/cd_txt_desc"
-        android:layout_gravity="center_horizontal" />
+        android:text="@string/send_collegue_really"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
 
+    <!--
     <LinearLayout
         android:layout_gravity="center_horizontal"
         android:id="@+id/infos"
@@ -48,54 +50,93 @@
             android:layout_margin="5dp"
             android:src="@drawable/info_feature" />
     </LinearLayout>
+    -->
+
+    <TextView
+        android:id="@+id/new_hint_explanation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:singleLine="false"
+        android:text="@string/new_hint_explanation"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
-        <Button
+        <ImageButton
+            android:id="@+id/cd_btn_weapon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:text="@string/send_collegue_no"
-            android:textColor="@color/violett"
-            android:onClick="sendNot"
-            android:background="@drawable/btn_android"
-            android:id="@+id/cd_btn_abort" />
+            android:focusableInTouchMode="false"
+            android:src="@drawable/btn_weapon" />
 
-
-        <Button
+        <ImageButton
+            android:id="@+id/cd_btn_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_margin="20dp"
-            android:layout_weight="1"
-            android:text="@string/send_collegue_yes"
-            android:textColor="@color/violett"
-            android:background="@drawable/btn_android"
-            android:id="@+id/cd_btn_send" />
+            android:layout_gravity="center_horizontal"
+            android:nestedScrollingEnabled="false"
+            android:src="@drawable/btn_map" />
+
+        <ImageButton
+            android:id="@+id/cd_btn_feature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/btn_feature" />
     </LinearLayout>
 
+    <!--
     <LinearLayout
-        android:id="@+id/btn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/cd_btn_close"
+            android:id="@+id/cd_btn_abort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
             android:background="@drawable/btn_android"
-            android:onClick="closeDialog"
-            android:text="@string/close"
+            android:onClick="sendNot"
+            android:text="@string/send_collegue_no"
             android:textColor="@color/violett" />
 
+
+        <Button
+            android:id="@+id/cd_btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_android"
+            android:text="@string/send_collegue_yes"
+            android:textColor="@color/violett" />
     </LinearLayout>
+    -->
+
+    <Button
+        android:id="@+id/cd_btn_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:background="@drawable/btn_android"
+        android:onClick="closeDialog"
+        android:text="@string/close"
+        android:textColor="@color/violett" />
+
 </LinearLayout>
