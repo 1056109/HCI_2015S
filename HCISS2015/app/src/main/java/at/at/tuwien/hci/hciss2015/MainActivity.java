@@ -823,7 +823,7 @@ public class MainActivity extends FragmentActivity implements
 
         if (mapProgress == 0) {
             handleCustomToast(getResources().getString(R.string.zeroMap));
-        } else
+        } else {
             if (!showCircle) {
                 showCircle = true;
                 mapBtn.setImageResource(R.drawable.btn_map_pressed);
@@ -834,6 +834,7 @@ public class MainActivity extends FragmentActivity implements
                 mapBtn.setImageResource(R.drawable.btn_map);
             }
             circle.setVisible(showCircle);
+        }
     }
 
     public void openMerkmale(View view) {
