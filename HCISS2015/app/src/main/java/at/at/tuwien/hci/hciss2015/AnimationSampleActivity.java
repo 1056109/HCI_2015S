@@ -44,7 +44,13 @@ public class AnimationSampleActivity extends Activity implements View.OnClickLis
     private TextView help2;
     private TextView help3;
     private TextView help4;
+    private TextView colleagueState;
+    private TextView weaponProgress;
+    private TextView featureProgress;
+    private TextView mapProgress;
     private final ApiUtils apiUtils = new ApiUtils();
+    float alphaVal = 0.5f;
+    float alphaReset = 1.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +65,12 @@ public class AnimationSampleActivity extends Activity implements View.OnClickLis
         help2 = (TextView) findViewById(R.id.help2);
         help3 = (TextView) findViewById(R.id.help3);
         help4 = (TextView) findViewById(R.id.help4);
+        colleagueState = (TextView) findViewById(R.id.colleagueState);
+        weaponProgress = (TextView) findViewById(R.id.weaponProgress);
+        featureProgress = (TextView) findViewById(R.id.featureProgress);
+        mapProgress = (TextView) findViewById(R.id.mapProgress);
 
-        showcaseView = new ShowcaseView.Builder(this)
+        showcaseView = new ShowcaseView.Builder(this,true)
                 .setTarget(new ViewTarget(btnColleague))
                 .setOnClickListener(this)
                 .build();
@@ -72,6 +82,8 @@ public class AnimationSampleActivity extends Activity implements View.OnClickLis
         lps.setMargins(margin, margin, margin, margin);
         showcaseView.setButtonPosition(lps);
         showcaseView.setButtonText(getString(R.string.next));
+        setAlpha(alphaVal,btnMap,btnWeapon,btnFeature,weaponProgress,featureProgress,mapProgress);
+
     }
 
 
@@ -90,20 +102,25 @@ public class AnimationSampleActivity extends Activity implements View.OnClickLis
                 showcaseView.setShowcase(new ViewTarget(btnWeapon), true);
                 help1.setVisibility(View.GONE);
                 help2.setVisibility(View.VISIBLE);
+                setAlpha(alphaVal,colleagueState,btnColleague);
+                setAlpha(alphaReset,weaponProgress,btnWeapon);
                 break;
 
             case 1:
                 showcaseView.setShowcase(new ViewTarget(btnMap), true);
                 help2.setVisibility(View.GONE);
                 help3.setVisibility(View.VISIBLE);
+                setAlpha(alphaVal,weaponProgress,btnWeapon);
+                setAlpha(alphaReset,mapProgress,btnMap);
                 break;
 
             case 2:
                 showcaseView.setShowcase(new ViewTarget(btnFeature), true);
-                //showcaseView.setTarget(Target.NONE);
                 help3.setVisibility(View.GONE);
                 help4.setVisibility(View.VISIBLE);
                 showcaseView.setButtonText(getString(R.string.close));
+                setAlpha(alphaVal,mapProgress,btnMap);
+                setAlpha(alphaReset,featureProgress,btnFeature);
                 //setAlpha(0.4f, textView1, textView2, textView3);
                 break;
 
