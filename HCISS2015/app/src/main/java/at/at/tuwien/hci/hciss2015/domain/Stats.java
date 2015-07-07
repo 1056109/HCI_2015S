@@ -29,7 +29,7 @@ public class Stats {
     }
 
     public void setMap() {
-        map+=1;
+        map++;
     }
 
     public int getSolved() {
@@ -44,7 +44,13 @@ public class Stats {
         return missed;
     }
 
-    public void setNotSolved() {
-        missed++;
+    public void setNotSolved() { missed++ ;}
+
+    public int getRate() {
+        if (solved == 0 && missed == 0) {
+            return 0;
+        } else {
+            return (int)(((float) solved / (solved + missed)) * 100);
+        }
     }
 }

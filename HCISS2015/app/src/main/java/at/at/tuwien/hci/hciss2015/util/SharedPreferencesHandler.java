@@ -48,18 +48,6 @@ public class SharedPreferencesHandler {
         return MyJsonParser.parseJson(sharedPref.getString(USER, ""), User.class);
     }
 
-    public void putSuspect(Suspect suspect) {
-        editor.putString(SUSPECT, MyJsonParser.toJson(suspect));
-        editor.commit();
-    }
-
-    public Suspect getSuspect() {
-        if("".equals(sharedPref.getString(SUSPECT, ""))) {
-            return null;
-        }
-        return MyJsonParser.parseJson(sharedPref.getString(SUSPECT,""), Suspect.class);
-    }
-
     public void putCase(Case crimeCase) {
         editor.putString(CASE, MyJsonParser.toJson(crimeCase));
         editor.commit();

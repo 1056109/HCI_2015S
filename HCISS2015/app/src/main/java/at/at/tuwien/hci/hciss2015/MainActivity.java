@@ -664,8 +664,6 @@ public class MainActivity extends FragmentActivity implements
         hasDestination = true;
         activeCase.setSuspectResidenceFound(true);
         sharedPrefs.putCase(activeCase);
-        myStats.setMap();
-        sharedPrefs.putStats(myStats);
 
         openMerkmale(view);
     }
@@ -891,7 +889,6 @@ public class MainActivity extends FragmentActivity implements
         int id = 0;
         int[] idArray = new int[5];
         List<Suspect> suspectList = activeCase.getSuspectList();
-        Collections.shuffle(suspectList);
 
         for(Suspect suspect : suspectList) {
             idArray[id] = context.getResources().getIdentifier("char" + suspect.getSuspectId(), "drawable", context.getPackageName());
@@ -926,21 +923,15 @@ public class MainActivity extends FragmentActivity implements
 
     private void setStats(View layout) {
         TextView solved = (TextView) layout.findViewById(R.id.solvedRate);
-        solved.setText("" + sharedPrefs.getStats().getSolved());
+        solved.setText(Integer.toString(sharedPrefs.getStats().getSolved()));
         TextView missed = (TextView) layout.findViewById(R.id.missedRate);
-        missed.setText("" + sharedPrefs.getStats().getMissed());
+        missed.setText(Integer.toString(sharedPrefs.getStats().getMissed()));
         TextView mapSolved = (TextView) layout.findViewById(R.id.mapRate);
-        mapSolved.setText("" + sharedPrefs.getStats().getMap());
+        mapSolved.setText(Integer.toString(sharedPrefs.getStats().getMap()));
         TextView featureSolved = (TextView) layout.findViewById(R.id.featureRate);
-        featureSolved.setText("" + sharedPrefs.getStats().getFeatures());
+        featureSolved.setText(Integer.toString(sharedPrefs.getStats().getFeatures()));
         TextView rate = (TextView) layout.findViewById(R.id.statRate);
-        int ratenumber;
-        if (sharedPrefs.getStats().getSolved() == 0 && sharedPrefs.getStats().getMissed() == 0)
-            ratenumber = 0;
-        else
-            ratenumber = (sharedPrefs.getStats().getSolved() /
-                    (sharedPrefs.getStats().getSolved() + sharedPrefs.getStats().getMissed())) * 100;
-        rate.setText("" + ratenumber + " %");
+        rate.setText(Integer.toString(sharedPrefs.getStats().getRate()) + " %");
     }
 
     private void setStart(View layout) {
@@ -1124,7 +1115,7 @@ public class MainActivity extends FragmentActivity implements
         }
 
         List<PointOfInterest> nearbyPois = new ArrayList<PointOfInterest>(
-                        daoPoiInstance.getPOIsByPosition(location.getLatitude(), location.getLongitude(), 30));
+                        daoPoiInstance.getPOIsByPosition(location.getLatitude(), location.getLongitude(), 50));
 
         Log.v("CheckMarkers", "Counted nearby Markers: " + nearbyPois.size());
 
@@ -1386,8 +1377,6 @@ public class MainActivity extends FragmentActivity implements
 
     public void endCase(View view) {
         vibrate();
-        myStats.setSolved();
-        sharedPrefs.putStats(myStats);
         daoPoiInstance.resetAllFlags();
         daoPoiInstance.resetOtherTypes();
         sharedPrefs.removeCase();
@@ -1490,6 +1479,8 @@ public class MainActivity extends FragmentActivity implements
         suspect.setCrimeCommitter(false);
         suspectList.add(suspect);
         usedIds.add(suspect.getSuspectId());
+
+        Collections.shuffle(suspectList);
 
         int crimeSceneType = randomizer.nextInt(2);
 

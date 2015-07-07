@@ -9,7 +9,7 @@
     <string name="gps_off">Nein, beenden</string>
 
     <string name="welcome_first_start">Willkommen bei Vienna Cop! Bitte Daten eingeben, auf Start drücken, schon geht deine
-        Polizeikarriere in Wien los!</string>
+         Polizeikarriere in Wien los!</string>
 
     <!--<string name="welcome_first_start">Willkommen bei Vienna Cop!</string>-->
 	
@@ -135,12 +135,12 @@
     <string name="benutzerdaten">In diesem Menü kannst du deine Spielerdaten aktualisieren</string>
 
     <string name="info">App-Info</string>
-    <string name="infoMsg">ViennaCop ist ein Studenten-Projekt, welches im Rahmen des HCI-Seminars (SS2015) der Forschungsgruppe DECO (INSO) an der TU Wien entstanden ist. \n\nTeam-Mitglieder: \n\tAmer Salkovic\n\tMario Vorstandlechner\n\tMichael Traxler\n\tAlex Brandner</string>
+    <string name="infoMsg">ViennaCop ist ein Studenten-Projekt, welches im Rahmen des HCI-Seminars (SS2015) der Forschungsgruppe DECO (INSO) an der TU Wien entstanden ist. \n\nTeam-Mitglieder: \n\tAlex Brandner\n\tAmer Salkovic\n\tMichael Traxler\n\tMario Vorstandlechner</string>
 
     <string name="stat">Statistik</string>
     <string name="statRateMsg">Aufklärungsrate</string>
     <string name="solvedRateMsg">Gelöste Fälle</string>
-    <string name="missedRateMsg">Falsche Fälle</string>
+    <string name="missedRateMsg">Ungelöste Fälle</string>
     <string name="featureRateMsg">Gefundene Tätermerkmale</string>
     <string name="mapRateMsg">Gefundene Ortshinweise</string>
 
