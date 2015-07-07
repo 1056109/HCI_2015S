@@ -58,7 +58,8 @@
         </activity>
 
         <activity
-            android:name=".AnimationSampleActivity">
+            android:name=".AnimationSampleActivity"
+            android:screenOrientation="portrait">
         </activity>
 
         <service android:name="at.at.tuwien.hci.hciss2015.util.GeofenceTransitionsIntentService" />

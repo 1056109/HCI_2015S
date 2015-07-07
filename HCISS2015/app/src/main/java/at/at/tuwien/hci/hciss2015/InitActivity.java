@@ -91,7 +91,7 @@ public class InitActivity extends Activity {
                 }
             }
         };
-        myHandler.postDelayed(runnable, 2000);
+        myHandler.postDelayed(runnable, 2500);
     }
 
     public void gpsOn(View view) {
