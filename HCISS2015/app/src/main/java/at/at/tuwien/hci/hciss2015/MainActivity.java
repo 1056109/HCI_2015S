@@ -155,7 +155,7 @@ public class MainActivity extends FragmentActivity implements
 
     private Dialog dialog;
 
-    private long startTime;
+    private long startTime = 15000;
 
     private Handler timerHandler;
     private Runnable runnable;
@@ -183,6 +183,16 @@ public class MainActivity extends FragmentActivity implements
     private BitmapDescriptor[] bmpDescriptorsLarge = new BitmapDescriptor[7];
 
     private LayoutInflater layoutInfl;
+
+    /*
+     * colleague resume
+     */
+    private View btnClicked;
+    private int poiId;
+    private int poiType;
+    private long remainingTime;
+
+    // END colleague resume
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -260,8 +270,15 @@ public class MainActivity extends FragmentActivity implements
 
         sharedPrefs = new SharedPreferencesHandler(this);
         activeCase = sharedPrefs.getCase();
-        if( activeCase != null && activeCase.isColleagueUsed() ) {
-            hideColleague();
+        if( activeCase != null ) {
+            if( activeCase.isColleagueUsed() ) {
+                hideColleague();
+            } else if( !activeCase.isColleagueUsed() && activeCase.getTimeRemaining() > 0 ) {
+                startTime = activeCase.getTimeRemaining();
+                View btnClicked = new View(context);
+                btnClicked.setId(activeCase.getViewId());
+                executeTimerTask(activeCase.getPoiId(), activeCase.getPoiType(), btnClicked);
+            }
         }
 
         layoutInfl = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -369,7 +386,9 @@ public class MainActivity extends FragmentActivity implements
                                 @Override
                                 public void onClick(View view) {
                                     send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]), view);
-                                    marker.remove();
+                                    btnClicked = view;
+                                    poiId = Integer.parseInt(poiData[0]);
+                                    poiType = Integer.parseInt(poiData[1]);
                                 }
                             });
                             ImageButton cdBtnMap = (ImageButton) layout.findViewById(R.id.cd_btn_map);
@@ -377,7 +396,9 @@ public class MainActivity extends FragmentActivity implements
                                 @Override
                                 public void onClick(View view) {
                                     send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]), view);
-                                    marker.remove();
+                                    btnClicked = view;
+                                    poiId = Integer.parseInt(poiData[0]);
+                                    poiType = Integer.parseInt(poiData[1]);
                                 }
                             });
                             ImageButton cdBtnFeature = (ImageButton) layout.findViewById(R.id.cd_btn_feature);
@@ -385,7 +406,9 @@ public class MainActivity extends FragmentActivity implements
                                 @Override
                                 public void onClick(View view) {
                                     send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]), view);
-                                    marker.remove();
+                                    btnClicked = view;
+                                    poiId = Integer.parseInt(poiData[0]);
+                                    poiType = Integer.parseInt(poiData[1]);
                                 }
                             });
 
@@ -1059,7 +1082,13 @@ public class MainActivity extends FragmentActivity implements
     @Override
     protected void onStop() {
         super.onStop();
-
+        if(colleagueState == ColleagueState.WORKING && startTime > 0) {
+            activeCase.setViewId(btnClicked.getId());
+            activeCase.setPoiId(poiId);
+            activeCase.setPoiType(poiType);
+            activeCase.setTimeRemaining(startTime);
+            sharedPrefs.putCase(activeCase);
+        }
     }
 
     @Override
@@ -1261,7 +1290,7 @@ public class MainActivity extends FragmentActivity implements
 
     private void executeTimerTask(final int poiId, final int poiType, final View btnClicked) {
         //startTime = 900000; //15 Min
-        startTime = 15000;
+        //startTime = 15000;
         timerHandler = new Handler();
         runnable = new Runnable() {
 
@@ -1300,11 +1329,14 @@ public class MainActivity extends FragmentActivity implements
                     } else if(poiType == Types.PARK) {
                         selectFeature(btnClicked);
                     }
-
+                    MyMarkerDrawer.getMarkers().get(poiId).remove();
                     MyMarkerDrawer.getMarkers().remove(poiId);
                     daoPoiInstance.updatePOIFlag(poiId, 1);
                     timerHandler.removeCallbacks(runnable);
                     //fire info dialog
+
+                    activeCase.setTimeRemaining(0);
+                    sharedPrefs.putCase(activeCase);
                 }
             }
         };

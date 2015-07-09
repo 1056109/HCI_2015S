@@ -1,5 +1,6 @@
 package at.at.tuwien.hci.hciss2015.domain;
 
+
 import java.util.List;
 
 /**
@@ -19,6 +20,11 @@ public class Case {
     private boolean weaponLocationVisited;
     private boolean colleagueUsed;
     private int crimeSceneType;
+
+    private int viewId;
+    private int poiId;
+    private int poiType;
+    private long timeRemaining;
 
     public Case() { }
 
@@ -149,6 +155,38 @@ public class Case {
 
     public void setWeaponLocationVisited(boolean weaponLocationVisited) {
         this.weaponLocationVisited = weaponLocationVisited;
+    }
+
+    public int getViewId() {
+        return viewId;
+    }
+
+    public void setViewId(int viewId) {
+        this.viewId = viewId;
+    }
+
+    public int getPoiId() {
+        return poiId;
+    }
+
+    public void setPoiId(int poiId) {
+        this.poiId = poiId;
+    }
+
+    public int getPoiType() {
+        return poiType;
+    }
+
+    public void setPoiType(int poiType) {
+        this.poiType = poiType;
+    }
+
+    public long getTimeRemaining() {
+        return timeRemaining;
+    }
+
+    public void setTimeRemaining(long timeRemaining) {
+        this.timeRemaining = timeRemaining;
     }
 
     public String toString() {
