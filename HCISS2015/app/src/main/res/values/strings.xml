@@ -28,7 +28,7 @@
 	geflohen, deswegen würde ich vorschlagen, dass Sie dort mit Ihren Untersuchungen beginnen! Eine erste heiße Spur haben wir bereits.</string>
 
     <string name="weapon_location1">Guten Tag! Wir haben hier die Tatwaffe für Sie. Wollen Sie diese nun untersuchen und weitere Hinweise erhalten?</string>
-    <string name="weapon_location2">Hallo. Die Tatwaffe wurde noch nicht untersucht. Möchten Sie eine Untersuchung veranlassen und Hinweise zum Aufenthaltsort bzw. zum Aussehen des Täters erhalten?</string>
+    <string name="weapon_location2">Hallo. Die Tatwaffe wurde noch nicht untersucht. Möchten Sie eine Untersuchung veranlassen?</string>
     <string name="weapon_location_visited">Willkommen zurück. Es konnten leider keine weiteren Hinweise ermittelt werden.</string>
 
 	<string name="police_investigation1">Willkommen Kollege/Kollegin. Ich schätze Sie wollen die Überwachungsbänder des aktuellen Falles untersuchen? 
@@ -39,19 +39,19 @@
 	<string name="hospital_investigation2">Wie kann ich Ihnen helfen? Kommen Sie wegen den Toten bei der Schießerei? Sie haben Glück, die Obduktion wird gerade 
 	abgeschlossen, Sie können in Kürze die Ergebnisse studieren.</string>
 	<string name="subway_investigation1">Hi. Sie kommen um die Überwachungskameras zu kontrollieren? Ich werde Ihnen helfen, wir können also gleich anfangen. 
-	Wollen Sie sich auf den Fluchtweg oder das Aussehen des Täters konzentieren?</string>
-	<string name="subway_investigation2">Hallo, ich habe Sie bereits erwartet. Sie kommen wegen den Überwachungsbändern, oder? Hier, sie sind bereit zur Überprüfung. 
-	Wollen Sie herausfinden wie der Täter aussieht oder wohin er geflüchtet ist?</string>
+	Lassen Sie uns herausfinden, wohin der Täter geflohen ist.</string>
+	<string name="subway_investigation2">Hallo, ich habe Sie bereits erwartet. Sie kommen wegen den Überwachungsbändern, oder? Hier, sie sind bereit zur Überprüfung.
+	Sehen wir uns doch an, in welche Richtung der Verdächtige verschwunden ist.</string>
 	<string name="park_investigation1">Hallo Kollege/Kollegin. Durch diesen Park ist der Täter geflüchtet und wurde dabei von mehreren Personen gesehen. Sie haben 
 	nun die Möglichkeit, diese Leute zu befragen und herauszufinden, wie der Täter in etwa aussieht.</string>
 	<string name="park_investigation2">Guten Tag. Sie kommen wegen der Befragung der Zeugen? Mehrere Personen haben Täter aus der Nähe gesehen, Sie werden also mit 
 	Sicherheit Hinweise auf das Aussehen des Täters herausfinden können.</string>
     <string name="no_investigation">Willkommen. Wir können Ihnen ohne Untersuchung des Tatorts leider nicht behilflich sein.</string>
 
-    <string name="new_hint_explanation">Wählen Sie den Hinweis aus</string>
+    <string name="new_hint_explanation">Wählen Sie aus, nach welchen Hinweisen Sie suchen wollen</string>
 	
-	<string name="suspect_selection">Werter Kollege, wir haben hier die Verdächtigen gesammelt. Ich hoffe Sie haben genug Hinweise gesammelt um den Täter 
-	eindeutig identifizieren zu können. Falls nicht wäre es sinnvoll, wenn Sie noch etwas weiterforschen. Ansonsten sagen Sie uns bitte, wer der Täter ist.</string>
+	<string name="suspect_selection">Werter Kollege, wir haben hier die Verdächtigen versammelt. Wenn Sie genügend Hinweise gesammelt haben um den Täter 
+	 identifizieren zu können wählen Sie ihn bitte aus. Falls nicht schlage ich vor dass Sie noch etwas weiterforschen.</string>
 	
 	<string name="hint_feature1">Durch deine Nachforschungen konntest du folgendes Merkmal des Täters in Erfahrung bringen:</string>
 	<string name="hint_feature2">Durch die intensive Untersuchung war es dir möglich, folgendes Aussehensmerkmal des Täters herauszufinden:</string>
