@@ -1446,7 +1446,9 @@ public class MainActivity extends FragmentActivity implements
         } while (crimeScenePois.isEmpty() && searchRange < 1500);
 
         if(crimeScenePois.isEmpty()) {
-            Log.e(TAG, "Crime scene could not be found");
+            Log.i(TAG, "Crime scene could not be found");
+            crimeScenePois = new ArrayList<PointOfInterest>(
+                    daoPoiInstance.getPOIsByType(Types.OTHER));
         }
 
         PointOfInterest crimeScene = crimeScenePois.get(randomizer.nextInt(crimeScenePois.size()));
