@@ -1527,6 +1527,10 @@ public class MainActivity extends FragmentActivity implements
         updateCaseProgress();
 
         dialog.dismiss();
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(crimeScene.getLatLng()));
+        handleCustomToast(getResources().getString(R.string.start_case_info));
+
     }
 
     public void resumeCase(View view) {
