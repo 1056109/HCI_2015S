@@ -1134,6 +1134,10 @@ public class MainActivity extends FragmentActivity implements
                 nearbyMarkers.put(poi.getId(), marker);
             }
         }
+
+        if(nearbyMarkers.size() > 0) {
+            vibrate();
+        }
     }
 
     @Override
@@ -1257,7 +1261,7 @@ public class MainActivity extends FragmentActivity implements
 
     private void executeTimerTask(final int poiId, final int poiType, final View btnClicked) {
         //startTime = 900000; //15 Min
-        startTime = 10000;
+        startTime = 15000;
         timerHandler = new Handler();
         runnable = new Runnable() {
 
