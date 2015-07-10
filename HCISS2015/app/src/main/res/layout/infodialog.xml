@@ -41,6 +41,18 @@
             android:text="@string/infoMsg" />
     </ScrollView>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linkBrushes"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:text="@string/linkBrushes" />
+
     <Button
         android:id="@+id/infoOk"
         android:layout_width="wrap_content"

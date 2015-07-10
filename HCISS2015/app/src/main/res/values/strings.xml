@@ -135,7 +135,8 @@
     <string name="benutzerdaten">In diesem Menü kannst du deine Spielerdaten aktualisieren</string>
 
     <string name="info">App-Info</string>
-    <string name="infoMsg">ViennaCop ist ein Studenten-Projekt, welches im Rahmen des HCI-Seminars (SS2015) der Forschungsgruppe DECO (INSO) an der TU Wien entstanden ist. \n\nTeam-Mitglieder: \n\tAlex Brandner\n\tAmer Salkovic\n\tMichael Traxler\n\tMario Vorstandlechner</string>
+    <string name="infoMsg">ViennaCop ist ein Studenten-Projekt, welches im Rahmen des HCI-Seminars (SS2015) der Forschungsgruppe DECO (INSO) an der TU Wien entstanden ist. \n\nTeam-Mitglieder: \n\tAlex Brandner\n\tAmer Salkovic\n\tMichael Traxler\n\tMario Vorstandlechner\n\n</string>
+    <string name="linkBrushes">Für die Phantombilder wurden folgende Photoshop-Brushes verwendet:\n\tEyes Brush Set Vol. 2\n\t\thttp://goo.gl/wUVBOn\n\tHair Brushes CS+\n\t\thttp://goo.gl/YjRJTp</string>
 
     <string name="stat">Statistik</string>
     <string name="statRateMsg">Aufklärungsrate</string>

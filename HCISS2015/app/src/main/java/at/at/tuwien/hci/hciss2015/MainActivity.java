@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -897,6 +898,8 @@ public class MainActivity extends FragmentActivity implements
             setStart(layout);
         } else if (view == R.layout.end_case_layout) {
             setEnd(layout);
+        } else if (view == R.layout.infodialog){
+            setLinks(layout);
         }
 
         dialog.show();
@@ -955,6 +958,10 @@ public class MainActivity extends FragmentActivity implements
         featureSolved.setText(Integer.toString(sharedPrefs.getStats().getFeatures()));
         TextView rate = (TextView) layout.findViewById(R.id.statRate);
         rate.setText(Integer.toString(sharedPrefs.getStats().getRate()) + " %");
+    }
+    private void setLinks(View layout){
+        TextView linkBrushes = (TextView) layout.findViewById(R.id.linkBrushes);
+        linkBrushes.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void setStart(View layout) {
