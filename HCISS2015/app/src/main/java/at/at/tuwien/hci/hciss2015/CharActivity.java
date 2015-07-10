@@ -3,9 +3,8 @@ package at.at.tuwien.hci.hciss2015;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Vibrator;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Vibrator;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -97,7 +96,7 @@ public class CharActivity extends Activity {
         }
 
         if(user.getAvatarResId() != 0) {
-            ((ImageView) findViewById(user.getAvatarResId())).setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
+            ((ImageView) findViewById(user.getAvatarResId())).setBackgroundResource(R.drawable.btn_bckgrnd_pressed); //Comment from Alex: Hatte hier mal eine NullPointer Exception. Konnte es aber nicht reproduzieren...
         }
 
         if(!"".equals(user.getName()))
