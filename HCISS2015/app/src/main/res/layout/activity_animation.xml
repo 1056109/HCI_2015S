@@ -10,12 +10,80 @@
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <LinearLayout
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="bottom"
+            android:layout_marginBottom="185dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageSuspect"
+                android:src="@drawable/ic_suspect"
+                android:layout_gravity="center_horizontal|bottom"
+                android:longClickable="false"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="bottom"
+            android:layout_marginBottom="200dp"
+            android:layout_marginLeft="150dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageMurder"
+                android:src="@drawable/ic_murder"
+                android:layout_gravity="center_horizontal|bottom" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="bottom">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imagePolice"
+                android:src="@drawable/ic_police_large"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginRight="20dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageHospital"
+                android:src="@drawable/ic_hospital"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginRight="80dp"
+                android:layout_marginBottom="20dp"
+                android:focusableInTouchMode="false" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imagePark"
+                android:src="@drawable/ic_park"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="150dp" />
+        </LinearLayout>
+
+        <LinearLayout
         android:layout_width="92dp"
         android:layout_height="121dp"
         android:layout_gravity="right|bottom"
         android:gravity="bottom"
-        android:orientation="vertical">
+        android:orientation="vertical"
+            android:layout_marginBottom="40dp">
 
         <TextView
             android:id="@+id/featureProgress"
@@ -43,7 +111,8 @@
         android:layout_height="90dp"
         android:layout_gravity="center|bottom"
         android:gravity="bottom"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginBottom="40dp">
 
         <TextView
             android:id="@+id/mapProgress"
@@ -71,7 +140,8 @@
         android:layout_height="121dp"
         android:layout_gravity="left|bottom"
         android:gravity="bottom"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginBottom="40dp">
 
         <TextView
             android:id="@+id/weaponProgress"
@@ -100,7 +170,7 @@
         android:layout_width="73dp"
         android:layout_height="121dp"
         android:layout_gravity="left|bottom"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="120dp"
         android:gravity="bottom"
         android:orientation="vertical">
 
@@ -131,8 +201,100 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/scrollView7"
+        android:background="@drawable/curve_shape_black"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="false" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/anim_thirdb"
+            android:id="@+id/help3b"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:padding="10dp" />
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView8"
+        android:background="@drawable/curve_shape_black"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="false" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/anim_fifth"
+            android:id="@+id/help5"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:padding="10dp" />
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView5"
+        android:background="@drawable/curve_shape_black"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="false" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/anim_start"
+            android:id="@+id/startIcon"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:visibility="visible"
+            android:textColor="@color/white"
+            android:padding="10dp" />
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView6"
+        android:background="@drawable/curve_shape_black"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="false"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/anim_zero"
+            android:id="@+id/help0"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:padding="10dp" />
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/scrollView"
-        android:background="@drawable/curve_shape_black">
+        android:background="@drawable/curve_shape_black"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="false">
 
         <TextView
             android:layout_width="wrap_content"
@@ -142,7 +304,7 @@
             android:id="@+id/help1"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:visibility="visible"
+            android:visibility="gone"
             android:textColor="@color/white"
             android:padding="10dp" />
     </ScrollView>

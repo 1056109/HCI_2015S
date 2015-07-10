@@ -159,13 +159,19 @@
     
     <string name="sharedPref">MySharedPref</string>
 
+    <string name="anim_start">Wenn du einen neuen Fall aufnimmst, musst du zuerst den Tatort aufsuchen (Fadenkreuz-Symbol). Geh hin und du erhältst den ersten Täterhinweis.</string>
+    <string name="anim_zero">Danach kannst du Hinweispunkte in der Umgebung aufsuchen. Diese werden aktiviert sobald du dich in der Nähe befindest. Dort erhältst du neue Hinweise über den Standort oder das Aussehen des Täters.</string>
+
     <string name="anim_first">Mit diesem Button kannst du einen Kollegen zu einem Punkt deiner Wahl schicken. Nach 15 Minuten erhältst du wichtige Hinweise zu deinem Fall.</string>
-    <string name="anim_second">Wenn du alle Informationen bezüglich der Tatwaffe gesammelt hast, erhältst du neue Hinweise zum Täter.</string>
+    <string name="anim_second">Falls die Tatwaffe auftaucht, erhältst du mehrere Täterhinweise auf einmal sobald du sie untersucht hast. Du musst dazu zum Ort gehen wo sie gefunden wurde.</string>
     <string name="anim_third">Wenn du auf das Kartensymbol drückst, wird dir der Radius angezeigt in dem sich der Täter versteckt hält.</string>
-    <string name="anim_fourth">Hier kannst du dir alle gesammelten Täterhinweise noch einmal ansehen. Außerdem wird automatisch eine Liste von Verdächtigen generiert über die du den Täter auswählen kannst.</string>
+    <string name="anim_thirdb">Sobald du sämtliche Hinweise zum Täterstandort gefunden hast, musst du nur noch das Versteck im eingrenzenden Radius finden. Wenn du in der Nähe bist, erscheint das unten gezeigte Symbol.</string>
+    <string name="anim_fourth">Hier kannst du dir alle gesammelten Hinweise zum Aussehen des Täters noch einmal ansehen. Außerdem wird automatisch eine Liste von Verdächtigen generiert sobald du das Versteck des Täters gefunden hast. Dadurch kannst du den wahren Täter identifizieren.</string>
+    <string name="anim_fifth">Achtung! Du solltest erst eine Entscheidung fällen sobald du dir wirklich sicher bist und genügend Hinweise gesammelt hast. Der Täter kann weiter sein Unwesen treiben falls du den Falschen verhaftest!</string>
 
     <string name="start_case_info">Zum Tatort begeben um Fall zu beginnen</string>
 
     <string name="next">\u0020Nächster Tipp\u0020</string>
+    <string name="closeTut">Tutorial schließen</string>
     <string name="close">Schließen</string>
 </resources>
