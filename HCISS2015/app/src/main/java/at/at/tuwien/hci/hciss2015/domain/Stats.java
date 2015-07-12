@@ -46,11 +46,11 @@ public class Stats {
 
     public void setNotSolved() { missed++ ;}
 
-    public int getRate() {
+    public double getRate() {
         if (solved == 0 && missed == 0) {
             return 0;
         } else {
-            return (int)(((float) solved / (solved + missed)) * 100);
+            return (((float) solved / (solved + missed)) * 100);
         }
     }
 }

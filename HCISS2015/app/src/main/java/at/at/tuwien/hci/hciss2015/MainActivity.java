@@ -49,6 +49,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -470,12 +471,13 @@ public class MainActivity extends FragmentActivity implements
                                 mdBtnWeapon.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        dialog.dismiss();
                                         addWeapon(view);
                                         marker.remove();
                                         nearbyMarkers.remove(Integer.parseInt(poiData[0]));
                                         MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
                                         daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
-                                        dialog.dismiss();
+
                                     }
                                 });
 
@@ -489,12 +491,13 @@ public class MainActivity extends FragmentActivity implements
                                 mdBtnMap.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        dialog.dismiss();
                                         addMapDetail(view);
                                         marker.remove();
                                         nearbyMarkers.remove(Integer.parseInt(poiData[0]));
                                         MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
                                         daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
-                                        dialog.dismiss();
+
                                     }
                                 });
 
@@ -508,12 +511,13 @@ public class MainActivity extends FragmentActivity implements
                                 mdBtnFeature.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        dialog.dismiss();
                                         selectFeature(view);
                                         marker.remove();
                                         nearbyMarkers.remove(Integer.parseInt(poiData[0]));
                                         MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
                                         daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
-                                        dialog.dismiss();
+
                                     }
                                 });
 
@@ -879,8 +883,7 @@ public class MainActivity extends FragmentActivity implements
     private void openDialog(final int view) {
         dialog = new Dialog(this);
         dialog.setCancelable(false);
-        LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = li.inflate(view, null, false);
+        View layout = layoutInfl.inflate(view, null, false);
         dialog.setContentView(layout);
         Window window = dialog.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
@@ -945,6 +948,7 @@ public class MainActivity extends FragmentActivity implements
     }
 
     private void setStats(View layout) {
+        DecimalFormat df = new DecimalFormat("##,## ");
         TextView solved = (TextView) layout.findViewById(R.id.solvedRate);
         solved.setText(Integer.toString(sharedPrefs.getStats().getSolved()));
         TextView missed = (TextView) layout.findViewById(R.id.missedRate);
@@ -954,7 +958,7 @@ public class MainActivity extends FragmentActivity implements
         TextView featureSolved = (TextView) layout.findViewById(R.id.featureRate);
         featureSolved.setText(Integer.toString(sharedPrefs.getStats().getFeatures()));
         TextView rate = (TextView) layout.findViewById(R.id.statRate);
-        rate.setText(Integer.toString(sharedPrefs.getStats().getRate()) + " %");
+        rate.setText(df.format(sharedPrefs.getStats().getRate()) + " %");
     }
     private void setLinks(View layout){
         TextView linkBrushes = (TextView) layout.findViewById(R.id.linkBrushes);
