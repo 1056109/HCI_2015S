@@ -89,12 +89,6 @@ public class MainActivity extends FragmentActivity implements
 
     private final LatLng VIENNA = new LatLng(48.209272, 16.372801);
 
-    private static final int MIN_ZOOM = 12;
-
-    private static final int MAX_ZOOM = 16;
-
-    private static final String TILE_SERVER_URL = "http://tile.openstreetmap.org/";
-
     private static final int WEAPON_HINT_NUMBER = 3;
     private static final int MAX_FEATURES = 5;
     private static final int MAX_MAPHINTS = 3;
@@ -191,7 +185,6 @@ public class MainActivity extends FragmentActivity implements
     private View btnClicked;
     private int poiId;
     private int poiType;
-    private long remainingTime;
 
     // END colleague resume
 
@@ -268,6 +261,7 @@ public class MainActivity extends FragmentActivity implements
         mapTxt = (TextView) findViewById(R.id.mapProgress);
         featureBtn = (ImageButton) findViewById(R.id.btnFeature);
         featureTxt = (TextView) findViewById(R.id.featureProgress);
+        weaponBtn = (ImageButton) findViewById(R.id.btnWeapon);
 
         sharedPrefs = new SharedPreferencesHandler(this);
         activeCase = sharedPrefs.getCase();
@@ -280,6 +274,11 @@ public class MainActivity extends FragmentActivity implements
                 btnClicked.setId(activeCase.getViewId());
                 executeTimerTask(activeCase.getPoiId(), activeCase.getPoiType(), btnClicked);
             }
+
+            if(activeCase.isWeaponLocationFound() && !activeCase.isWeaponLocationVisited()) {
+                weaponBtn.setClickable(true);
+                weaponBtn.setImageResource(R.drawable.btn_weapon);
+            }
         }
 
         layoutInfl = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -288,7 +287,8 @@ public class MainActivity extends FragmentActivity implements
 
         openDialog(R.layout.start_case_layout);
 
-        //activeCase.setCrimeSceneFound(true);
+
+
     }
 
     private void updateCaseProgress() {
@@ -298,7 +298,6 @@ public class MainActivity extends FragmentActivity implements
         mapProgress = activeCase.getMapProgress();
         featureProgress = activeCase.getFeatureProgress();
         hasDestination = activeCase.isSuspectResidenceFound();
-        //colleagueUsed = activeCase.isColleagueUsed();
 
         features.put("Hautfarbe", activeCase.getSuspectProgress().getSkinColor());        //features of suspect
         features.put("Haarfarbe", activeCase.getSuspectProgress().getHairColor());
@@ -310,9 +309,6 @@ public class MainActivity extends FragmentActivity implements
             weaponTxt.setText("1/1");
         else
             weaponTxt.setText("0/1");
-
-        //if (colleagueUsed)
-        //    hideColleague();
 
         mapTxt.setText("" + mapProgress + "/" + MAX_MAPHINTS);
         featureTxt.setText("" + featureProgress + "/" + MAX_FEATURES);
@@ -524,15 +520,6 @@ public class MainActivity extends FragmentActivity implements
                                 if (!activeCase.isCrimeSceneFound()) {
                                     handleCustomToast(getResources().getString(R.string.no_investigation));
                                     return true;
-                                    /*
-                                    mdBtnWeapon.setVisibility(View.GONE);
-                                    mdBtnMap.setVisibility(View.GONE);
-                                    mdBtnFeature.setVisibility(View.GONE);
-                                    TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
-                                    headerValue.setText(getResources().getString(R.string.no_investigation));
-                                    TextView explanation = (TextView) layout.findViewById(R.id.new_hint_explanation);
-                                    explanation.setVisibility(View.GONE);
-                                    */
                                 } else {
                                     if (Integer.parseInt(poiData[1]) == Types.POLICESTATION) {
                                         mdBtnWeapon.setVisibility(View.GONE);
@@ -692,6 +679,11 @@ public class MainActivity extends FragmentActivity implements
         openMerkmale(view);
     }
 
+    public void focusOnWeapon(View view) {
+        //Toast.makeText(context, "weapon focused!", Toast.LENGTH_SHORT).show();
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sharedPrefs.getCase().getWeaponLocation().getLatLng()));
+    }
+
     public void addWeapon(View view) {
         if(!activeCase.isWeaponLocationFound()) {
             PointOfInterest weaponLocation = activeCase.getWeaponLocation();
@@ -708,6 +700,9 @@ public class MainActivity extends FragmentActivity implements
             activeCase.setWeaponLocationFound(true);
             sharedPrefs.putCase(activeCase);
             weaponTxt.setText("1/1");
+
+            weaponBtn.setClickable(true);
+            weaponBtn.setImageResource(R.drawable.btn_weapon);
             handleCustomToast(getResources().getString(R.string.hint_weapon));
         } else {
             handleCustomToast(getResources().getString(R.string.nohint_weapon));
@@ -735,6 +730,8 @@ public class MainActivity extends FragmentActivity implements
             }
             activeCase.setWeaponLocationVisited(true);
             sharedPrefs.putCase(activeCase);
+            weaponBtn.setClickable(false);
+            weaponBtn.setImageResource(R.drawable.info_weapon);
         } else {
             handleCustomToast(getResources().getString(R.string.nohint_weaponlocation));
         }

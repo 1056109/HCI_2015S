@@ -97,11 +97,13 @@
 
             <ImageButton
                 android:id="@+id/btnWeapon"
+                android:clickable="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
                 android:layout_margin="10dp"
                 android:background="?android:selectableItemBackground"
+                android:onClick="focusOnWeapon"
                 android:src="@drawable/info_weapon" />
         </LinearLayout>
 
@@ -147,6 +149,7 @@
             android:onClick="openDrawer"
             android:src="@drawable/btn_menu" />
 
+        <!--
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -171,6 +174,7 @@
             android:onClick="addMapDetail"
             android:id="@+id/button"
             android:layout_gravity="center_horizontal|top" />
+        -->
 
     </FrameLayout>
 
