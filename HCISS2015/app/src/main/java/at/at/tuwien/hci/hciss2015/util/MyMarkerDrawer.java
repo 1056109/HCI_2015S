@@ -72,12 +72,23 @@ public class MyMarkerDrawer extends AsyncTask<Void, PointOfInterest, Boolean> {
     }
 
     public void drawMarker(GoogleMap map, PointOfInterest poi) {
-        Marker marker = map.addMarker(new MarkerOptions()
-                        .title(poi.getDescription())
-                        .position(poi.getLatLng())
-                        .snippet(String.valueOf(poi.getId()) + ";" + String.valueOf(poi.getType()))
-                        .icon(bmpDescriptors[poi.getType()])
-        );
+        Marker marker = null;
+        if(poi.getType() == 6) {
+            marker = map.addMarker(new MarkerOptions()
+                            .title(poi.getDescription())
+                            .position(poi.getLatLng())
+                            .snippet(String.valueOf(poi.getId()) + ";" + String.valueOf(poi.getType()))
+                            .icon(bmpDescriptors[poi.getType()])
+                    .visible(false)
+            );
+        } else {
+            marker = map.addMarker(new MarkerOptions()
+                            .title(poi.getDescription())
+                            .position(poi.getLatLng())
+                            .snippet(String.valueOf(poi.getId()) + ";" + String.valueOf(poi.getType()))
+                            .icon(bmpDescriptors[poi.getType()])
+            );
+        }
         markers.put(poi.getId(), marker);
     }
 
