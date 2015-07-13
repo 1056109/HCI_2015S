@@ -306,13 +306,19 @@ public class MainActivity extends FragmentActivity implements
         features.put("Brille", activeCase.getSuspectProgress().getGlasses());
         features.put("Narbe", activeCase.getSuspectProgress().getScar());
 
-        if (activeCase.isWeaponLocationFound())
+        if (activeCase.isWeaponLocationFound()) {
             weaponTxt.setText("1/1");
+            weaponTxt.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
+        }
         else
             weaponTxt.setText("0/1");
 
         mapTxt.setText("" + mapProgress + "/" + MAX_MAPHINTS);
+        if (mapProgress==MAX_MAPHINTS)
+            mapTxt.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
         featureTxt.setText("" + featureProgress + "/" + MAX_FEATURES);
+        if (featureProgress==MAX_FEATURES)
+            featureTxt.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
 
         myStats = sharedPrefs.getStats();
         if (myStats == null) {
@@ -675,14 +681,6 @@ public class MainActivity extends FragmentActivity implements
         });
     }
 
-    public void standort(View view) {              //testing function
-        hasDestination = true;
-        activeCase.setSuspectResidenceFound(true);
-        sharedPrefs.putCase(activeCase);
-
-        openMerkmale(view);
-    }
-
     public void focusOnWeapon(View view) {
         //Toast.makeText(context, "weapon focused!", Toast.LENGTH_SHORT).show();
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sharedPrefs.getCase().getWeaponLocation().getLatLng()));
@@ -704,6 +702,7 @@ public class MainActivity extends FragmentActivity implements
             activeCase.setWeaponLocationFound(true);
             sharedPrefs.putCase(activeCase);
             weaponTxt.setText("1/1");
+            weaponTxt.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
 
             weaponBtn.setClickable(true);
             weaponBtn.setImageResource(R.drawable.btn_weapon);
@@ -778,6 +777,10 @@ public class MainActivity extends FragmentActivity implements
         }
     }
 
+    public void test(View view){
+        addFeature("Haarfarbe", "weiﬂ");
+    }
+
     public void addFeature(String feature, String value) {       //method for adding features
         if(featureProgress < MAX_FEATURES) {
             features.put(feature, value);
@@ -799,6 +802,11 @@ public class MainActivity extends FragmentActivity implements
             featureBtn.setImageResource(R.drawable.btn_feature_pressed);
             myStats.setFeatures();
             sharedPrefs.putStats(myStats);
+
+            openMerkmale(this.getCurrentFocus());
+
+            if (featureProgress==MAX_FEATURES)
+                featureTxt.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
         }
     }
 
@@ -813,11 +821,15 @@ public class MainActivity extends FragmentActivity implements
             mapTxt.setText(mapProgress + "/" + MAX_MAPHINTS);
             mapBtn.setImageResource(R.drawable.btn_map_pressed);
             drawMap();
+            if (mapProgress==MAX_MAPHINTS)
+                mapTxt.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
         } else {
             handleCustomToast(getResources().getString(R.string.nonew_hintMap));
         }
         vibrate();
         dialog.dismiss();
+        openMap(getCurrentFocus());
+
     }
 
     private void drawMap() {
@@ -829,8 +841,8 @@ public class MainActivity extends FragmentActivity implements
 
         switch(mapProgress) {
             case 1: radius = circleRads[0]; circleZoom = 13; break;
-            case 2: radius = circleRads[1]; circleZoom = 15; break;
-            case 3: radius = circleRads[2]; circleZoom = 17; break;
+            case 2: radius = circleRads[1]; circleZoom = 14; break;
+            case 3: radius = circleRads[2]; circleZoom = 16; break;
             default: radius = circleRads[0]; circleZoom = 13; break;
         }
 
