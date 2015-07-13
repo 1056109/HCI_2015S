@@ -760,6 +760,7 @@ public class MainActivity extends FragmentActivity implements
             if (features.containsKey("Narbe") && "".equals(features.get("Narbe"))) {
                 crimeCommitterFeatures.put("Narbe", activeCase.getCrimeCommitter().getScar());
             }
+            dialog.dismiss();
             if (!crimeCommitterFeatures.isEmpty()) {
                 Set<String> keySet = crimeCommitterFeatures.keySet();
                 String[] keyArray = keySet.toArray(new String[keySet.size()]);
@@ -770,7 +771,6 @@ public class MainActivity extends FragmentActivity implements
                 handleCustomToast(getResources().getString(R.string.nonew_featurehint));
             }
             vibrate();
-            dialog.dismiss();
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
