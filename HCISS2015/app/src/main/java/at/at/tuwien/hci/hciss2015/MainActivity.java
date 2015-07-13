@@ -264,6 +264,7 @@ public class MainActivity extends FragmentActivity implements
         featureTxt = (TextView) findViewById(R.id.featureProgress);
         weaponBtn = (ImageButton) findViewById(R.id.btnWeapon);
 
+
         sharedPrefs = new SharedPreferencesHandler(this);
         activeCase = sharedPrefs.getCase();
         if( activeCase != null ) {
@@ -277,7 +278,6 @@ public class MainActivity extends FragmentActivity implements
             }
 
             if(activeCase.isWeaponLocationFound() && !activeCase.isWeaponLocationVisited()) {
-                weaponBtn.setClickable(true);
                 weaponBtn.setImageResource(R.drawable.btn_weapon);
             }
         }
@@ -682,8 +682,9 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void focusOnWeapon(View view) {
-        //Toast.makeText(context, "weapon focused!", Toast.LENGTH_SHORT).show();
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sharedPrefs.getCase().getWeaponLocation().getLatLng()));
+        if(activeCase.isWeaponLocationFound() && !activeCase.isWeaponLocationVisited()) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(sharedPrefs.getCase().getWeaponLocation().getLatLng()));
+        }
     }
 
     public void addWeapon(View view) {
@@ -778,7 +779,7 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void test(View view){
-        addFeature("Haarfarbe", "weiß");
+        addFeature("Haarfarbe", "weiï¿½");
     }
 
     public void addFeature(String feature, String value) {       //method for adding features
