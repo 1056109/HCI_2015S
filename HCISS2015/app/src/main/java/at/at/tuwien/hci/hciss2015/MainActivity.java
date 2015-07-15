@@ -703,6 +703,7 @@ public class MainActivity extends FragmentActivity implements
     public void focusOnWeapon(View view) {
         if(activeCase.isWeaponLocationFound() && !activeCase.isWeaponLocationVisited()) {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sharedPrefs.getCase().getWeaponLocation().getLatLng(), 15));
+            handleCustomToast("visit murder weapon location and collect three more hints");
         }
     }
 
@@ -730,7 +731,6 @@ public class MainActivity extends FragmentActivity implements
         } else {
             handleCustomToast(getResources().getString(R.string.nohint_weapon));
         }
-        vibrate();
         dialog.dismiss();
     }
 
@@ -758,7 +758,6 @@ public class MainActivity extends FragmentActivity implements
         } else {
             handleCustomToast(getResources().getString(R.string.nohint_weaponlocation));
         }
-        vibrate();
         dialog.dismiss();
     }
 
@@ -790,7 +789,6 @@ public class MainActivity extends FragmentActivity implements
             } else {
                 handleCustomToast(getResources().getString(R.string.nonew_featurehint));
             }
-            vibrate();
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
@@ -846,7 +844,6 @@ public class MainActivity extends FragmentActivity implements
         } else {
             handleCustomToast(getResources().getString(R.string.nonew_hintMap));
         }
-        vibrate();
         dialog.dismiss();
         openMap(getCurrentFocus());
 
@@ -885,8 +882,6 @@ public class MainActivity extends FragmentActivity implements
 
 
     public void openMap(View view) {
-        vibrate();
-
         if (mapProgress == 0) {
             handleCustomToast(getResources().getString(R.string.zeroMap));
         } else {
@@ -907,7 +902,6 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void openMerkmale(View view) {
-        vibrate();
         featureBtn.setImageResource(R.drawable.btn_feature_pressed);
         openDialog(R.layout.feature_layout);
     }
@@ -1043,13 +1037,11 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void closeFeatures(View view) {
-        vibrate();
         featureBtn.setImageResource(R.drawable.btn_feature);
         dialog.dismiss();
     }
 
     public void closeDialog(View view) {
-        vibrate();
         dialog.dismiss();
         myDrawerList.setItemChecked(0, true);
     }
@@ -1060,12 +1052,10 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void openDrawer(View view) {
-        vibrate();
         myDrawerLayout.openDrawer(myDrawerList);
     }
 
     public void sendColleague(View view) {
-        vibrate();
         if (colleagueState == ColleagueState.WAITING) {
             colleague.setImageResource(R.drawable.btn_colleague_pressed);
             colleagueState = ColleagueState.READY;
@@ -1089,7 +1079,6 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void sendNot(View view) {
-        vibrate();
         dialog.dismiss();
     }
 
@@ -1308,7 +1297,6 @@ public class MainActivity extends FragmentActivity implements
                 //startDialog Info
                 openDialog(R.layout.infodialog);
             }
-            vibrate();
             myDrawerList.setItemChecked(position, true);
             myDrawerLayout.closeDrawer(myDrawerList);
 
@@ -1385,35 +1373,30 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void selectSuspect1(View view) {
-        vibrate();
         deselect();
         suspects.put(suspectIds[0], true);
         imgSuspect1.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectSuspect2(View view) {
-        vibrate();
         deselect();
         suspects.put(suspectIds[1], true);
         imgSuspect2.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectSuspect3(View view) {
-        vibrate();
         deselect();
         suspects.put(suspectIds[2], true);
         imgSuspect3.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectSuspect4(View view) {
-        vibrate();
         deselect();
         suspects.put(suspectIds[3], true);
         imgSuspect4.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectSuspect5(View view) {
-        vibrate();
         deselect();
         suspects.put(suspectIds[4], true);
         imgSuspect5.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
@@ -1433,13 +1416,11 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void chooseSuspect(View view) {
-        vibrate();
         dialog.dismiss();
         openDialog(R.layout.end_case_layout);
     }
 
     public void abortCase(View view) {
-        vibrate();
         myStats.setNotSolved();
         sharedPrefs.putStats(myStats);
         daoPoiInstance.resetAllFlags();
@@ -1452,7 +1433,6 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void endCase(View view) {
-        vibrate();
         daoPoiInstance.resetAllFlags();
         daoPoiInstance.resetOtherTypes();
         sharedPrefs.removeCase();
@@ -1463,7 +1443,6 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void startCase(View view) {
-        vibrate();
 
         mapBtn.setImageResource(R.drawable.btn_map);
         featureBtn.setImageResource(R.drawable.btn_feature);
@@ -1574,13 +1553,11 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void resumeCase(View view) {
-        vibrate();
         updateCaseProgress();
         dialog.dismiss();
     }
 
     public void afterCrimeScene(View view) {
-        vibrate();
         if(!activeCase.isCrimeSceneFound()) {
             if (randomizer.nextBoolean()) {
                 if (featureProgress < MAX_FEATURES) {
