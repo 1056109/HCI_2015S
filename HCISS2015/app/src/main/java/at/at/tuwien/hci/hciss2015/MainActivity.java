@@ -468,61 +468,80 @@ public class MainActivity extends FragmentActivity implements
                                 final View layout = layoutInfl.inflate(R.layout.marker_dialog, null, false);
 
                                 final ImageButton mdBtnWeapon = (ImageButton) layout.findViewById(R.id.md_btn_weapon);
+                                /*
                                 if (activeCase.isWeaponLocationFound()) {
                                     mdBtnWeapon.setEnabled(false);
                                 } else {
                                     mdBtnWeapon.setEnabled(true);
                                 }
+                                */
                                 mdBtnWeapon.setVisibility(View.VISIBLE);
                                 mdBtnWeapon.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        dialog.dismiss();
-                                        addWeapon(view);
-                                        marker.remove();
-                                        nearbyMarkers.remove(Integer.parseInt(poiData[0]));
-                                        MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
-                                        daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
-
+                                        if (activeCase.isWeaponLocationFound()) {
+                                            dialog.dismiss();
+                                            handleCustomToast("murder weapon has already been found!");
+                                        } else {
+                                            dialog.dismiss();
+                                            addWeapon(view);
+                                            marker.remove();
+                                            nearbyMarkers.remove(Integer.parseInt(poiData[0]));
+                                            MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
+                                            daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                        }
                                     }
                                 });
 
                                 ImageButton mdBtnMap = (ImageButton) layout.findViewById(R.id.md_btn_map);
+                                /*
                                 if (mapProgress >= MAX_MAPHINTS) {
                                     mdBtnMap.setEnabled(false);
                                 } else {
                                     mdBtnMap.setEnabled(true);
                                 }
+                                */
                                 mdBtnMap.setVisibility(View.VISIBLE);
                                 mdBtnMap.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        dialog.dismiss();
-                                        addMapDetail(view);
-                                        marker.remove();
-                                        nearbyMarkers.remove(Integer.parseInt(poiData[0]));
-                                        MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
-                                        daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
-
+                                        if(mapProgress >= MAX_MAPHINTS) {
+                                            dialog.dismiss();
+                                            handleCustomToast("you have already collected all map hints!");
+                                        } else {
+                                            dialog.dismiss();
+                                            addMapDetail(view);
+                                            marker.remove();
+                                            nearbyMarkers.remove(Integer.parseInt(poiData[0]));
+                                            MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
+                                            daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                        }
                                     }
                                 });
 
                                 ImageButton mdBtnFeature = (ImageButton) layout.findViewById(R.id.md_btn_feature);
+                                /*
                                 if (featureProgress >= MAX_FEATURES) {
                                     mdBtnFeature.setEnabled(false);
                                 } else {
                                     mdBtnFeature.setEnabled(true);
                                 }
+                                */
                                 mdBtnFeature.setVisibility(View.VISIBLE);
                                 mdBtnFeature.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        dialog.dismiss();
-                                        selectFeature(view);
-                                        marker.remove();
-                                        nearbyMarkers.remove(Integer.parseInt(poiData[0]));
-                                        MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
-                                        daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                        if(featureProgress >= MAX_FEATURES) {
+                                            dialog.dismiss();
+                                            handleCustomToast("you have already collected all features");
+                                        } else {
+                                            dialog.dismiss();
+                                            selectFeature(view);
+                                            marker.remove();
+                                            nearbyMarkers.remove(Integer.parseInt(poiData[0]));
+                                            MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
+                                            daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                        }
 
                                     }
                                 });
