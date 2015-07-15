@@ -683,7 +683,7 @@ public class MainActivity extends FragmentActivity implements
 
     public void focusOnWeapon(View view) {
         if(activeCase.isWeaponLocationFound() && !activeCase.isWeaponLocationVisited()) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(sharedPrefs.getCase().getWeaponLocation().getLatLng()));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sharedPrefs.getCase().getWeaponLocation().getLatLng(), 15));
         }
     }
 
@@ -1549,7 +1549,7 @@ public class MainActivity extends FragmentActivity implements
 
         dialog.dismiss();
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(crimeScene.getLatLng()));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(crimeScene.getLatLng(), 15));
         handleCustomToast(getResources().getString(R.string.start_case_info));
 
     }
