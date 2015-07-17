@@ -8,7 +8,7 @@
     <string name="gps_on">Ja, einschalten</string>
     <string name="gps_off">Nein, beenden</string>
 
-    <string name="welcome_first_start">Willkommen bei Vienna Cop! Bitte Daten eingeben, auf Start drücken, schon geht deine
+    <string name="welcome_first_start">Willkommen bei Vienna Cop! Bitte Daten eingeben, auf Start drücken und schon geht deine
          Polizeikarriere in Wien los!</string>
 
     <!--<string name="welcome_first_start">Willkommen bei Vienna Cop!</string>-->
@@ -116,23 +116,23 @@
     <string name="weaponProgress">0/1</string>
 
     <string name="send_collegue_start">READY</string>
-    <string name="send_colleague_desc">Ort wählen, an dem Kollege nach Hinweisen suchen soll.</string>
+    <string name="send_colleague_desc">Wähle den Ort an dem dein Kollege nach Hinweisen suchen soll.</string>
     <string name="send_colleague_impossible">Ihr Kollege kann erst nach der Untersuchung des Tatorts Hinweise beschaffen.</string>
-    <string name="send_collegue_really">Moechtest du deinen Kollegen nach einem der folgenden Hinweise suchen lassen?</string>
+    <string name="send_collegue_really">Möchtest du deinen Kollegen nach einem der folgenden Hinweise suchen lassen?</string>
     <string name="send_colleague_working_msg">Dein Kollege wird an dieser Stelle seine Untersuchung beginnen!</string>
-    <string name="send_collegue_yes">Ja, Kollege losschicken</string>
+    <string name="send_collegue_yes">Ja, Kollegen losschicken</string>
     <string name="send_collegue_no">Nein, anderen Ort wählen</string>
     <string name="title_activity_timer">TimerActivity</string>
 
-    <string name="zeroMap">Es wurden noch keine Hinweise zum Aufenhaltsort des Taeters gefunden!</string>
-    <string name="hintMap">Der Aufenthaltort des Taeters konnte dank der gefundenen Hinweise auf diesen Bereich eingeschraenkt werden.</string>
-    <string name="new_hintMap">Der Aufenthaltort des Taeters konnte dank der gefundenen Hinweise weiter eingeschraenkt werden.</string>
-    <string name="nonew_hintMap">Sie haben bereits sämtliche Hinweise zum Aufenthaltsort gefunden. Wählen Sie einen anderen Hinweis aus.</string>
+    <string name="zeroMap">Es wurden noch keine Hinweise zum Aufenhaltsort des Täters gefunden!</string>
+    <string name="hintMap">Der Aufenthaltort des Täters konnte dank der gefundenen Hinweise auf diesen Bereich eingeschränkt werden.</string>
+    <string name="new_hintMap">Der Aufenthaltort des Täters konnte dank der gefundenen Hinweise weiter eingeschränkt werden.</string>
+    <string name="nonew_hintMap">Du hast bereits sämtliche Hinweise zum Aufenthaltsort gefunden. Wähle einen anderen Hinweis aus.</string>
 
     <string name="title_activity_char">charActivity</string>
 
-    <string name="nohint_weapon">Die Tatwaffe konnte bereits gefunden werden. Wählen Sie einen anderen Hinweis aus.</string>
-    <string name="nohint_weaponlocation">Die Tatwaffe wurde bereits untersucht. Finden Sie andere Hinweise.</string>
+    <string name="nohint_weapon">Die Tatwaffe wurde bereits gefunden. Wähle einen anderen Hinweis aus.</string>
+    <string name="nohint_weaponlocation">Die Tatwaffe wurde bereits untersucht. Finde andere Hinweise.</string>
 
     <string name="benutzerdaten">In diesem Menü kannst du deine Spielerdaten aktualisieren</string>
 
@@ -147,18 +147,18 @@
     <string name="featureRateMsg">Gefundene Tätermerkmale</string>
     <string name="mapRateMsg">Gefundene Ortshinweise</string>
 
-    <string name="abort">Wollen Sie den Fall wirklich abbrechen?</string>
+    <string name="abort">Willst du den Fall wirklich abbrechen?</string>
 
-    <string name="choose_suspect">Wir konnten die Verdaechtigen eingrenzen. Waehle anhand deiner gesammelten Hinweise
-        den/die TaeterIn. Bist du dir unsicher, dann suche weitere Hinweise und komm spaeter wieder</string>
+    <string name="choose_suspect">Wir konnten die Verdächtigen eingrenzen. Wähle anhand deiner gesammelten Hinweise
+        den/die TäterIn. Bist du dir unsicher, dann suche weitere Hinweise und komm später wieder.</string>
 
     <string name="new_featurehint">Das Aussehen des Täters konnte weiter ausgeforscht werden.</string>
-    <string name="nonew_featurehint">Sie haben bereits sämtliche Hinweise zum Aussehen des Täters gefdunden. Wählen Sie einen anderen Hinweis aus.</string>
+    <string name="nonew_featurehint">Du hast bereits sämtliche Hinweise zum Aussehen des Täters gefdunden. Wähle einen anderen Hinweis aus.</string>
 
-    <string name="end_case_positive">Glueckwunsch! Du hast den richtigen Verdaechtigen gewaehlt, er hat die Tat gestanden.
+    <string name="end_case_positive">Glückwunsch! Du hast den richtigen Verdächtigen gewählt, er hat die Tat gestanden.
     Weiter so!</string>
     <string name="end_case_negative">Es hat sich leider herausgestellt dass du die falsche Person beschuldigt hast, der wirkliche
-    Taeter hat in der Zwischenzeit erneut zugeschlagen und wurde dabei von Kollegen festgenommen. Pass beim naechsten Mal besser auf!</string>
+    Täter hat in der Zwischenzeit erneut zugeschlagen und wurde dabei von Kollegen festgenommen. Pass beim nächsten Mal besser auf!</string>
     
     <string name="sharedPref">MySharedPref</string>
 
@@ -172,7 +172,7 @@
     <string name="anim_fourth">Hier kannst du dir alle gesammelten Hinweise zum Aussehen des Täters noch einmal ansehen. Außerdem wird automatisch eine Liste von Verdächtigen generiert sobald du das Versteck des Täters gefunden hast. Dadurch kannst du den wahren Täter identifizieren.</string>
     <string name="anim_fifth">Achtung! Du solltest erst eine Entscheidung fällen sobald du dir wirklich sicher bist und genügend Hinweise gesammelt hast. Der Täter kann weiter sein Unwesen treiben falls du den Falschen verhaftest!</string>
 
-    <string name="start_case_info">Zum Tatort begeben um Fall zu beginnen</string>
+    <string name="start_case_info">Gehe zum Tatort und beginne den Fall</string>
 
     <string name="next">\u0020Nächster Tipp\u0020</string>
     <string name="closeTut">Tutorial schließen</string>
@@ -181,7 +181,7 @@
     <string name="blank">\u0020</string>
 
     <string name="murderWeaponFoundMsg">Die Tatwaffe wurde bereits gefunden!</string>
-    <string name="collectWeapon">Gehen Sie zum Ort wo die Tatwaffe gefunden wurde und erhalten Sie drei zusätzliche Täterhinweise!</string>
+    <string name="collectWeapon">Gehe zum Ort wo die Tatwaffe gefunden wurde und erhalte drei zusätzliche Täterhinweise!</string>
     <string name="allMapHintsFoundMsg">Alle Hinweise zum Aufenthaltsort des Täters wurden bereits gefunden!</string>
     <string name="allFeaturesFoundMsg">Alle Hinweise zum Aussehen des Täters wurden bereits gefunden!</string>
     <string name="appCloseMsg">Entferne die ViennaCop App aus deinen Hintergrund-Anwendungen und vermeide ständige Location-Updates um Akku zu sparen!</string>
