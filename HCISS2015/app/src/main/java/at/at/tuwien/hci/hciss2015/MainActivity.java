@@ -199,6 +199,8 @@ public class MainActivity extends FragmentActivity implements
     private List<LogItem> logTemp;
     SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 
+    private boolean displayToast = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1106,6 +1108,7 @@ public class MainActivity extends FragmentActivity implements
     protected void onResume() {
         super.onResume();
         myDrawerList.setItemChecked(0, true);
+        displayToast = true;
     }
 
     //todo all: disconnect googleApiClient onStop or onDestroy !?
@@ -1120,10 +1123,12 @@ public class MainActivity extends FragmentActivity implements
             sharedPrefs.putCase(activeCase);
         }
 
-        Toast toast = Toast.makeText(this, getString(R.string.appCloseMsg), Toast.LENGTH_SHORT);
-        TextView msg = (TextView) toast.getView().findViewById(android.R.id.message);
-        if( msg != null ) msg.setGravity(Gravity.CENTER);
-        toast.show();
+        if(displayToast) {
+            Toast toast = Toast.makeText(this, getString(R.string.appCloseMsg), Toast.LENGTH_SHORT);
+            TextView msg = (TextView) toast.getView().findViewById(android.R.id.message);
+            if (msg != null) msg.setGravity(Gravity.CENTER);
+            toast.show();
+        }
     }
 
     @Override
@@ -1282,6 +1287,7 @@ public class MainActivity extends FragmentActivity implements
 
         private void selectItem(int position) {
             if (position == 1) {
+                displayToast = false;
                 Intent intent = new Intent(MainActivity.this, CharActivity.class);
                 intent.putExtra("activity", TAG);
                 startActivity(intent);
@@ -1296,6 +1302,7 @@ public class MainActivity extends FragmentActivity implements
             }
             if (position == 4) {
                 //startDialog Help
+                displayToast = false;
                 startActivity(new Intent(MainActivity.this, AnimationSampleActivity.class));
                 finish();
             }
