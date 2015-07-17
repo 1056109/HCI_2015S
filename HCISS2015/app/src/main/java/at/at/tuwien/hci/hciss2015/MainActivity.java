@@ -249,7 +249,7 @@ public class MainActivity extends FragmentActivity implements
         // Info
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
         //Log
-        navDrawerItems.add(new NavDrawerItem("Log", navMenuIcons.getResourceId(5, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(5, -1)));
 
         // Recycle the typed array
         navMenuIcons.recycle();
@@ -485,20 +485,14 @@ public class MainActivity extends FragmentActivity implements
                                 final View layout = layoutInfl.inflate(R.layout.marker_dialog, null, false);
 
                                 final ImageButton mdBtnWeapon = (ImageButton) layout.findViewById(R.id.md_btn_weapon);
-                                /*
-                                if (activeCase.isWeaponLocationFound()) {
-                                    mdBtnWeapon.setEnabled(false);
-                                } else {
-                                    mdBtnWeapon.setEnabled(true);
-                                }
-                                */
+
                                 mdBtnWeapon.setVisibility(View.VISIBLE);
                                 mdBtnWeapon.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         if (activeCase.isWeaponLocationFound()) {
                                             dialog.dismiss();
-                                            handleCustomToast("murder weapon has already been found!");
+                                            handleCustomToast(getString(R.string.murderWeaponFoundMsg));
                                         } else {
                                             dialog.dismiss();
                                             addWeapon(view);
@@ -511,20 +505,14 @@ public class MainActivity extends FragmentActivity implements
                                 });
 
                                 ImageButton mdBtnMap = (ImageButton) layout.findViewById(R.id.md_btn_map);
-                                /*
-                                if (mapProgress >= MAX_MAPHINTS) {
-                                    mdBtnMap.setEnabled(false);
-                                } else {
-                                    mdBtnMap.setEnabled(true);
-                                }
-                                */
+
                                 mdBtnMap.setVisibility(View.VISIBLE);
                                 mdBtnMap.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         if(mapProgress >= MAX_MAPHINTS) {
                                             dialog.dismiss();
-                                            handleCustomToast("you have already collected all map hints!");
+                                            handleCustomToast(getString(R.string.allMapHintsFoundMsg));
                                         } else {
                                             dialog.dismiss();
                                             addMapDetail(view);
@@ -537,20 +525,14 @@ public class MainActivity extends FragmentActivity implements
                                 });
 
                                 ImageButton mdBtnFeature = (ImageButton) layout.findViewById(R.id.md_btn_feature);
-                                /*
-                                if (featureProgress >= MAX_FEATURES) {
-                                    mdBtnFeature.setEnabled(false);
-                                } else {
-                                    mdBtnFeature.setEnabled(true);
-                                }
-                                */
+
                                 mdBtnFeature.setVisibility(View.VISIBLE);
                                 mdBtnFeature.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         if(featureProgress >= MAX_FEATURES) {
                                             dialog.dismiss();
-                                            handleCustomToast("you have already collected all features");
+                                            handleCustomToast(getString(R.string.allFeaturesFoundMsg));
                                         } else {
                                             dialog.dismiss();
                                             selectFeature(view);
@@ -1137,6 +1119,11 @@ public class MainActivity extends FragmentActivity implements
             activeCase.setTimeRemaining(startTime);
             sharedPrefs.putCase(activeCase);
         }
+
+        Toast toast = Toast.makeText(this, getString(R.string.appCloseMsg), Toast.LENGTH_SHORT);
+        TextView msg = (TextView) toast.getView().findViewById(android.R.id.message);
+        if( msg != null ) msg.setGravity(Gravity.CENTER);
+        toast.show();
     }
 
     @Override
@@ -1364,8 +1351,6 @@ public class MainActivity extends FragmentActivity implements
     }
 
     private void executeTimerTask(final int poiId, final int poiType, final View btnClicked) {
-        //startTime = 900000; //15 Min
-        //startTime = 15000;
         timerHandler = new Handler();
         runnable = new Runnable() {
 
