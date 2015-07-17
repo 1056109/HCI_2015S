@@ -155,7 +155,7 @@ public class MainActivity extends FragmentActivity implements
 
     private Dialog dialog;
 
-    private long startTime = 15000;
+    private long startTime = 900000;
 
     private Handler timerHandler;
     private Runnable runnable;
@@ -1460,6 +1460,7 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void abortCase(View view) {
+        displayToast = false;
         myStats.setNotSolved();
         sharedPrefs.putStats(myStats);
         daoPoiInstance.resetAllFlags();
