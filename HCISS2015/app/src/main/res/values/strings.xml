@@ -175,6 +175,6 @@
     <string name="next">\u0020Nächster Tipp\u0020</string>
     <string name="closeTut">Tutorial schließen</string>
     <string name="close">Schließen</string>
-
     <string name="logHeader">Log</string>
+    <string name="blank">\u0020</string>
 </resources>

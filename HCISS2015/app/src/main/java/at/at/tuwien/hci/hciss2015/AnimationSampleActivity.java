@@ -26,9 +26,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.github.amlcurran.showcaseview.ApiUtils;
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import at.at.tuwien.hci.hciss2015.showcaseview.ApiUtils;
+import at.at.tuwien.hci.hciss2015.showcaseview.ShowcaseView;
+import at.at.tuwien.hci.hciss2015.showcaseview.targets.ViewTarget;
 
 /**
  * Created by Alex on 26/10/13.
@@ -55,6 +55,7 @@ public class AnimationSampleActivity extends Activity implements View.OnClickLis
     private TextView mapProgress;
     private final ApiUtils apiUtils = new ApiUtils();
     float alphaVal = 0.5f;
+    float alphaValbtn = 0.0f;
     float alphaReset = 1.0f;
 
     @Override
@@ -92,14 +93,17 @@ public class AnimationSampleActivity extends Activity implements View.OnClickLis
                 .setOnClickListener(this)
                 .build();
         //layoutParams = (RelativeLayout.LayoutParams) btnColleague.getLayoutParams();
-        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-        lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        int margin = 10;
-        lps.setMargins(margin, margin, margin, margin);
+        //LinearLayout.LayoutParams lps = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT)
+        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT);
+        //lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        //lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        //int margin = 10;
+        //lps.setMargins(margin, margin, margin, margin);
+
         showcaseView.setButtonPosition(lps);
-        showcaseView.setButtonText(getString(R.string.next));
-        setAlpha(alphaVal,colleagueState,btnColleague,imagePolice,imageSuspect,imageHospital,imagePark,btnMap,btnWeapon,btnFeature,weaponProgress,featureProgress,mapProgress);
+        showcaseView.setButtonAlpha(alphaValbtn);
+        showcaseView.setButtonText(getString(R.string.blank));
+        setAlpha(alphaVal, colleagueState, btnColleague, imagePolice, imageSuspect, imageHospital, imagePark, btnMap, btnWeapon, btnFeature, weaponProgress, featureProgress, mapProgress);
 
     }
 
@@ -164,7 +168,7 @@ public class AnimationSampleActivity extends Activity implements View.OnClickLis
                 showcaseView.setShowcase(new ViewTarget(btnFeature), true);
                 help4.setVisibility(View.GONE);
                 help5.setVisibility(View.VISIBLE);
-                showcaseView.setButtonText(getString(R.string.close));
+                //showcaseView.setButtonText(getString(R.string.close));
                 break;
 
             case 7:
