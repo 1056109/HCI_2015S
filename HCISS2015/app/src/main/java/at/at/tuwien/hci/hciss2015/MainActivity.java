@@ -249,7 +249,7 @@ public class MainActivity extends FragmentActivity implements
         // Info
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
         //Log
-        navDrawerItems.add(new NavDrawerItem("Log", navMenuIcons.getResourceId(5, -1)));
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[6], navMenuIcons.getResourceId(6, -1)));
 
         // Recycle the typed array
         navMenuIcons.recycle();

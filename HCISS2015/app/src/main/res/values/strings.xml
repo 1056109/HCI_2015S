@@ -66,6 +66,7 @@
         <item>Statistik</item>
         <item>Help</item>
         <item>Info</item>
+        <item>Log</item>
     </array>
 
     <array name="nav_drawer_icons">
@@ -75,6 +76,7 @@
         <item>@drawable/ic_stats_drawer</item>
         <item>@drawable/ic_help_drawer</item>
         <item>@drawable/ic_info_drawer</item>
+        <item>@drawable/ic_log_drawer</item>
     </array>
 
     <array name="my_marker_icons">
