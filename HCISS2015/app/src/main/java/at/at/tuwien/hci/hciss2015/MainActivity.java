@@ -702,7 +702,7 @@ public class MainActivity extends FragmentActivity implements
     public void focusOnWeapon(View view) {
         if(activeCase.isWeaponLocationFound() && !activeCase.isWeaponLocationVisited()) {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sharedPrefs.getCase().getWeaponLocation().getLatLng(), 15));
-            handleCustomToast("visit murder weapon location and collect three more hints");
+            handleCustomToast(getResources().getString(R.string.collectWeapon));
         }
     }
 
