@@ -50,8 +50,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -61,6 +63,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import at.at.tuwien.hci.hciss2015.domain.Case;
+import at.at.tuwien.hci.hciss2015.domain.LogItem;
 import at.at.tuwien.hci.hciss2015.domain.NavDrawerItem;
 import at.at.tuwien.hci.hciss2015.domain.PointOfInterest;
 import at.at.tuwien.hci.hciss2015.domain.Stats;
@@ -71,6 +74,7 @@ import at.at.tuwien.hci.hciss2015.persistence.SuspectDaoImpl;
 import at.at.tuwien.hci.hciss2015.persistence.Types;
 import at.at.tuwien.hci.hciss2015.util.MyDrawerAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyListAdapter;
+import at.at.tuwien.hci.hciss2015.util.MyLogAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyMarkerDrawer;
 import at.at.tuwien.hci.hciss2015.util.SharedPreferencesHandler;
 
@@ -189,6 +193,12 @@ public class MainActivity extends FragmentActivity implements
 
     // END colleague resume
 
+    //logs
+    private MyLogAdapter logAdapter;
+    private List<LogItem> logItems;
+    private List<LogItem> logTemp;
+    SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -238,6 +248,8 @@ public class MainActivity extends FragmentActivity implements
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
         // Info
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
+        //Log
+        navDrawerItems.add(new NavDrawerItem("Log", navMenuIcons.getResourceId(5, -1)));
 
         // Recycle the typed array
         navMenuIcons.recycle();
@@ -264,6 +276,11 @@ public class MainActivity extends FragmentActivity implements
         featureTxt = (TextView) findViewById(R.id.featureProgress);
         weaponBtn = (ImageButton) findViewById(R.id.btnWeapon);
 
+
+        logAdapter = new MyLogAdapter(this);
+        logItems = new ArrayList<LogItem>();
+        logTemp = new ArrayList<LogItem>();
+        logAdapter.updateLogs(logItems);
 
         sharedPrefs = new SharedPreferencesHandler(this);
         activeCase = sharedPrefs.getCase();
@@ -924,7 +941,7 @@ public class MainActivity extends FragmentActivity implements
             setStart(layout);
         } else if (view == R.layout.end_case_layout) {
             setEnd(layout);
-        } else if (view == R.layout.infodialog){
+        } else if (view == R.layout.infodialog) {
             setLinks(layout);
         }
 
@@ -1092,6 +1109,8 @@ public class MainActivity extends FragmentActivity implements
         toast.setView(customToastLayout);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.show();
+
+        logItems.add(new LogItem(message, df.format(new Date())));
     }
 
     @Override
@@ -1296,6 +1315,34 @@ public class MainActivity extends FragmentActivity implements
             if (position == 5) {
                 //startDialog Info
                 openDialog(R.layout.infodialog);
+            }
+
+            if (position == 6) {
+                logTemp.clear();
+                final Dialog dialog = new Dialog(context);
+                Window window = dialog.getWindow();
+                window.setBackgroundDrawableResource(android.R.color.transparent);
+
+                View view = getLayoutInflater().inflate(R.layout.logs_dialog_layout, null);
+
+                ListView lv = (ListView) view.findViewById(R.id.lvLogs);
+                Button btnClose = (Button) view.findViewById(R.id.btnCloseLogs);
+                btnClose.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        myDrawerList.setItemChecked(0, true);
+                    }
+                });
+
+                logTemp.addAll(logItems);
+                Collections.reverse(logTemp);
+                logAdapter.updateLogs(logTemp);
+                lv.setAdapter(logAdapter);
+                lv.setOnItemClickListener(null);
+
+                dialog.setContentView(view);
+                dialog.show();
             }
             myDrawerList.setItemChecked(position, true);
             myDrawerLayout.closeDrawer(myDrawerList);
