@@ -961,6 +961,7 @@ public class MainActivity extends FragmentActivity implements
         chooseSuspectBtn = (Button) layout.findViewById(R.id.choose_suspect_btn);
         scrollView = (HorizontalScrollView) layout.findViewById(R.id.horizontalScrollView);
         featureHeader.setText(getResources().getString(R.string.choose_suspect));
+        layout.findViewById(R.id.taeterhinweis).setVisibility(View.GONE);
         merkmalText.setVisibility(View.VISIBLE);
         verdaechtigeText.setVisibility(View.VISIBLE);
         featureHeader.setTextSize(13);

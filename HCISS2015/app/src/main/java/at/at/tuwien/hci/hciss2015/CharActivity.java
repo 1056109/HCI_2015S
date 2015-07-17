@@ -105,7 +105,7 @@ public class CharActivity extends Activity {
 
     public void checkInput(View view) {
         //todo sicherheitsabfragen ob alles eingetragen ist
-        vibrate();
+        //vibrate();
         user.setName(editTxtName.getText().toString());
         sharedPref.putUser(user);
         if( "init".equals(getIntent().getStringExtra("activity")) ) {
@@ -118,49 +118,49 @@ public class CharActivity extends Activity {
     }
 
     public void selectFace1(View view) {
-        vibrate();
+        //vibrate();
         deselect();
         user.setAvatarResId(R.id.officer1);
         imgOfficer1.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectFace2(View view) {
-        vibrate();
+        //vibrate();
         deselect();
         user.setAvatarResId(R.id.officer2);
         imgOfficer2.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectFace3(View view) {
-        vibrate();
+        //vibrate();
         deselect();
         user.setAvatarResId(R.id.officer3);
         imgOfficer3.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectFace4(View view) {
-        vibrate();
+        //vibrate();
         deselect();
         user.setAvatarResId(R.id.officer4);
         imgOfficer4.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectFace5(View view) {
-        vibrate();
+        //vibrate();
         deselect();
         user.setAvatarResId(R.id.officer5);
         imgOfficer5.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectFace6(View view) {
-        vibrate();
+        //vibrate();
         deselect();
         user.setAvatarResId(R.id.officer6);
         imgOfficer6.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
     }
 
     public void selectGenderMale(View view) {
-        vibrate();
+        //vibrate();
         user.setGender('M');
         btnGenderFemale.setBackgroundResource(R.drawable.btn_android);
         btnGenderFemale.setTextColor(getResources().getColor(R.color.violett));
@@ -169,7 +169,7 @@ public class CharActivity extends Activity {
     }
 
     public void selectGenderFemale(View view) {
-        vibrate();
+        //vibrate();
         user.setGender('F');
         btnGenderFemale.setBackgroundResource(R.drawable.btn_bckgrnd_pressed);
         btnGenderFemale.setTextColor(getResources().getColor(R.color.black));

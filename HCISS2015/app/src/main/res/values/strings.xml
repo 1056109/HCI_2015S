@@ -185,4 +185,6 @@
     <string name="allMapHintsFoundMsg">Alle Hinweise zum Aufenthaltsort des Täters wurden bereits gefunden!</string>
     <string name="allFeaturesFoundMsg">Alle Hinweise zum Aussehen des Täters wurden bereits gefunden!</string>
     <string name="appCloseMsg">Entferne die ViennaCop App aus deinen Hintergrund-Anwendungen und vermeide ständige Location-Updates um Akku zu sparen!</string>
+
+    <string name="taeterhinweis">Hinweis: Nachdem du das Versteck des Täters gefunden hast wird dir eine Liste von Verdächtigen angezeigt. Aus dieser Liste kannst du den tatsächlichen Täter bestimmen und verhaften.</string>
 </resources>
