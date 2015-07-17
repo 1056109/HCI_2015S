@@ -179,4 +179,9 @@
     <string name="close">Schließen</string>
     <string name="logHeader">Log</string>
     <string name="blank">\u0020</string>
+
+    <string name="murderWeaponFoundMsg">Die Tatwaffe ist bereits gefunden</string>
+    <string name="allMapHintsFoundMsg">Alle Kartenhinweise sind bereits gefunden</string>
+    <string name="allFeaturesFoundMsg">Alle Tätermerkmale sind bereits gefunden</string>
+    <string name="appCloseMsg">Entfernen Sie die ViennaCop App aus Hintergrund Apps und vermeiden Sie somit die Location-Updates um Akku Ihres Smartphone zu sparen</string>
 </resources>
