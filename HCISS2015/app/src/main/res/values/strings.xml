@@ -180,9 +180,9 @@
     <string name="logHeader">Log</string>
     <string name="blank">\u0020</string>
 
-    <string name="murderWeaponFoundMsg">Die Tatwaffe ist bereits gefunden</string>
+    <string name="murderWeaponFoundMsg">Die Tatwaffe wurde bereits gefunden!</string>
     <string name="collectWeapon">Gehen Sie zum Ort wo die Tatwaffe gefunden wurde und erhalten Sie drei zusätzliche Täterhinweise!</string>
-    <string name="allMapHintsFoundMsg">Alle Kartenhinweise sind bereits gefunden</string>
-    <string name="allFeaturesFoundMsg">Alle Tätermerkmale sind bereits gefunden</string>
-    <string name="appCloseMsg">Entfernen Sie die ViennaCop App aus Hintergrund Apps und vermeiden Sie somit die Location-Updates um Akku Ihres Smartphone zu sparen</string>
+    <string name="allMapHintsFoundMsg">Alle Hinweise zum Aufenthaltsort des Täters wurden bereits gefunden!</string>
+    <string name="allFeaturesFoundMsg">Alle Hinweise zum Aussehen des Täters wurden bereits gefunden!</string>
+    <string name="appCloseMsg">Entferne die ViennaCop App aus deinen Hintergrund-Anwendungen und vermeide ständige Location-Updates um Akku zu sparen!</string>
 </resources>
