@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -72,6 +73,7 @@ import at.at.tuwien.hci.hciss2015.persistence.MyDatabaseHelper;
 import at.at.tuwien.hci.hciss2015.persistence.PointOfInterestDaoImpl;
 import at.at.tuwien.hci.hciss2015.persistence.SuspectDaoImpl;
 import at.at.tuwien.hci.hciss2015.persistence.Types;
+import at.at.tuwien.hci.hciss2015.util.MyAnalyticsTracker;
 import at.at.tuwien.hci.hciss2015.util.MyDrawerAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyListAdapter;
 import at.at.tuwien.hci.hciss2015.util.MyLogAdapter;
@@ -705,6 +707,9 @@ public class MainActivity extends FragmentActivity implements
         if(activeCase.isWeaponLocationFound() && !activeCase.isWeaponLocationVisited()) {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sharedPrefs.getCase().getWeaponLocation().getLatLng(), 15));
             handleCustomToast(getResources().getString(R.string.collectWeapon));
+            setGoogleAnalyticsEvent("focusOnWeapon", "clickButton", "weaponFocus");
+        }else{
+            setGoogleAnalyticsEvent("focusOnWeapon", "clickButton", "noWeaponFocus");
         }
     }
 
@@ -885,6 +890,7 @@ public class MainActivity extends FragmentActivity implements
     public void openMap(View view) {
         if (mapProgress == 0) {
             handleCustomToast(getResources().getString(R.string.zeroMap));
+            setGoogleAnalyticsEvent("openMap", "clickButton", "noMapFeatures");
         } else {
             if(circle == null) {
                 drawMap();
@@ -899,10 +905,12 @@ public class MainActivity extends FragmentActivity implements
                 mapBtn.setImageResource(R.drawable.btn_map);
             }
             circle.setVisible(showCircle);
+            setGoogleAnalyticsEvent("openMap", "clickButton", "mapFeatures");
         }
     }
 
     public void openMerkmale(View view) {
+        setGoogleAnalyticsEvent("openMerkmale", "clickButton", "showMerkmale");
         featureBtn.setImageResource(R.drawable.btn_feature_pressed);
         openDialog(R.layout.feature_layout);
     }
@@ -1005,6 +1013,7 @@ public class MainActivity extends FragmentActivity implements
             }
             layout.findViewById(R.id.start_case_btn).setVisibility(View.VISIBLE);
             layout.findViewById(R.id.resume_case_btn).setVisibility(View.GONE);
+            setGoogleAnalyticsEvent("setStart", "welcomeMsg", "firstWelcome");
         } else {
             if(activeCase.isCrimeSceneFound()) {
                 headerValue.setText(String.format(getResources().getString(R.string.welcomeback_msg),
@@ -1015,6 +1024,7 @@ public class MainActivity extends FragmentActivity implements
             }
             layout.findViewById(R.id.start_case_btn).setVisibility(View.GONE);
             layout.findViewById(R.id.resume_case_btn).setVisibility(View.VISIBLE);
+            setGoogleAnalyticsEvent("setStart","welcomeMsg","welcomeBack");
         }
     }
 
@@ -1024,9 +1034,11 @@ public class MainActivity extends FragmentActivity implements
             if(suspects.get(activeCase.getCrimeCommitter().getSuspectId())) {
                 headerValue.setText(getResources().getString(R.string.end_case_positive));
                 myStats.setSolved();
+                setGoogleAnalyticsEvent("setEnd", "clickButton", "correctSuspect");
             } else {
                 headerValue.setText(getResources().getString(R.string.end_case_negative));
                 myStats.setNotSolved();
+                setGoogleAnalyticsEvent("setEnd","clickButton","wrongSuspect");
             }
             sharedPrefs.putStats(myStats);
             ImageView comitter = (ImageView) layout.findViewById(R.id.crime_comitter);
@@ -1058,6 +1070,7 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void sendColleague(View view) {
+        setGoogleAnalyticsEvent("sendColleague","clickButton","firstAction");
         if (colleagueState == ColleagueState.WAITING) {
             colleague.setImageResource(R.drawable.btn_colleague_pressed);
             colleagueState = ColleagueState.READY;
@@ -1618,6 +1631,25 @@ public class MainActivity extends FragmentActivity implements
         sharedPrefs.putCase(activeCase);
         dialog.dismiss();
     }
+
+    public void setGoogleAnalyticsEvent(String category, String action, String label){
+        /*GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
+        Tracker tracker = analytics.newTracker("UA-65307534-1"); // Send hits to tracker id UA-XXXX-Y
+
+        tracker.setScreenName("Main Screen");
+
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category)
+                .setAction(action)
+                .setLabel(label)
+                .build());*/
+
+        Log.v("GA-Tracker","GA-Tracker -> Category: " + category + " Action: " + action + " Label: " + label);
+        MyAnalyticsTracker.tracker().send(new HitBuilders.EventBuilder(category, action)
+                .setLabel(label)
+                .build());
+    }
+
 
 }
 
