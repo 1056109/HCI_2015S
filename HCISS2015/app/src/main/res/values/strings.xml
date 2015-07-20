@@ -22,7 +22,7 @@
     <string name="action_tatort">Ihre Kollegen erwarten Sie am Tatort mit neuen Informationen</string>
     <string name="action_hints">Ein Täter konnte anhand der ermittelten Hinweise bislang noch nicht ausgeforscht werden</string>
 
-    <string name="crime_scene1">Hallo! Wir haben es hier mit einem Mordfall zu tun. Die Leiche weißt mehrere Einstiche auf, wir haben sie bereits ins Krankenhaus 
+    <string name="crime_scene1">Hallo! Wir haben es hier mit einem Mordfall zu tun. Die Leiche weist mehrere Einstiche auf, wir haben sie bereits ins Krankenhaus
 	zur Autopsie gebracht. Wir konnten bereits etwas in Erfahrung bringen. Ich würde Ihnen als nächstes raten, die Obduktionsergebnisse zu untersuchen. Viel Erfolg bei dem Fall!</string>
 	<string name="crime_scene2">Hallo! Hier wo Sie stehen gab es vor Kurzem eine Schießerei mit mehreren Toten. Mehrere Täter sind durch den angrenzenden Park
 	geflohen, deswegen würde ich vorschlagen, dass Sie dort mit Ihren Untersuchungen beginnen! Eine erste heiße Spur haben wir bereits.</string>
@@ -48,7 +48,7 @@
 	Sicherheit Hinweise auf das Aussehen des Täters herausfinden können.</string>
     <string name="no_investigation">Willkommen. Wir können Ihnen ohne Untersuchung des Tatorts leider nicht behilflich sein.</string>
 
-    <string name="new_hint_explanation">Wählen Sie aus, nach welchen Hinweisen Sie suchen wollen</string>
+    <string name="new_hint_explanation">Wähle aus, nach welchen Hinweisen du suchen möchtest</string>
 	
 	<string name="suspect_selection">Werter Kollege, wir haben hier die Verdächtigen versammelt. Wenn Sie genügend Hinweise gesammelt haben um den Täter 
 	 identifizieren zu können wählen Sie ihn bitte aus. Falls nicht schlage ich vor dass Sie noch etwas weiterforschen.</string>
