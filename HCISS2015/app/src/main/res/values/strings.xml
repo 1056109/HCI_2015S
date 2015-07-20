@@ -14,7 +14,7 @@
     <!--<string name="welcome_first_start">Willkommen bei Vienna Cop!</string>-->
 	
 	<string name="welcome_msg_first_case">Guten Tag, Police Officer %1$s. Willkommen im Dienst. Ich habe eine gute und eine schlechte Nachricht für Sie.
-	Die gute: Ihnen wird es bei uns gefallen. Die schlechte: Sie müssen jetzt los, Ihre neue Kollegen erwarten Sie schon am Tatort. Ich wünsche Ihnen 
+	Die Gute: Ihnen wird es bei uns gefallen. Die Schlechte: Sie müssen jetzt los, Ihre neue Kollegen erwarten Sie schon am Tatort. Ich wünsche Ihnen
 	für Ihren 1. Fall und die weitere Laufbahn alles Gute!</string>
     <string name="welcome_msg_next_case">Hallo, Police Officer %1$s. Wir haben einen neuen Fall für Sie. Die Kollegen warten bereits am Tatort. Viel Erfolg!</string>
 	<string name="welcomeback_msg">Willkommen zurück, Police Officer %1$s. Schön Sie wiederzusehen. %2$s. Bereit den Fall wieder aufzunehmen? Viel Erfolg!</string>
@@ -185,6 +185,8 @@
     <string name="allMapHintsFoundMsg">Alle Hinweise zum Aufenthaltsort des Täters wurden bereits gefunden!</string>
     <string name="allFeaturesFoundMsg">Alle Hinweise zum Aussehen des Täters wurden bereits gefunden!</string>
     <string name="appCloseMsg">Entferne die ViennaCop App aus deinen Hintergrund-Anwendungen und vermeide ständige Location-Updates um Akku zu sparen!</string>
+
+    <string name="gpsInfo">Dein Standort wird gesucht...\n(GPS muss aktiviert sein)</string>
 
     <string name="taeterhinweis">Hinweis: Nachdem du das Versteck des Täters gefunden hast wird dir eine Liste von Verdächtigen angezeigt. Aus dieser Liste kannst du den tatsächlichen Täter bestimmen und verhaften.</string>
 </resources>

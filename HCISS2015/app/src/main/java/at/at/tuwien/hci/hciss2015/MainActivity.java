@@ -202,6 +202,9 @@ public class MainActivity extends FragmentActivity implements
     SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy hh:mm");
 
     private boolean displayToast = true;
+    private boolean displayStartscreen = true;
+
+    View startCaseView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,6 +270,7 @@ public class MainActivity extends FragmentActivity implements
 
         mMap = ((SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map)).getMap();
+        Log.v("mMap init", String.valueOf(mMap));
 
         colleague = (ImageButton) findViewById(R.id.btnColleague);
         txtColleagueState = (TextView) findViewById(R.id.colleagueState);
@@ -308,9 +312,6 @@ public class MainActivity extends FragmentActivity implements
         buildGoogleApiClient();
 
         openDialog(R.layout.start_case_layout);
-
-
-
     }
 
     private void updateCaseProgress() {
@@ -377,240 +378,100 @@ public class MainActivity extends FragmentActivity implements
                     .build();
         }
 
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, new GoogleMap.CancelableCallback() {
+        if(myLocation != null) {
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 1000, new GoogleMap.CancelableCallback() {
 
-            @Override
-            public void onFinish() {
+                @Override
+                public void onFinish() {
 
-                MyMarkerDrawer markerDrawer = new MyMarkerDrawer(context, mMap);
-                markerDrawer.execute();
+                    MyMarkerDrawer markerDrawer = new MyMarkerDrawer(context, mMap);
+                    markerDrawer.execute();
 
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                mMap.getUiSettings().setMapToolbarEnabled(false);
-                mMap.setMyLocationEnabled(true);
-                mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
-                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                    mMap.getUiSettings().setMyLocationButtonEnabled(true);
+                    mMap.getUiSettings().setMapToolbarEnabled(false);
+                    mMap.setMyLocationEnabled(true);
+                    mMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
+                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
-                    @Override
-                    public boolean onMarkerClick(final Marker marker) {
+                        @Override
+                        public boolean onMarkerClick(final Marker marker) {
 
                         /*
                         *  Marker click handling
                         * */
-                        final String[] poiData = marker.getSnippet().split(";");
+                            final String[] poiData = marker.getSnippet().split(";");
 
-                        if (colleagueState == ColleagueState.READY && Integer.parseInt(poiData[1]) < Types.OTHER) { // send colleague case
-                            dialog = new Dialog(context);
-                            dialog.setCancelable(false);
-
-                            final View layout = layoutInfl.inflate(R.layout.colleguedialog, null, false);
-
-                            ImageButton cdBtnWeapon = (ImageButton) layout.findViewById(R.id.cd_btn_weapon);
-                            cdBtnWeapon.setOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]), view);
-                                    btnClicked = view;
-                                    poiId = Integer.parseInt(poiData[0]);
-                                    poiType = Integer.parseInt(poiData[1]);
-                                }
-                            });
-                            ImageButton cdBtnMap = (ImageButton) layout.findViewById(R.id.cd_btn_map);
-                            cdBtnMap.setOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]), view);
-                                    btnClicked = view;
-                                    poiId = Integer.parseInt(poiData[0]);
-                                    poiType = Integer.parseInt(poiData[1]);
-                                }
-                            });
-                            ImageButton cdBtnFeature = (ImageButton) layout.findViewById(R.id.cd_btn_feature);
-                            cdBtnFeature.setOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]), view);
-                                    btnClicked = view;
-                                    poiId = Integer.parseInt(poiData[0]);
-                                    poiType = Integer.parseInt(poiData[1]);
-                                }
-                            });
-
-                            cdBtnWeapon.setVisibility(View.VISIBLE);
-                            cdBtnMap.setVisibility(View.VISIBLE);
-                            cdBtnFeature.setVisibility(View.VISIBLE);
-
-                            if (!activeCase.isCrimeSceneFound()) {
-                                handleCustomToast(getResources().getString(R.string.send_colleague_impossible));
-                                return true;
-                            } else {
-                                if (Integer.parseInt(poiData[1]) == Types.POLICESTATION) {
-                                    cdBtnWeapon.setVisibility(View.GONE);
-                                    if (mapProgress >= MAX_MAPHINTS) {
-                                        cdBtnMap.setEnabled(false);
-                                    }
-                                    if (featureProgress >= MAX_FEATURES) {
-                                        cdBtnFeature.setEnabled(false);
-                                    }
-                                } else if (Integer.parseInt(poiData[1]) == Types.HOSPITAL) {
-                                    cdBtnMap.setVisibility(View.GONE);
-                                    cdBtnFeature.setVisibility(View.GONE);
-                                    if (activeCase.isWeaponLocationFound()) {
-                                        cdBtnWeapon.setEnabled(false);
-                                    }
-                                } else if (Integer.parseInt(poiData[1]) == Types.SUBWAY) {
-                                    cdBtnWeapon.setVisibility(View.GONE);
-                                    cdBtnFeature.setVisibility(View.GONE);
-                                    if (mapProgress >= MAX_MAPHINTS) {
-                                        cdBtnMap.setEnabled(false);
-                                    }
-                                } else if (Integer.parseInt(poiData[1]) == Types.PARK) {
-                                    cdBtnWeapon.setVisibility(View.GONE);
-                                    cdBtnMap.setVisibility(View.GONE);
-                                    if (featureProgress >= MAX_FEATURES) {
-                                        cdBtnFeature.setEnabled(false);
-                                    }
-                                }
-                            }
-
-                            dialog.setContentView(layout);
-                            Window window = dialog.getWindow();
-                            window.setBackgroundDrawableResource(android.R.color.transparent);
-                            dialog.show();
-                            return true;
-
-                        } else if (marker.getTitle().contains("Hinweis")) { // on marker in 30m range click
-                            if (Integer.parseInt(poiData[1]) < Types.OTHER) {
-
+                            if (colleagueState == ColleagueState.READY && Integer.parseInt(poiData[1]) < Types.OTHER) { // send colleague case
                                 dialog = new Dialog(context);
                                 dialog.setCancelable(false);
 
-                                final View layout = layoutInfl.inflate(R.layout.marker_dialog, null, false);
+                                final View layout = layoutInfl.inflate(R.layout.colleguedialog, null, false);
 
-                                final ImageButton mdBtnWeapon = (ImageButton) layout.findViewById(R.id.md_btn_weapon);
-
-                                mdBtnWeapon.setVisibility(View.VISIBLE);
-                                mdBtnWeapon.setOnClickListener(new OnClickListener() {
+                                ImageButton cdBtnWeapon = (ImageButton) layout.findViewById(R.id.cd_btn_weapon);
+                                cdBtnWeapon.setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        if (activeCase.isWeaponLocationFound()) {
-                                            dialog.dismiss();
-                                            handleCustomToast(getString(R.string.murderWeaponFoundMsg));
-                                        } else {
-                                            dialog.dismiss();
-                                            addWeapon(view);
-                                            marker.remove();
-                                            nearbyMarkers.remove(Integer.parseInt(poiData[0]));
-                                            MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
-                                            daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
-                                        }
+                                        send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]), view);
+                                        btnClicked = view;
+                                        poiId = Integer.parseInt(poiData[0]);
+                                        poiType = Integer.parseInt(poiData[1]);
+                                    }
+                                });
+                                ImageButton cdBtnMap = (ImageButton) layout.findViewById(R.id.cd_btn_map);
+                                cdBtnMap.setOnClickListener(new OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]), view);
+                                        btnClicked = view;
+                                        poiId = Integer.parseInt(poiData[0]);
+                                        poiType = Integer.parseInt(poiData[1]);
+                                    }
+                                });
+                                ImageButton cdBtnFeature = (ImageButton) layout.findViewById(R.id.cd_btn_feature);
+                                cdBtnFeature.setOnClickListener(new OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        send(Integer.parseInt(poiData[0]), Integer.parseInt(poiData[1]), view);
+                                        btnClicked = view;
+                                        poiId = Integer.parseInt(poiData[0]);
+                                        poiType = Integer.parseInt(poiData[1]);
                                     }
                                 });
 
-                                ImageButton mdBtnMap = (ImageButton) layout.findViewById(R.id.md_btn_map);
-
-                                mdBtnMap.setVisibility(View.VISIBLE);
-                                mdBtnMap.setOnClickListener(new OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if(mapProgress >= MAX_MAPHINTS) {
-                                            dialog.dismiss();
-                                            handleCustomToast(getString(R.string.allMapHintsFoundMsg));
-                                        } else {
-                                            dialog.dismiss();
-                                            addMapDetail(view);
-                                            marker.remove();
-                                            nearbyMarkers.remove(Integer.parseInt(poiData[0]));
-                                            MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
-                                            daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
-                                        }
-                                    }
-                                });
-
-                                ImageButton mdBtnFeature = (ImageButton) layout.findViewById(R.id.md_btn_feature);
-
-                                mdBtnFeature.setVisibility(View.VISIBLE);
-                                mdBtnFeature.setOnClickListener(new OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if(featureProgress >= MAX_FEATURES) {
-                                            dialog.dismiss();
-                                            handleCustomToast(getString(R.string.allFeaturesFoundMsg));
-                                        } else {
-                                            dialog.dismiss();
-                                            selectFeature(view);
-                                            marker.remove();
-                                            nearbyMarkers.remove(Integer.parseInt(poiData[0]));
-                                            MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
-                                            daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
-                                        }
-
-                                    }
-                                });
+                                cdBtnWeapon.setVisibility(View.VISIBLE);
+                                cdBtnMap.setVisibility(View.VISIBLE);
+                                cdBtnFeature.setVisibility(View.VISIBLE);
 
                                 if (!activeCase.isCrimeSceneFound()) {
-                                    handleCustomToast(getResources().getString(R.string.no_investigation));
+                                    handleCustomToast(getResources().getString(R.string.send_colleague_impossible));
                                     return true;
                                 } else {
                                     if (Integer.parseInt(poiData[1]) == Types.POLICESTATION) {
-                                        mdBtnWeapon.setVisibility(View.GONE);
-                                        TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
-                                        switch (randomizer.nextInt(2)) {
-                                            case 0:
-                                                headerValue.setText(getResources().getString(R.string.police_investigation1));
-                                                break;
-                                            case 1:
-                                                headerValue.setText(getResources().getString(R.string.police_investigation2));
-                                                break;
-                                            default:
-                                                headerValue.setText(getResources().getString(R.string.police_investigation1));
-                                                break;
+                                        cdBtnWeapon.setVisibility(View.GONE);
+                                        if (mapProgress >= MAX_MAPHINTS) {
+                                            cdBtnMap.setEnabled(false);
+                                        }
+                                        if (featureProgress >= MAX_FEATURES) {
+                                            cdBtnFeature.setEnabled(false);
                                         }
                                     } else if (Integer.parseInt(poiData[1]) == Types.HOSPITAL) {
-                                        mdBtnMap.setVisibility(View.GONE);
-                                        mdBtnFeature.setVisibility(View.GONE);
-                                        TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
-                                        switch (randomizer.nextInt(2)) {
-                                            case 0:
-                                                headerValue.setText(getResources().getString(R.string.hospital_investigation1));
-                                                break;
-                                            case 1:
-                                                headerValue.setText(getResources().getString(R.string.hospital_investigation2));
-                                                break;
-                                            default:
-                                                headerValue.setText(getResources().getString(R.string.hospital_investigation1));
-                                                break;
+                                        cdBtnMap.setVisibility(View.GONE);
+                                        cdBtnFeature.setVisibility(View.GONE);
+                                        if (activeCase.isWeaponLocationFound()) {
+                                            cdBtnWeapon.setEnabled(false);
                                         }
                                     } else if (Integer.parseInt(poiData[1]) == Types.SUBWAY) {
-                                        mdBtnWeapon.setVisibility(View.GONE);
-                                        mdBtnFeature.setVisibility(View.GONE);
-                                        TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
-                                        switch (randomizer.nextInt(2)) {
-                                            case 0:
-                                                headerValue.setText(getResources().getString(R.string.subway_investigation1));
-                                                break;
-                                            case 1:
-                                                headerValue.setText(getResources().getString(R.string.subway_investigation2));
-                                                break;
-                                            default:
-                                                headerValue.setText(getResources().getString(R.string.subway_investigation1));
-                                                break;
+                                        cdBtnWeapon.setVisibility(View.GONE);
+                                        cdBtnFeature.setVisibility(View.GONE);
+                                        if (mapProgress >= MAX_MAPHINTS) {
+                                            cdBtnMap.setEnabled(false);
                                         }
                                     } else if (Integer.parseInt(poiData[1]) == Types.PARK) {
-                                        mdBtnWeapon.setVisibility(View.GONE);
-                                        mdBtnMap.setVisibility(View.GONE);
-                                        TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
-                                        switch (randomizer.nextInt(2)) {
-                                            case 0:
-                                                headerValue.setText(getResources().getString(R.string.park_investigation1));
-                                                break;
-                                            case 1:
-                                                headerValue.setText(getResources().getString(R.string.park_investigation2));
-                                                break;
-                                            default:
-                                                headerValue.setText(getResources().getString(R.string.park_investigation1));
-                                                break;
+                                        cdBtnWeapon.setVisibility(View.GONE);
+                                        cdBtnMap.setVisibility(View.GONE);
+                                        if (featureProgress >= MAX_FEATURES) {
+                                            cdBtnFeature.setEnabled(false);
                                         }
                                     }
                                 }
@@ -619,88 +480,230 @@ public class MainActivity extends FragmentActivity implements
                                 Window window = dialog.getWindow();
                                 window.setBackgroundDrawableResource(android.R.color.transparent);
                                 dialog.show();
-
                                 return true;
-                            } else if (Integer.parseInt(poiData[1]) == Types.OTHER) {
-                                dialog = new Dialog(context);
-                                dialog.setCancelable(false);
 
-                                final View layout = layoutInfl.inflate(R.layout.crimescene_layout, null, false);
+                            } else if (marker.getTitle().contains("Hinweis")) { // on marker in 30m range click
+                                if (Integer.parseInt(poiData[1]) < Types.OTHER) {
 
-                                TextView headerValue = (TextView) layout.findViewById(R.id.crimescene_text);
-                                switch (activeCase.getCrimeSceneType()) {
-                                    case 0:
-                                        headerValue.setText(getResources().getString(R.string.crime_scene1));
-                                        break;
-                                    case 1:
-                                        headerValue.setText(getResources().getString(R.string.crime_scene2));
-                                        break;
-                                    default:
-                                        headerValue.setText(getResources().getString(R.string.crime_scene1));
-                                        break;
+                                    dialog = new Dialog(context);
+                                    dialog.setCancelable(false);
+
+                                    final View layout = layoutInfl.inflate(R.layout.marker_dialog, null, false);
+
+                                    final ImageButton mdBtnWeapon = (ImageButton) layout.findViewById(R.id.md_btn_weapon);
+
+                                    mdBtnWeapon.setVisibility(View.VISIBLE);
+                                    mdBtnWeapon.setOnClickListener(new OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            if (activeCase.isWeaponLocationFound()) {
+                                                dialog.dismiss();
+                                                handleCustomToast(getString(R.string.murderWeaponFoundMsg));
+                                            } else {
+                                                dialog.dismiss();
+                                                addWeapon(view);
+                                                marker.remove();
+                                                nearbyMarkers.remove(Integer.parseInt(poiData[0]));
+                                                MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
+                                                daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                            }
+                                        }
+                                    });
+
+                                    ImageButton mdBtnMap = (ImageButton) layout.findViewById(R.id.md_btn_map);
+
+                                    mdBtnMap.setVisibility(View.VISIBLE);
+                                    mdBtnMap.setOnClickListener(new OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            if (mapProgress >= MAX_MAPHINTS) {
+                                                dialog.dismiss();
+                                                handleCustomToast(getString(R.string.allMapHintsFoundMsg));
+                                            } else {
+                                                dialog.dismiss();
+                                                addMapDetail(view);
+                                                marker.remove();
+                                                nearbyMarkers.remove(Integer.parseInt(poiData[0]));
+                                                MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
+                                                daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                            }
+                                        }
+                                    });
+
+                                    ImageButton mdBtnFeature = (ImageButton) layout.findViewById(R.id.md_btn_feature);
+
+                                    mdBtnFeature.setVisibility(View.VISIBLE);
+                                    mdBtnFeature.setOnClickListener(new OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            if (featureProgress >= MAX_FEATURES) {
+                                                dialog.dismiss();
+                                                handleCustomToast(getString(R.string.allFeaturesFoundMsg));
+                                            } else {
+                                                dialog.dismiss();
+                                                selectFeature(view);
+                                                marker.remove();
+                                                nearbyMarkers.remove(Integer.parseInt(poiData[0]));
+                                                MyMarkerDrawer.getMarkers().remove(Integer.parseInt(poiData[0]));
+                                                daoPoiInstance.updatePOIFlag(Integer.parseInt(poiData[0]), 1);
+                                            }
+
+                                        }
+                                    });
+
+                                    if (!activeCase.isCrimeSceneFound()) {
+                                        handleCustomToast(getResources().getString(R.string.no_investigation));
+                                        return true;
+                                    } else {
+                                        if (Integer.parseInt(poiData[1]) == Types.POLICESTATION) {
+                                            mdBtnWeapon.setVisibility(View.GONE);
+                                            TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
+                                            switch (randomizer.nextInt(2)) {
+                                                case 0:
+                                                    headerValue.setText(getResources().getString(R.string.police_investigation1));
+                                                    break;
+                                                case 1:
+                                                    headerValue.setText(getResources().getString(R.string.police_investigation2));
+                                                    break;
+                                                default:
+                                                    headerValue.setText(getResources().getString(R.string.police_investigation1));
+                                                    break;
+                                            }
+                                        } else if (Integer.parseInt(poiData[1]) == Types.HOSPITAL) {
+                                            mdBtnMap.setVisibility(View.GONE);
+                                            mdBtnFeature.setVisibility(View.GONE);
+                                            TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
+                                            switch (randomizer.nextInt(2)) {
+                                                case 0:
+                                                    headerValue.setText(getResources().getString(R.string.hospital_investigation1));
+                                                    break;
+                                                case 1:
+                                                    headerValue.setText(getResources().getString(R.string.hospital_investigation2));
+                                                    break;
+                                                default:
+                                                    headerValue.setText(getResources().getString(R.string.hospital_investigation1));
+                                                    break;
+                                            }
+                                        } else if (Integer.parseInt(poiData[1]) == Types.SUBWAY) {
+                                            mdBtnWeapon.setVisibility(View.GONE);
+                                            mdBtnFeature.setVisibility(View.GONE);
+                                            TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
+                                            switch (randomizer.nextInt(2)) {
+                                                case 0:
+                                                    headerValue.setText(getResources().getString(R.string.subway_investigation1));
+                                                    break;
+                                                case 1:
+                                                    headerValue.setText(getResources().getString(R.string.subway_investigation2));
+                                                    break;
+                                                default:
+                                                    headerValue.setText(getResources().getString(R.string.subway_investigation1));
+                                                    break;
+                                            }
+                                        } else if (Integer.parseInt(poiData[1]) == Types.PARK) {
+                                            mdBtnWeapon.setVisibility(View.GONE);
+                                            mdBtnMap.setVisibility(View.GONE);
+                                            TextView headerValue = (TextView) layout.findViewById(R.id.new_hint_text);
+                                            switch (randomizer.nextInt(2)) {
+                                                case 0:
+                                                    headerValue.setText(getResources().getString(R.string.park_investigation1));
+                                                    break;
+                                                case 1:
+                                                    headerValue.setText(getResources().getString(R.string.park_investigation2));
+                                                    break;
+                                                default:
+                                                    headerValue.setText(getResources().getString(R.string.park_investigation1));
+                                                    break;
+                                            }
+                                        }
+                                    }
+
+                                    dialog.setContentView(layout);
+                                    Window window = dialog.getWindow();
+                                    window.setBackgroundDrawableResource(android.R.color.transparent);
+                                    dialog.show();
+
+                                    return true;
+                                } else if (Integer.parseInt(poiData[1]) == Types.OTHER) {
+                                    dialog = new Dialog(context);
+                                    dialog.setCancelable(false);
+
+                                    final View layout = layoutInfl.inflate(R.layout.crimescene_layout, null, false);
+
+                                    TextView headerValue = (TextView) layout.findViewById(R.id.crimescene_text);
+                                    switch (activeCase.getCrimeSceneType()) {
+                                        case 0:
+                                            headerValue.setText(getResources().getString(R.string.crime_scene1));
+                                            break;
+                                        case 1:
+                                            headerValue.setText(getResources().getString(R.string.crime_scene2));
+                                            break;
+                                        default:
+                                            headerValue.setText(getResources().getString(R.string.crime_scene1));
+                                            break;
+                                    }
+
+                                    dialog.setContentView(layout);
+                                    Window window = dialog.getWindow();
+                                    window.setBackgroundDrawableResource(android.R.color.transparent);
+                                    dialog.show();
+
+                                    return true;
+                                } else if (Integer.parseInt(poiData[1]) == Types.WEAPON) {
+                                    dialog = new Dialog(context);
+                                    dialog.setCancelable(false);
+
+                                    final View layout = layoutInfl.inflate(R.layout.weaponlocation_layout, null, false);
+
+                                    TextView headerValue = (TextView) layout.findViewById(R.id.weaponlocation_text);
+                                    switch (randomizer.nextInt(2)) {
+                                        case 0:
+                                            headerValue.setText(getResources().getString(R.string.weapon_location1));
+                                            break;
+                                        case 1:
+                                            headerValue.setText(getResources().getString(R.string.weapon_location2));
+                                            break;
+                                        default:
+                                            headerValue.setText(getResources().getString(R.string.weapon_location1));
+                                            break;
+                                    }
+
+                                    if (activeCase.isWeaponLocationVisited()) {
+                                        headerValue.setText(getResources().getString(R.string.weapon_location_visited));
+                                        Button btnHints = (Button) layout.findViewById(R.id.wp_hints);
+                                        btnHints.setVisibility(View.GONE);
+                                    }
+
+                                    dialog.setContentView(layout);
+                                    Window window = dialog.getWindow();
+                                    window.setBackgroundDrawableResource(android.R.color.transparent);
+                                    dialog.show();
+
+                                    return true;
+                                } else {
+
+                                    hasDestination = true;
+                                    activeCase.setSuspectResidenceFound(true);
+                                    sharedPrefs.putCase(activeCase);
+                                    myStats.setMap();
+                                    sharedPrefs.putStats(myStats);
+
+                                    openMerkmale(null);
+
+                                    return true;
                                 }
-
-                                dialog.setContentView(layout);
-                                Window window = dialog.getWindow();
-                                window.setBackgroundDrawableResource(android.R.color.transparent);
-                                dialog.show();
-
-                                return true;
-                            } else if (Integer.parseInt(poiData[1]) == Types.WEAPON) {
-                                dialog = new Dialog(context);
-                                dialog.setCancelable(false);
-
-                                final View layout = layoutInfl.inflate(R.layout.weaponlocation_layout, null, false);
-
-                                TextView headerValue = (TextView) layout.findViewById(R.id.weaponlocation_text);
-                                switch (randomizer.nextInt(2)) {
-                                    case 0:
-                                        headerValue.setText(getResources().getString(R.string.weapon_location1));
-                                        break;
-                                    case 1:
-                                        headerValue.setText(getResources().getString(R.string.weapon_location2));
-                                        break;
-                                    default:
-                                        headerValue.setText(getResources().getString(R.string.weapon_location1));
-                                        break;
-                                }
-
-                                if (activeCase.isWeaponLocationVisited()) {
-                                    headerValue.setText(getResources().getString(R.string.weapon_location_visited));
-                                    Button btnHints = (Button) layout.findViewById(R.id.wp_hints);
-                                    btnHints.setVisibility(View.GONE);
-                                }
-
-                                dialog.setContentView(layout);
-                                Window window = dialog.getWindow();
-                                window.setBackgroundDrawableResource(android.R.color.transparent);
-                                dialog.show();
-
-                                return true;
-                            } else {
-
-                                hasDestination = true;
-                                activeCase.setSuspectResidenceFound(true);
-                                sharedPrefs.putCase(activeCase);
-                                myStats.setMap();
-                                sharedPrefs.putStats(myStats);
-
-                                openMerkmale(null);
-
-                                return true;
                             }
+                            return false; //Every other case, show InfoWindow
+                            // End marker click handling
                         }
-                        return false; //Every other case, show InfoWindow
-                        // End marker click handling
-                    }
-                });
-            }
+                    });
+                }
 
-            @Override
-            public void onCancel() {
-                onFinish();
-            }
-        });
+                @Override
+                public void onCancel() {
+                    onFinish();
+                }
+            });
+        }
     }
 
     public void focusOnWeapon(View view) {
@@ -930,6 +933,7 @@ public class MainActivity extends FragmentActivity implements
         } else if (view == R.layout.statisticsdialog) {
             setStats(layout);
         } else if (view == R.layout.start_case_layout) {
+            startCaseView = layout;
             setStart(layout);
         } else if (view == R.layout.end_case_layout) {
             setEnd(layout);
@@ -1011,8 +1015,8 @@ public class MainActivity extends FragmentActivity implements
                 headerValue.setText(String.format(getResources().getString(R.string.welcome_msg_next_case),
                         sharedPrefs.getUser().getName()));
             }
-            layout.findViewById(R.id.start_case_btn).setVisibility(View.VISIBLE);
-            layout.findViewById(R.id.resume_case_btn).setVisibility(View.GONE);
+            //layout.findViewById(R.id.start_case_btn).setVisibility(View.VISIBLE);
+            //layout.findViewById(R.id.resume_case_btn).setVisibility(View.GONE);
             setGoogleAnalyticsEvent("setStart", "welcomeMsg", "firstWelcome");
         } else {
             if(activeCase.isCrimeSceneFound()) {
@@ -1022,8 +1026,8 @@ public class MainActivity extends FragmentActivity implements
                 headerValue.setText(String.format(getResources().getString(R.string.welcomeback_msg),
                         sharedPrefs.getUser().getName(), getResources().getString(R.string.action_tatort)));
             }
-            layout.findViewById(R.id.start_case_btn).setVisibility(View.GONE);
-            layout.findViewById(R.id.resume_case_btn).setVisibility(View.VISIBLE);
+            //layout.findViewById(R.id.start_case_btn).setVisibility(View.GONE);
+            //layout.findViewById(R.id.resume_case_btn).setVisibility(View.VISIBLE);
             setGoogleAnalyticsEvent("setStart","welcomeMsg","welcomeBack");
         }
     }
@@ -1070,7 +1074,7 @@ public class MainActivity extends FragmentActivity implements
     }
 
     public void sendColleague(View view) {
-        setGoogleAnalyticsEvent("sendColleague","clickButton","firstAction");
+        setGoogleAnalyticsEvent("sendColleague", "clickButton", "firstAction");
         if (colleagueState == ColleagueState.WAITING) {
             colleague.setImageResource(R.drawable.btn_colleague_pressed);
             colleagueState = ColleagueState.READY;
@@ -1179,6 +1183,18 @@ public class MainActivity extends FragmentActivity implements
     public void onLocationChanged(Location location) {
         Log.v("myNewLocation", "Latitude: " + location.getLatitude() +
                 ", Longitude: " + location.getLongitude());
+        startCaseView.findViewById(R.id.gpsInfo).setVisibility(View.GONE);
+
+        if(displayStartscreen) {
+            displayStartscreen = false;
+            if (sharedPrefs.getCase() == null) {
+                startCaseView.findViewById(R.id.startButton).setVisibility(View.VISIBLE);
+                startCaseView.findViewById(R.id.resumeButton).setVisibility(View.GONE);
+            } else {
+                startCaseView.findViewById(R.id.startButton).setVisibility(View.GONE);
+                startCaseView.findViewById(R.id.resumeButton).setVisibility(View.VISIBLE);
+            }
+        }
 
         if (!nearbyMarkers.isEmpty()) {
             for (int key : nearbyMarkers.keySet()) {
@@ -1523,8 +1539,8 @@ public class MainActivity extends FragmentActivity implements
             crimeScenePois = new ArrayList<PointOfInterest>(
                     daoPoiInstance.getPOIsByType(Types.OTHER));
         }
-
         PointOfInterest crimeScene = crimeScenePois.get(randomizer.nextInt(crimeScenePois.size()));
+
         Marker csMarker = mMap.addMarker(new MarkerOptions()
                 .title(crimeScene.getDescription())
                 .position(crimeScene.getLatLng())

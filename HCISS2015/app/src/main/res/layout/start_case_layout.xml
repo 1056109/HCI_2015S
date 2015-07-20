@@ -40,53 +40,53 @@
         </LinearLayout>
 
         <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/gpsInfo"
+                android:id="@+id/gpsInfo"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:gravity="center_horizontal"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/start_case_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/startButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_android"
                 android:onClick="startCase"
                 android:text="Fall aufnehmen"
-                android:textColor="@color/violett" />
+                android:textColor="@color/violett"
+                android:visibility="gone" />
 
             <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/btn_android"
-                android:onClick="closeApp"
-                android:text="@string/close"
-                android:textColor="@color/violett" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/resume_case_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/button5"
+                android:id="@+id/resumeButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/btn_android"
                 android:onClick="resumeCase"
                 android:text="Fall fortsetzen"
-                android:textColor="@color/violett" />
+                android:textColor="@color/violett"
+                android:visibility="gone" />
 
             <Button
                 android:layout_width="0dp"
@@ -95,8 +95,10 @@
                 android:background="@drawable/btn_android"
                 android:onClick="closeApp"
                 android:text="@string/close"
-                android:textColor="@color/violett" />
+                android:textColor="@color/violett"
+                android:id="@+id/closeButton" />
 
         </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
